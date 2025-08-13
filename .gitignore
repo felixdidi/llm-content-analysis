@@ -1,0 +1,5 @@
+/env/
+/.quarto/
+.DS_Store
+_site
+etc

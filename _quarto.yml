@@ -1,0 +1,69 @@
+project:
+  type: website
+  lib-dir: site_libs
+  
+author:
+  - name: "Anonym"
+    affiliation: "Anonym"
+  
+lang: de
+language:
+  title-block-author-single: "Autor:in"
+  title-block-affiliation-single: "Universität"
+  title-block-published: ""
+
+website:
+  # site-url:
+  sidebar:
+    style: "floating"
+    align: "center"
+    logo: "img/transformer.png"
+    search: true
+    contents:
+      - href: "index.qmd"
+        text: "Startseite"
+      - section: "Anleitungen"
+        contents:
+          - href: "01_installation.qmd"
+            text: "1 Installation"
+          - href: "02_kategoriespezifisches_Encoder-Modell.ipynb"
+            text: "2 Kategoriespezifisches Encoder-Modell"
+          - href: "03_aufgabenspezifisches_Encoder-Modell.ipynb"
+            text: "3 Aufgabenspezifisches Encoder-Modell"
+          - href: "04_universelles_Decoder-Modell.ipynb"
+            text: "4 Universelles Decoder-Modell"
+      - section: "Beispielstudie"
+        contents:
+          - href: "beispielstudie/01_goldstandard.qmd"
+            text: "Goldstandard"
+          - href: "beispielstudie/02_kategoriespezifisches_Encoder-Modell.qmd"
+            text: "Kategoriespezifisches Encoder-Modell"
+          - href: "beispielstudie/03_aufgabenspezifisches_Encoder-Modell.qmd"
+            text: "Aufgabenspezifisches Encoder-Modell"
+          - href: "beispielstudie/04_universelles_Decoder-Modell.qmd"
+            text: "Universelles Decoder-Modell"
+          - href: "05_dictionary.qmd"
+            text: "Off-the-shelf Diktionär"
+          - href: "06_machine_learning.qmd"
+            text: "Überwachtes maschinelles Lernen"
+          - href: "07_validierung.qmd"
+            text: "Validierung"
+
+format:
+  html:
+    toc: false
+    page-navigation: true
+    number-sections: false
+    smooth-scroll: true
+    footnotes-hover: true
+    code-fold: false
+    code-tools: false
+    code-line-numbers: true
+    highlight-style: gruvbox
+    lang: de-DE
+    link-external-newwindow: true
+theme:
+  light: [cosmo, theme.scss]
+  
+execute:
+  freeze: auto
