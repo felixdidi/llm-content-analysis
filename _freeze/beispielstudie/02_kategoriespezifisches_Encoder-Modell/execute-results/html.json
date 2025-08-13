@@ -1,0 +1,12 @@
+{
+  "hash": "8b4ed5b064d1ba188feae2aa9c775b06",
+  "result": {
+    "engine": "jupyter",
+    "markdown": "---\ntitle: \"Kategoriespezifisches Encoder-Modell\"\nsubtitle: \"Beispielstudie\"\n---\n\n::: {#4990befc .cell execution_count=1}\n``` {.python .cell-code}\nimport pandas as pd\nfrom transformers import pipeline\n\ndaten = pd.read_csv(\"etc/goldstandard.csv\")\ndatenliste = list(daten[\"text\"])\n\nsentiment_classifier = pipeline(\"sentiment-analysis\",\n                                 model=\"oliverguhr/german-sentiment-bert\",\n                                 max_length = 512, truncation=True)\n\nergebnis = sentiment_classifier(datenliste)\nergebnis = pd.DataFrame(classifi)\nergebnis[\"text\"] = daten[\"text\"]\nergebnis\n```\n:::\n\n\n",
+    "supporting": [
+      "02_kategoriespezifisches_Encoder-Modell_files"
+    ],
+    "filters": [],
+    "includes": {}
+  }
+}
