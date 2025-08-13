@@ -285,7 +285,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="daten-laden" class="level2">
 <h2 class="anchored" data-anchor-id="daten-laden">Daten laden</h2>
 <p>Unabhängig vom verwendeten Modell laden wir zunächst die bereits installierten Pakete sowie unsere Textdaten und speichern diese in einem Listenobjekt:</p>
-<div id="4f95a582-2d6f-40c7-8e8e-c4b69e8ee3a8" class="cell" data-execution_count="31">
+<div id="4f95a582-2d6f-40c7-8e8e-c4b69e8ee3a8" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2"></a><span class="im">from</span> transformers <span class="im">import</span> pipeline</span>
 <span id="cb1-3"><a href="#cb1-3"></a></span>
@@ -293,7 +293,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-5"><a href="#cb1-5"></a>datenliste <span class="op">=</span> <span class="bu">list</span>(daten[<span class="st">"text"</span>])</span>
 <span id="cb1-6"><a href="#cb1-6"></a></span>
 <span id="cb1-7"><a href="#cb1-7"></a>daten</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="31">
+<div class="cell-output cell-output-display" data-execution_count="2">
 <div>
 
 
@@ -355,16 +355,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="klassifikation" class="level2">
 <h2 class="anchored" data-anchor-id="klassifikation">Klassifikation</h2>
 <p>Nun erfolgt die eigentliche Klassifikation über den <code>pipeline()</code>-Befehl. In diesem können wir je nach Bedarf noch weitere Parameter festlegen, die der Dokumentation von HuggingFace oder unserem Beispielcode im OSF entnommen werden können. Wichtig ist etwa bei kleineren Modellen das Kürzen langer Texte in Abhängigkeit der maximalen Inputlänge des gewählten Modells (z. B. <code>max_length = 512, truncation=True</code>). Die Ausführung des <code>pipeline()</code>-Befehls kann mitunter lange dauern, vor allem beim ersten Mal, da das LLM geladen werden muss.</p>
-<div id="3f695332-8b12-44ea-86a7-a17265f14b23" class="cell" data-execution_count="32">
+<div id="3f695332-8b12-44ea-86a7-a17265f14b23" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a>sentiment_classifier <span class="op">=</span> pipeline(<span class="st">"sentiment-analysis"</span>,</span>
 <span id="cb2-2"><a href="#cb2-2"></a>                                 model<span class="op">=</span><span class="st">"oliverguhr/german-sentiment-bert"</span>,</span>
 <span id="cb2-3"><a href="#cb2-3"></a>                                 max_length <span class="op">=</span> <span class="dv">512</span>, truncation<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb2-4"><a href="#cb2-4"></a></span>
 <span id="cb2-5"><a href="#cb2-5"></a>ergebnis <span class="op">=</span> sentiment_classifier(datenliste)</span>
-<span id="cb2-6"><a href="#cb2-6"></a>ergebnis <span class="op">=</span> pd.DataFrame(classifi)</span>
+<span id="cb2-6"><a href="#cb2-6"></a>ergebnis <span class="op">=</span> pd.DataFrame(ergebnis)</span>
 <span id="cb2-7"><a href="#cb2-7"></a>ergebnis[<span class="st">"text"</span>] <span class="op">=</span> daten[<span class="st">"text"</span>]</span>
 <span id="cb2-8"><a href="#cb2-8"></a>ergebnis</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="32">
+<div class="cell-output cell-output-display" data-execution_count="3">
 <div>
 
 
