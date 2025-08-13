@@ -1,0 +1,187 @@
+[
+  {
+    "objectID": "03_aufgabenspezifisches_Encoder-Modell.html",
+    "href": "03_aufgabenspezifisches_Encoder-Modell.html",
+    "title": "Aufgabenspezifisches Encoder-Modell",
+    "section": "",
+    "text": "Unabhängig vom verwendeten Modell laden wir zunächst die bereits installierten Pakete sowie unsere Textdaten und speichern diese in einem Listenobjekt:\n\nimport pandas as pd\nfrom transformers import pipeline\n\ndaten = pd.read_csv(\"data/example_dataset.csv\")\ndatenliste = list(daten[\"text\"])\n\ndaten\n\n\n\n\n\n\n\n\ntext\n\n\n\n\n0\nDie orthodoxe Gemeinde feiert heute #Ostern. I...\n\n\n1\nVielen Dank Gregor Rutz für die Unterstützung ...\n\n\n2\nWird ja immer schlimmer mit den Intoleranten d...\n\n\n3\nLiebe Junge, geht wählen. Kann ja nicht sein, ...\n\n\n4\n‘— Das war unser EU-Wahl-Abschluss der SP– mit...\n\n\n5\nAufschlussreicher Blick hinter die Mauern! Tol...\n\n\n6\nDenn ein Hard-Brexit würde der #EU, aber noch ...\n\n\n7\nFamilienbonus: Es ist erstaunlich wie viele Me...\n\n\n8\nIntegration passiert vor Ort. Deshalb arbeitet...\n\n\n9\nIch frage mich: Wer ist als nächstes dran Frau...",
+    "crumbs": [
+      "Anleitungen",
+      "3 Aufgabenspezifisches Encoder-Modell"
+    ]
+  },
+  {
+    "objectID": "03_aufgabenspezifisches_Encoder-Modell.html#daten-laden",
+    "href": "03_aufgabenspezifisches_Encoder-Modell.html#daten-laden",
+    "title": "Aufgabenspezifisches Encoder-Modell",
+    "section": "",
+    "text": "Unabhängig vom verwendeten Modell laden wir zunächst die bereits installierten Pakete sowie unsere Textdaten und speichern diese in einem Listenobjekt:\n\nimport pandas as pd\nfrom transformers import pipeline\n\ndaten = pd.read_csv(\"data/example_dataset.csv\")\ndatenliste = list(daten[\"text\"])\n\ndaten\n\n\n\n\n\n\n\n\ntext\n\n\n\n\n0\nDie orthodoxe Gemeinde feiert heute #Ostern. I...\n\n\n1\nVielen Dank Gregor Rutz für die Unterstützung ...\n\n\n2\nWird ja immer schlimmer mit den Intoleranten d...\n\n\n3\nLiebe Junge, geht wählen. Kann ja nicht sein, ...\n\n\n4\n‘— Das war unser EU-Wahl-Abschluss der SP– mit...\n\n\n5\nAufschlussreicher Blick hinter die Mauern! Tol...\n\n\n6\nDenn ein Hard-Brexit würde der #EU, aber noch ...\n\n\n7\nFamilienbonus: Es ist erstaunlich wie viele Me...\n\n\n8\nIntegration passiert vor Ort. Deshalb arbeitet...\n\n\n9\nIch frage mich: Wer ist als nächstes dran Frau...",
+    "crumbs": [
+      "Anleitungen",
+      "3 Aufgabenspezifisches Encoder-Modell"
+    ]
+  },
+  {
+    "objectID": "03_aufgabenspezifisches_Encoder-Modell.html#klassifikation",
+    "href": "03_aufgabenspezifisches_Encoder-Modell.html#klassifikation",
+    "title": "Aufgabenspezifisches Encoder-Modell",
+    "section": "Klassifikation",
+    "text": "Klassifikation\nIm Gegensatz zu kategoriespezifischen Modellen können wir mit aufgabenspezifischen Encoder-Modellen jede beliebige Kategorie codieren. Als Beispiel verwenden wir hier das NLI-Modell von Laurer et al. (2024b; model = \"MoritzLaurer/bge-m3-zeroshot-v2.0\"). Für die Klassifikation mit dem NLI-Modell spezifizieren wir zusätzlich zum Modell noch die Ausprägungen der Kategorie (*candidate_labels) und eine “Hypothese”, die auf Grundlage des Textes geprüft werden soll (hypothesis_template; zur Hypothese im Kontext von NLI s. Abschn. 2.1). Bei der Ausführung des pipeline()-Befehls werden die zu codierenden Ausprägungen der Kategorie automatisch anstelle der geschwungenen Klammern in die Hypothese eingesetzt. Auf diese Weise wird der Befehl für jede Ausprägung einzeln durchgeführt (hier für “positiv”, “negativ” und “neutral”). Wir erhalten also als Ergebnis einen Datensatz, der uns pro Text für jede spezifizierte Ausprägung einen Wahrscheinlichkeitswert ausgibt (in unserem Beispiel die Wahrscheinlichkeit für “positiv”, “negativ” und “neutral”). Über den Parameter multi_label können wir festlegen, ob prinzipiell mehrere Kategorien gleichzeitig in einem Text vorkommen können.\n\ntemplate = \"Die Stimmung beziehungsweise Tonalität des Textes ist {}\"\nlabels = [\"positiv\", \"neutral\", \"negativ\"]\n\nzeroshot_classifier = pipeline(\"zero-shot-classification\",\n                                model = \"MoritzLaurer/bge-m3-zeroshot-v2.0\")\n\nresults = zeroshot_classifier(datenliste, candidate_labels=labels,\n                               hypothesis_template=template, multi_label=False)\n\nlabels = set(label for item in results for label in item['labels'])\nout_dict = {label: [] for label in labels}\nout_dict['sequence'] = []\n\nfor item in results:\n    out_dict['sequence'].append(item['sequence'])\n    for label in labels:\n        if label in item['labels']:\n            out_dict[label].append(item['scores'][item['labels'].index(label)])\n        else:\n            out_dict[label].append(None)\n\npd.DataFrame(out_dict)\n\n\n\n\n\n\n\n\npositiv\nneutral\nnegativ\nsequence\n\n\n\n\n0\n0.707576\n0.285608\n0.006816\nDie orthodoxe Gemeinde feiert heute #Ostern. I...\n\n\n1\n0.654405\n0.342164\n0.003431\nVielen Dank Gregor Rutz für die Unterstützung ...\n\n\n2\n0.010227\n0.180488\n0.809285\nWird ja immer schlimmer mit den Intoleranten d...\n\n\n3\n0.350793\n0.261388\n0.387819\nLiebe Junge, geht wählen. Kann ja nicht sein, ...\n\n\n4\n0.440438\n0.539635\n0.019927\n‘— Das war unser EU-Wahl-Abschluss der SP– mit...\n\n\n5\n0.985130\n0.012621\n0.002250\nAufschlussreicher Blick hinter die Mauern! Tol...\n\n\n6\n0.007550\n0.201777\n0.790673\nDenn ein Hard-Brexit würde der #EU, aber noch ...\n\n\n7\n0.375643\n0.567706\n0.056651\nFamilienbonus: Es ist erstaunlich wie viele Me...\n\n\n8\n0.301832\n0.689889\n0.008279\nIntegration passiert vor Ort. Deshalb arbeitet...\n\n\n9\n0.044657\n0.746518\n0.208825\nIch frage mich: Wer ist als nächstes dran Frau...",
+    "crumbs": [
+      "Anleitungen",
+      "3 Aufgabenspezifisches Encoder-Modell"
+    ]
+  },
+  {
+    "objectID": "beispielstudie/01_goldstandard.html",
+    "href": "beispielstudie/01_goldstandard.html",
+    "title": "",
+    "section": "",
+    "text": "TBD",
+    "crumbs": [
+      "Beispielstudie",
+      "Goldstandard"
+    ]
+  },
+  {
+    "objectID": "02_kategoriespezifisches_Encoder-Modell.html",
+    "href": "02_kategoriespezifisches_Encoder-Modell.html",
+    "title": "Kategoriespezifisches Encoder-Modell",
+    "section": "",
+    "text": "Unabhängig vom verwendeten Modell laden wir zunächst die bereits installierten Pakete sowie unsere Textdaten und speichern diese in einem Listenobjekt:\n\nimport pandas as pd\nfrom transformers import pipeline\n\ndaten = pd.read_csv(\"data/example_dataset.csv\")\ndatenliste = list(daten[\"text\"])\n\ndaten\n\n\n\n\n\n\n\n\ntext\n\n\n\n\n0\nDie orthodoxe Gemeinde feiert heute #Ostern. I...\n\n\n1\nVielen Dank Gregor Rutz für die Unterstützung ...\n\n\n2\nWird ja immer schlimmer mit den Intoleranten d...\n\n\n3\nLiebe Junge, geht wählen. Kann ja nicht sein, ...\n\n\n4\n‘— Das war unser EU-Wahl-Abschluss der SP– mit...\n\n\n5\nAufschlussreicher Blick hinter die Mauern! Tol...\n\n\n6\nDenn ein Hard-Brexit würde der #EU, aber noch ...\n\n\n7\nFamilienbonus: Es ist erstaunlich wie viele Me...\n\n\n8\nIntegration passiert vor Ort. Deshalb arbeitet...\n\n\n9\nIch frage mich: Wer ist als nächstes dran Frau...",
+    "crumbs": [
+      "Anleitungen",
+      "2 Kategoriespezifisches Encoder-Modell"
+    ]
+  },
+  {
+    "objectID": "02_kategoriespezifisches_Encoder-Modell.html#daten-laden",
+    "href": "02_kategoriespezifisches_Encoder-Modell.html#daten-laden",
+    "title": "Kategoriespezifisches Encoder-Modell",
+    "section": "",
+    "text": "Unabhängig vom verwendeten Modell laden wir zunächst die bereits installierten Pakete sowie unsere Textdaten und speichern diese in einem Listenobjekt:\n\nimport pandas as pd\nfrom transformers import pipeline\n\ndaten = pd.read_csv(\"data/example_dataset.csv\")\ndatenliste = list(daten[\"text\"])\n\ndaten\n\n\n\n\n\n\n\n\ntext\n\n\n\n\n0\nDie orthodoxe Gemeinde feiert heute #Ostern. I...\n\n\n1\nVielen Dank Gregor Rutz für die Unterstützung ...\n\n\n2\nWird ja immer schlimmer mit den Intoleranten d...\n\n\n3\nLiebe Junge, geht wählen. Kann ja nicht sein, ...\n\n\n4\n‘— Das war unser EU-Wahl-Abschluss der SP– mit...\n\n\n5\nAufschlussreicher Blick hinter die Mauern! Tol...\n\n\n6\nDenn ein Hard-Brexit würde der #EU, aber noch ...\n\n\n7\nFamilienbonus: Es ist erstaunlich wie viele Me...\n\n\n8\nIntegration passiert vor Ort. Deshalb arbeitet...\n\n\n9\nIch frage mich: Wer ist als nächstes dran Frau...",
+    "crumbs": [
+      "Anleitungen",
+      "2 Kategoriespezifisches Encoder-Modell"
+    ]
+  },
+  {
+    "objectID": "02_kategoriespezifisches_Encoder-Modell.html#klassifikation",
+    "href": "02_kategoriespezifisches_Encoder-Modell.html#klassifikation",
+    "title": "Kategoriespezifisches Encoder-Modell",
+    "section": "Klassifikation",
+    "text": "Klassifikation\nNun erfolgt die eigentliche Klassifikation über den pipeline()-Befehl. In diesem können wir je nach Bedarf noch weitere Parameter festlegen, die der Dokumentation von HuggingFace oder unserem Beispielcode im OSF entnommen werden können. Wichtig ist etwa bei kleineren Modellen das Kürzen langer Texte in Abhängigkeit der maximalen Inputlänge des gewählten Modells (z. B. max_length = 512, truncation=True). Die Ausführung des pipeline()-Befehls kann mitunter lange dauern, vor allem beim ersten Mal, da das LLM geladen werden muss.\n\nsentiment_classifier = pipeline(\"sentiment-analysis\",\n                                 model=\"oliverguhr/german-sentiment-bert\",\n                                 max_length = 512, truncation=True)\n\nergebnis = sentiment_classifier(datenliste)\nergebnis = pd.DataFrame(classifi)\nergebnis[\"text\"] = daten[\"text\"]\nergebnis\n\n\n\n\n\n\n\n\nlabel\nscore\ntext\n\n\n\n\n0\nneutral\n0.988959\nDie orthodoxe Gemeinde feiert heute #Ostern. I...\n\n\n1\nneutral\n0.753388\nVielen Dank Gregor Rutz für die Unterstützung ...\n\n\n2\nnegative\n0.976087\nWird ja immer schlimmer mit den Intoleranten d...\n\n\n3\nnegative\n0.732691\nLiebe Junge, geht wählen. Kann ja nicht sein, ...\n\n\n4\nnegative\n0.903959\n‘— Das war unser EU-Wahl-Abschluss der SP– mit...\n\n\n5\npositive\n0.942041\nAufschlussreicher Blick hinter die Mauern! Tol...\n\n\n6\nnegative\n0.685230\nDenn ein Hard-Brexit würde der #EU, aber noch ...\n\n\n7\nnegative\n0.609906\nFamilienbonus: Es ist erstaunlich wie viele Me...\n\n\n8\nneutral\n0.998905\nIntegration passiert vor Ort. Deshalb arbeitet...\n\n\n9\nneutral\n0.950086\nIch frage mich: Wer ist als nächstes dran Frau...",
+    "crumbs": [
+      "Anleitungen",
+      "2 Kategoriespezifisches Encoder-Modell"
+    ]
+  },
+  {
+    "objectID": "01_installation.html",
+    "href": "01_installation.html",
+    "title": "Installation",
+    "section": "",
+    "text": "Bevor wir beginnen, müssen wir Python zunächst auf dem eigenen Computer installieren (siehe hierzu https://python.org). Für den Beispielcode in diesem Artikel empfehlen wir die Python-Version 3.12.8. Anschließend legen wir (1) einen Projektordner und (2) eine virtuelle Python-Umgebung an, in die dann (3) alle benötigten Pakete installiert werden. Schließlich (4) öffnen wir die Jupyter Notebook-Umgebung, in der wir die Beispiele aus diesem Artikel ausprobieren können.",
+    "crumbs": [
+      "Anleitungen",
+      "1 Installation"
+    ]
+  },
+  {
+    "objectID": "01_installation.html#projektordner-anlegen",
+    "href": "01_installation.html#projektordner-anlegen",
+    "title": "Installation",
+    "section": "1 Projektordner anlegen",
+    "text": "1 Projektordner anlegen\nDen Projektordner können wir über den Dateimanager (Windows) bzw. Finder (Mac) anlegen. Anschließend navigieren wir zu unserem Projektordner und öffnen darin die Kommandozeile unseres Computers:\n\nLinux/MacWindows\n\n\nRechtsklick auf Projektordner im Finder und “Neues Terminal beim Ordner” auswählen\n\n\nShift + Rechtsklick auf Projektordner im Explorer und “PowerShell-Fenster hier öffnen” auswählen",
+    "crumbs": [
+      "Anleitungen",
+      "1 Installation"
+    ]
+  },
+  {
+    "objectID": "01_installation.html#virtuelle-python-umgebung-anlegen",
+    "href": "01_installation.html#virtuelle-python-umgebung-anlegen",
+    "title": "Installation",
+    "section": "2 Virtuelle Python-Umgebung anlegen",
+    "text": "2 Virtuelle Python-Umgebung anlegen\nDort führen wir den folgenden Befehl aus, der die virtuelle Python-Umgebung anlegt:\n\n\nTerminal\n\npython3.12 -m venv env\n\nMit dem nachfolgenden Befehl aktivieren wir die virtuelle Umgebung. Diesen zweiten Befehl müssen wir jedes Mal ausführen, wenn wir in der virtuelle Python-Umgebung arbeiten wollen:\n\nLinux/MacWindows\n\n\n\n\nTerminal\n\nsource env/bin/activate\n\n\n\n\n\nTerminal\n\n.\\env\\Scripts\\activate",
+    "crumbs": [
+      "Anleitungen",
+      "1 Installation"
+    ]
+  },
+  {
+    "objectID": "01_installation.html#pakete-installieren",
+    "href": "01_installation.html#pakete-installieren",
+    "title": "Installation",
+    "section": "3 Pakete installieren",
+    "text": "3 Pakete installieren\nAnschließend können wir die benötigten Pakete installieren, konkret die transformers-Bibliothek von HuggingFace (Wolf et al., 2020), die pandas-Bibliothek zur Datenverarbeitung (McKinney, 2010) sowie einige Machine Learning-Bibliotheken, die von transformers im Hintergrund benötigt werden. Abhängig vom verwendeten Transformer-Modell benötigen wir eventuell weitere Pakete, worauf entsprechende Fehlermeldungen im weiteren Prozess hinweisen. Diese können wir dann ebenfalls über pip install [paketname] installieren. Für die Beispiele aus diesem Artikel benötigen wir die im folgenden Code installierten Pakete:\npip install jupyter pandas transformers torch tensorflow flax tf-keras",
+    "crumbs": [
+      "Anleitungen",
+      "1 Installation"
+    ]
+  },
+  {
+    "objectID": "01_installation.html#jupyter-notebook-öffnen",
+    "href": "01_installation.html#jupyter-notebook-öffnen",
+    "title": "Installation",
+    "section": "4 Jupyter Notebook öffnen",
+    "text": "4 Jupyter Notebook öffnen\nMit dem folgenden Befehl können wir schließlich die Jupyter Notebook-Umgebung öffnen, in der wir die Beispiele aus diesem Artikel ausprobieren können. In der Jupyter Notebook-Umgebung können wir dann die Python-Skripte ausführen, die in den folgenden Kapiteln beschrieben werden. Zunächst öfnnen wir hierzu eines der Beispiel .ipynb-Notebooks, die im Projektordner liegen.\n\n\nTerminal\n\njupyter notebook\n\nAlternativ können wir auch ein neues Notebook erstellen, indem wir im Jupyter-Dashboard auf “File”, dann “New” klicken und dann “Notebook” auswählen. Dadurch wird eine neue Notebook-Datei erstellt, in der wir unseren Python-Code schreiben und ausführen können. Wenn wir das Notebook öffnen, werden wir zunächst gefragt, wie wir den Code ausführen wollen. Wir wählen hierzu “Python 3 (ipykernel)” aus, um sicherzustellen, dass wir die Python-Version verwenden, die wir zuvor installiert haben.\nIm Jupyter Notebook können wir dann die einzelnen Zellen ausführen, indem wir auf die Schaltfläche “Run” klicken oder die Tastenkombination Shift + Enter verwenden. Die Ergebnisse der Ausführung werden direkt unter der jeweiligen Zelle angezeigt.",
+    "crumbs": [
+      "Anleitungen",
+      "1 Installation"
+    ]
+  },
+  {
+    "objectID": "04_universelles_Decoder-Modell.html",
+    "href": "04_universelles_Decoder-Modell.html",
+    "title": "Universelles Decoder-Modell",
+    "section": "",
+    "text": "Unabhängig vom verwendeten Modell laden wir zunächst die bereits installierten Pakete sowie unsere Textdaten und speichern diese in einem Listenobjekt:\n\nimport pandas as pd\nfrom transformers import pipeline\nimport json\n\ndaten = pd.read_csv(\"data/example_dataset.csv\")\ndatenliste = list(daten[\"text\"])\n\ndaten\n\n\n\n\n\n\n\n\ntext\n\n\n\n\n0\nDie orthodoxe Gemeinde feiert heute #Ostern. I...\n\n\n1\nVielen Dank Gregor Rutz für die Unterstützung ...\n\n\n2\nWird ja immer schlimmer mit den Intoleranten d...\n\n\n3\nLiebe Junge, geht wählen. Kann ja nicht sein, ...\n\n\n4\n‘— Das war unser EU-Wahl-Abschluss der SP– mit...\n\n\n5\nAufschlussreicher Blick hinter die Mauern! Tol...\n\n\n6\nDenn ein Hard-Brexit würde der #EU, aber noch ...\n\n\n7\nFamilienbonus: Es ist erstaunlich wie viele Me...\n\n\n8\nIntegration passiert vor Ort. Deshalb arbeitet...\n\n\n9\nIch frage mich: Wer ist als nächstes dran Frau...",
+    "crumbs": [
+      "Anleitungen",
+      "4 Universelles Decoder-Modell"
+    ]
+  },
+  {
+    "objectID": "04_universelles_Decoder-Modell.html#daten-laden",
+    "href": "04_universelles_Decoder-Modell.html#daten-laden",
+    "title": "Universelles Decoder-Modell",
+    "section": "",
+    "text": "Unabhängig vom verwendeten Modell laden wir zunächst die bereits installierten Pakete sowie unsere Textdaten und speichern diese in einem Listenobjekt:\n\nimport pandas as pd\nfrom transformers import pipeline\nimport json\n\ndaten = pd.read_csv(\"data/example_dataset.csv\")\ndatenliste = list(daten[\"text\"])\n\ndaten\n\n\n\n\n\n\n\n\ntext\n\n\n\n\n0\nDie orthodoxe Gemeinde feiert heute #Ostern. I...\n\n\n1\nVielen Dank Gregor Rutz für die Unterstützung ...\n\n\n2\nWird ja immer schlimmer mit den Intoleranten d...\n\n\n3\nLiebe Junge, geht wählen. Kann ja nicht sein, ...\n\n\n4\n‘— Das war unser EU-Wahl-Abschluss der SP– mit...\n\n\n5\nAufschlussreicher Blick hinter die Mauern! Tol...\n\n\n6\nDenn ein Hard-Brexit würde der #EU, aber noch ...\n\n\n7\nFamilienbonus: Es ist erstaunlich wie viele Me...\n\n\n8\nIntegration passiert vor Ort. Deshalb arbeitet...\n\n\n9\nIch frage mich: Wer ist als nächstes dran Frau...",
+    "crumbs": [
+      "Anleitungen",
+      "4 Universelles Decoder-Modell"
+    ]
+  },
+  {
+    "objectID": "04_universelles_Decoder-Modell.html#klassifikation",
+    "href": "04_universelles_Decoder-Modell.html#klassifikation",
+    "title": "Universelles Decoder-Modell",
+    "section": "Klassifikation",
+    "text": "Klassifikation\nAnders als bei den vorigen Ansätzen müssen wir bei einem universellen Decoder-Modell einen Prompt entwickeln, auf dessen Basis das Modell Text generiert (d. h. die Antwort auf die Codieranfrage), idealerweise in einem maschinenlesbaren Format. Der Prompt könnte bspw. folgendermaßen lauten: “Du bist ein trainierter Assistent für Inhaltsanalyse, der die allgemeine Stimmung beziehungsweise Tonalität von Texten analysiert. Antworte immer präzise im JSON-Format mit sentiment (positiv, neutral, negativ) und reasoning (eine Begründung auf Deutsch). Gib ausschließlich den JSON-Response, beginnend mit ‘{’ und endend mit ‘}’, mit diesen zwei Parametern zurück.” Diesen Prompt wenden wir nun iterativ auf jeden Text in unserem Datensatz an. Dies geht am einfachsten über eine for-Schleife.\nÜber den Parameter max_new_tokens können wir die Länge des generierten Outputs beschränken, do_sample sollten wir i.d.R. auf “False” setzen, um deterministische und somit replizierbare Antworten zu erhalten. Zu beachten ist außerdem, dass große Sprachmodelle wie bspw. das hier verwendete LLama-Modell 3.1 (model=\"meta-llama/Meta-Llama-3.1-8B-Instruct\") über Hunggingface zwar prinzipiell frei verfügbar sind, oftmals jedoch eine Authentifizierung erfordern.\n\ngenerate = pipeline(\"text-generation\", model=\"meta-llama/Meta-Llama-3.1-8B-Instruct\")\n# Leere Liste für den Output\nergebnis = []\n# Eine Schleife zur Output-Generierung über jeden Text in der Liste laufen lassen\nfor text in datenliste:\n    instructions = [\n        {\"role\": \"system\", \n         \"content\": \"Du bist ein trainierter Assistent für Inhaltsanalyse, der die allgemeine Stimmung beziehungsweise Tonalität von Texten analysiert. Antworte immer präzise im JSON-Format mit sentiment (positiv, neutral, negativ) und reasoning (eine Begründung auf Deutsch). Gib ausschließlich den JSON-Response, beginnend mit '{' und endend mit '}', mit diesen zwei Parametern zurück\"},\n        {\"role\": \"user\", \"content\": text}]\n    outputs = generate(instructions, max_new_tokens=256, do_sample=False)\n    ergebnis.append({\"text\": text, \"response\": outputs[0][\"generated_text\"][-1]['content']})\n\n\n\n\nAnschließend können wir die Ergebnisse aus dem JSON-Response extrahieren. Wenn wir möchten, können wir die zusätzliche ausgegebene Begründung ebenfalls abspeichern, um uns diese anzusehen.\n\ndef parse_response(response):\n    parsed = json.loads(response)\n    return parsed['sentiment'], parsed['reasoning']\n\nparsed_data = [(entry['text'], *parse_response(entry['response'])) for entry in ergebnis]\nparsed_data = pd.DataFrame(parsed_data, columns=['text', 'sentiment', 'reasoning'])\n\nparsed_data\n\n\n\n\n\n\n\n\ntext\nsentiment\nreasoning\n\n\n\n\n0\nDie orthodoxe Gemeinde feiert heute #Ostern. I...\npositiv\nDer Text wünscht ein 'frohes und gesegnetes Fe...\n\n\n1\nVielen Dank Gregor Rutz für die Unterstützung ...\npositiv\nDer Text ist positiv, da er jemanden (Gregor R...\n\n\n2\nWird ja immer schlimmer mit den Intoleranten d...\nnegativ\nDer Text beschreibt eine negative Entwicklung,...\n\n\n3\nLiebe Junge, geht wählen. Kann ja nicht sein, ...\nnegativ\nDer Text enthält eine Aufforderung zum Handeln...\n\n\n4\n‘— Das war unser EU-Wahl-Abschluss der SP– mit...\npositiv\nDer Text enthält ein Ausrufezeichen, das auf e...\n\n\n5\nAufschlussreicher Blick hinter die Mauern! Tol...\npositiv\nDer Text enthält positive Wörter wie 'Tolle', ...\n\n\n6\nDenn ein Hard-Brexit würde der #EU, aber noch ...\nnegativ\nDer Text besagt, dass ein Hard-Brexit sowohl d...\n\n\n7\nFamilienbonus: Es ist erstaunlich wie viele Me...\nnegativ\nDie Verwendung des Wortes 'erstaunlich' in die...\n\n\n8\nIntegration passiert vor Ort. Deshalb arbeitet...\nneutral\nDer Text beschreibt eine praktische Zusammenar...\n\n\n9\nIch frage mich: Wer ist als nächstes dran Frau...\nneutral\nDie Frage ist neutral formuliert und bezieht s...",
+    "crumbs": [
+      "Anleitungen",
+      "4 Universelles Decoder-Modell"
+    ]
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Gebrauchsfertige, Open Source Large-Language Models auf HuggingFace",
+    "section": "",
+    "text": "Mit der steigenden Verfügbarkeit großer Textmengen und hoher Rechenleistung gewinnt die automatisierte Inhaltsanalyse in der Kommunikationswissenschaft zunehmend an Bedeutung. Bislang mangelt es jedoch an einfach zu bedienenden und leistungsfähigen Tools für die standardisierte automatisierte Inhaltsanalyse von Texten. Large Language Models (LLMs) und darauf aufbauende Modelle zur Textcodierung können dazu beitragen, diesen Mangel zu beheben. Die Modelle zeichnen sich durch ein tiefes Sprachverständnis aus und versprechen daher eine besonders valide Textcodierungen. Zudem sind gebrauchsfertige (off-the-shelf) LLM-basierter Modelle auf der Plattform HuggingFace frei verfügbar (Open Source) und können mit wenigen Zeilen Python-Code für die Inhaltsanalyse verwendet werden. Der vorliegende Beitrag untersucht das Potenzial solcher gebrauchsfertiger LLM-basierter Modelle auf HuggingFace als Forschungsinfrastruktur für die standardisierte Inhaltsanalyse von Texten. Nach einer Einführung in die Funktionsweise von LLMs werden drei Modelltypen für die Textcodierung vorgestellt: (1) kategoriespezifische Encoder-Modelle, (2) aufgabenspezifische Encoder-Modelle und (3) universelle Decoder-Modelle. Eine detaillierte Anleitung erläutert die Anwendung der drei Modelltypen über die HuggingFace-Bibliothek für die Textcodierung. In einer theoretischen Kontextualisierung und einer anschließenden empirischen Evaluationsstudie werden die Modelltypen mit herkömmlichen Methoden der standardisierten Inhaltsanalyse verglichen, insbesondere mit der manuellen Codierung, diktionärsbasierten Analyse und Analyse mittels überwachter maschineller Lernalgorithmen. Die Ergebnisse zeigen, dass LLM-basierte Modelle auf HuggingFace vergleichsweise einfach zugänglich, gut skalierbar und kostengünstig sind und eine hohe Leistungsfähigkeit aufweisen, die mit manuellen Inhaltsanalysen konkurrieren kann. Es werden aber auch Limitationen deutlich, wie die mangelnde Transparenz der Modelle hinsichtlich getroffener Codierungsentscheidungen. Insgesamt verdeutlicht der Beitrag jedoch das große Potenzial gebrauchsfertiger LLM-basierter Modelle auf HuggingFace als Forschungsinfrastruktur für die standardisierte Inhaltsanalyse von Texten.",
+    "crumbs": [
+      "Startseite"
+    ]
+  },
+  {
+    "objectID": "index.html#herzlich-willkommen",
+    "href": "index.html#herzlich-willkommen",
+    "title": "Gebrauchsfertige, Open Source Large-Language Models auf HuggingFace",
+    "section": "",
+    "text": "Mit der steigenden Verfügbarkeit großer Textmengen und hoher Rechenleistung gewinnt die automatisierte Inhaltsanalyse in der Kommunikationswissenschaft zunehmend an Bedeutung. Bislang mangelt es jedoch an einfach zu bedienenden und leistungsfähigen Tools für die standardisierte automatisierte Inhaltsanalyse von Texten. Large Language Models (LLMs) und darauf aufbauende Modelle zur Textcodierung können dazu beitragen, diesen Mangel zu beheben. Die Modelle zeichnen sich durch ein tiefes Sprachverständnis aus und versprechen daher eine besonders valide Textcodierungen. Zudem sind gebrauchsfertige (off-the-shelf) LLM-basierter Modelle auf der Plattform HuggingFace frei verfügbar (Open Source) und können mit wenigen Zeilen Python-Code für die Inhaltsanalyse verwendet werden. Der vorliegende Beitrag untersucht das Potenzial solcher gebrauchsfertiger LLM-basierter Modelle auf HuggingFace als Forschungsinfrastruktur für die standardisierte Inhaltsanalyse von Texten. Nach einer Einführung in die Funktionsweise von LLMs werden drei Modelltypen für die Textcodierung vorgestellt: (1) kategoriespezifische Encoder-Modelle, (2) aufgabenspezifische Encoder-Modelle und (3) universelle Decoder-Modelle. Eine detaillierte Anleitung erläutert die Anwendung der drei Modelltypen über die HuggingFace-Bibliothek für die Textcodierung. In einer theoretischen Kontextualisierung und einer anschließenden empirischen Evaluationsstudie werden die Modelltypen mit herkömmlichen Methoden der standardisierten Inhaltsanalyse verglichen, insbesondere mit der manuellen Codierung, diktionärsbasierten Analyse und Analyse mittels überwachter maschineller Lernalgorithmen. Die Ergebnisse zeigen, dass LLM-basierte Modelle auf HuggingFace vergleichsweise einfach zugänglich, gut skalierbar und kostengünstig sind und eine hohe Leistungsfähigkeit aufweisen, die mit manuellen Inhaltsanalysen konkurrieren kann. Es werden aber auch Limitationen deutlich, wie die mangelnde Transparenz der Modelle hinsichtlich getroffener Codierungsentscheidungen. Insgesamt verdeutlicht der Beitrag jedoch das große Potenzial gebrauchsfertiger LLM-basierter Modelle auf HuggingFace als Forschungsinfrastruktur für die standardisierte Inhaltsanalyse von Texten.",
+    "crumbs": [
+      "Startseite"
+    ]
+  }
+]
