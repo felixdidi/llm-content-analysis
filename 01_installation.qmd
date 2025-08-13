@@ -1,0 +1,69 @@
+---
+title: "Installation"
+bibliography: "bib/refs.bib"
+csl: https://www.zotero.org/styles/apa
+---
+
+Bevor wir beginnen, müssen wir Python zunächst auf dem eigenen Computer installieren (siehe hierzu <https://python.org>). Für den Beispielcode in diesem Artikel empfehlen wir die Python-Version 3.12.8. Anschließend legen wir (1) einen Projektordner und (2) eine virtuelle Python-Umgebung an, in die dann (3) alle benötigten Pakete installiert werden. Schließlich (4) öffnen wir die Jupyter Notebook-Umgebung, in der wir die Beispiele aus diesem Artikel ausprobieren können.
+
+## 1 Projektordner anlegen
+
+Den Projektordner können wir über den Dateimanager (Windows) bzw. Finder (Mac) anlegen. Anschließend navigieren wir zu unserem Projektordner und öffnen darin die Kommandozeile unseres Computers:
+
+::: {.panel-tabset group="os"}
+
+## Linux/Mac
+
+Rechtsklick auf Projektordner im Finder und “Neues Terminal beim Ordner” auswählen
+
+## Windows
+
+Shift + Rechtsklick auf Projektordner im Explorer und “PowerShell-Fenster hier öffnen” auswählen
+
+:::
+
+## 2 Virtuelle Python-Umgebung anlegen
+
+Dort führen wir den folgenden Befehl aus, der die virtuelle Python-Umgebung anlegt:
+
+```{.bash filename="Terminal"}
+python3.12 -m venv env
+```
+
+Mit dem nachfolgenden Befehl aktivieren wir die virtuelle Umgebung. Diesen zweiten Befehl müssen wir jedes Mal ausführen, wenn wir in der virtuelle Python-Umgebung arbeiten wollen:
+
+::: {.panel-tabset group="os"}
+
+## Linux/Mac
+
+```{.bash filename="Terminal"}
+source env/bin/activate
+```
+
+## Windows
+
+```{.bash filename="Terminal"}
+.\env\Scripts\activate
+```
+
+:::
+
+## 3 Pakete installieren
+
+Anschließend können wir die benötigten Pakete installieren, konkret die `transformers`-Bibliothek von HuggingFace [@wolfHuggingFacesTransformersStateoftheart2020], die `pandas`-Bibliothek zur Datenverarbeitung [@mckinneyDataStructuresStatistical2010] sowie einige Machine Learning-Bibliotheken, die von `transformers` im Hintergrund benötigt werden. Abhängig vom verwendeten Transformer-Modell benötigen wir eventuell weitere Pakete, worauf entsprechende Fehlermeldungen im weiteren Prozess hinweisen. Diese können wir dann ebenfalls über `pip install [paketname]` installieren. Für die Beispiele aus diesem Artikel benötigen wir die im folgenden Code installierten Pakete:
+
+```bash
+pip install jupyter pandas transformers torch tensorflow flax tf-keras
+```
+
+## 4 Jupyter Notebook öffnen
+
+Mit dem folgenden Befehl können wir schließlich die Jupyter Notebook-Umgebung öffnen, in der wir die Beispiele aus diesem Artikel ausprobieren können. In der Jupyter Notebook-Umgebung können wir dann die Python-Skripte ausführen, die in den folgenden Kapiteln beschrieben werden. Zunächst öfnnen wir hierzu eines der Beispiel `.ipynb`-Notebooks, die im Projektordner liegen. 
+
+```{.bash filename="Terminal"}
+jupyter notebook
+```
+
+Alternativ können wir auch ein neues Notebook erstellen, indem wir im Jupyter-Dashboard auf "File", dann "New" klicken und dann "Notebook" auswählen. Dadurch wird eine neue Notebook-Datei erstellt, in der wir unseren Python-Code schreiben und ausführen können. Wenn wir das Notebook öffnen, werden wir zunächst gefragt, wie wir den Code ausführen wollen. Wir wählen hierzu "Python 3 (ipykernel)" aus, um sicherzustellen, dass wir die Python-Version verwenden, die wir zuvor installiert haben.
+
+Im Jupyter Notebook können wir dann die einzelnen Zellen ausführen, indem wir auf die Schaltfläche "Run" klicken oder die Tastenkombination `Shift + Enter` verwenden. Die Ergebnisse der Ausführung werden direkt unter der jeweiligen Zelle angezeigt.
