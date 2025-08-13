@@ -33,50 +33,6 @@
     ]
   },
   {
-    "objectID": "beispielstudie/01_goldstandard.html",
-    "href": "beispielstudie/01_goldstandard.html",
-    "title": "",
-    "section": "",
-    "text": "TBD",
-    "crumbs": [
-      "Beispielstudie",
-      "Goldstandard"
-    ]
-  },
-  {
-    "objectID": "02_kategoriespezifisches_Encoder-Modell.html",
-    "href": "02_kategoriespezifisches_Encoder-Modell.html",
-    "title": "Kategoriespezifisches Encoder-Modell",
-    "section": "",
-    "text": "Unabhängig vom verwendeten Modell laden wir zunächst die bereits installierten Pakete sowie unsere Textdaten und speichern diese in einem Listenobjekt:\n\nimport pandas as pd\nfrom transformers import pipeline\n\ndaten = pd.read_csv(\"data/example_dataset.csv\")\ndatenliste = list(daten[\"text\"])\n\ndaten\n\n\n\n\n\n\n\n\ntext\n\n\n\n\n0\nDie orthodoxe Gemeinde feiert heute #Ostern. I...\n\n\n1\nVielen Dank Gregor Rutz für die Unterstützung ...\n\n\n2\nWird ja immer schlimmer mit den Intoleranten d...\n\n\n3\nLiebe Junge, geht wählen. Kann ja nicht sein, ...\n\n\n4\n‘— Das war unser EU-Wahl-Abschluss der SP– mit...\n\n\n5\nAufschlussreicher Blick hinter die Mauern! Tol...\n\n\n6\nDenn ein Hard-Brexit würde der #EU, aber noch ...\n\n\n7\nFamilienbonus: Es ist erstaunlich wie viele Me...\n\n\n8\nIntegration passiert vor Ort. Deshalb arbeitet...\n\n\n9\nIch frage mich: Wer ist als nächstes dran Frau...",
-    "crumbs": [
-      "Anleitungen",
-      "2 Kategoriespezifisches Encoder-Modell"
-    ]
-  },
-  {
-    "objectID": "02_kategoriespezifisches_Encoder-Modell.html#daten-laden",
-    "href": "02_kategoriespezifisches_Encoder-Modell.html#daten-laden",
-    "title": "Kategoriespezifisches Encoder-Modell",
-    "section": "",
-    "text": "Unabhängig vom verwendeten Modell laden wir zunächst die bereits installierten Pakete sowie unsere Textdaten und speichern diese in einem Listenobjekt:\n\nimport pandas as pd\nfrom transformers import pipeline\n\ndaten = pd.read_csv(\"data/example_dataset.csv\")\ndatenliste = list(daten[\"text\"])\n\ndaten\n\n\n\n\n\n\n\n\ntext\n\n\n\n\n0\nDie orthodoxe Gemeinde feiert heute #Ostern. I...\n\n\n1\nVielen Dank Gregor Rutz für die Unterstützung ...\n\n\n2\nWird ja immer schlimmer mit den Intoleranten d...\n\n\n3\nLiebe Junge, geht wählen. Kann ja nicht sein, ...\n\n\n4\n‘— Das war unser EU-Wahl-Abschluss der SP– mit...\n\n\n5\nAufschlussreicher Blick hinter die Mauern! Tol...\n\n\n6\nDenn ein Hard-Brexit würde der #EU, aber noch ...\n\n\n7\nFamilienbonus: Es ist erstaunlich wie viele Me...\n\n\n8\nIntegration passiert vor Ort. Deshalb arbeitet...\n\n\n9\nIch frage mich: Wer ist als nächstes dran Frau...",
-    "crumbs": [
-      "Anleitungen",
-      "2 Kategoriespezifisches Encoder-Modell"
-    ]
-  },
-  {
-    "objectID": "02_kategoriespezifisches_Encoder-Modell.html#klassifikation",
-    "href": "02_kategoriespezifisches_Encoder-Modell.html#klassifikation",
-    "title": "Kategoriespezifisches Encoder-Modell",
-    "section": "Klassifikation",
-    "text": "Klassifikation\nNun erfolgt die eigentliche Klassifikation über den pipeline()-Befehl. In diesem können wir je nach Bedarf noch weitere Parameter festlegen, die der Dokumentation von HuggingFace oder unserem Beispielcode im OSF entnommen werden können. Wichtig ist etwa bei kleineren Modellen das Kürzen langer Texte in Abhängigkeit der maximalen Inputlänge des gewählten Modells (z. B. max_length = 512, truncation=True). Die Ausführung des pipeline()-Befehls kann mitunter lange dauern, vor allem beim ersten Mal, da das LLM geladen werden muss.\n\nsentiment_classifier = pipeline(\"sentiment-analysis\",\n                                 model=\"oliverguhr/german-sentiment-bert\",\n                                 max_length = 512, truncation=True)\n\nergebnis = sentiment_classifier(datenliste)\nergebnis = pd.DataFrame(classifi)\nergebnis[\"text\"] = daten[\"text\"]\nergebnis\n\n\n\n\n\n\n\n\nlabel\nscore\ntext\n\n\n\n\n0\nneutral\n0.988959\nDie orthodoxe Gemeinde feiert heute #Ostern. I...\n\n\n1\nneutral\n0.753388\nVielen Dank Gregor Rutz für die Unterstützung ...\n\n\n2\nnegative\n0.976087\nWird ja immer schlimmer mit den Intoleranten d...\n\n\n3\nnegative\n0.732691\nLiebe Junge, geht wählen. Kann ja nicht sein, ...\n\n\n4\nnegative\n0.903959\n‘— Das war unser EU-Wahl-Abschluss der SP– mit...\n\n\n5\npositive\n0.942041\nAufschlussreicher Blick hinter die Mauern! Tol...\n\n\n6\nnegative\n0.685230\nDenn ein Hard-Brexit würde der #EU, aber noch ...\n\n\n7\nnegative\n0.609906\nFamilienbonus: Es ist erstaunlich wie viele Me...\n\n\n8\nneutral\n0.998905\nIntegration passiert vor Ort. Deshalb arbeitet...\n\n\n9\nneutral\n0.950086\nIch frage mich: Wer ist als nächstes dran Frau...",
-    "crumbs": [
-      "Anleitungen",
-      "2 Kategoriespezifisches Encoder-Modell"
-    ]
-  },
-  {
     "objectID": "01_installation.html",
     "href": "01_installation.html",
     "title": "Installation",
@@ -129,6 +85,39 @@
     "crumbs": [
       "Anleitungen",
       "1 Installation"
+    ]
+  },
+  {
+    "objectID": "02_kategoriespezifisches_Encoder-Modell.html",
+    "href": "02_kategoriespezifisches_Encoder-Modell.html",
+    "title": "Kategoriespezifisches Encoder-Modell",
+    "section": "",
+    "text": "Unabhängig vom verwendeten Modell laden wir zunächst die bereits installierten Pakete sowie unsere Textdaten und speichern diese in einem Listenobjekt:\n\nimport pandas as pd\nfrom transformers import pipeline\n\ndaten = pd.read_csv(\"data/example_dataset.csv\")\ndatenliste = list(daten[\"text\"])\n\ndaten\n\n\n\n\n\n\n\n\ntext\n\n\n\n\n0\nDie orthodoxe Gemeinde feiert heute #Ostern. I...\n\n\n1\nVielen Dank Gregor Rutz für die Unterstützung ...\n\n\n2\nWird ja immer schlimmer mit den Intoleranten d...\n\n\n3\nLiebe Junge, geht wählen. Kann ja nicht sein, ...\n\n\n4\n‘— Das war unser EU-Wahl-Abschluss der SP– mit...\n\n\n5\nAufschlussreicher Blick hinter die Mauern! Tol...\n\n\n6\nDenn ein Hard-Brexit würde der #EU, aber noch ...\n\n\n7\nFamilienbonus: Es ist erstaunlich wie viele Me...\n\n\n8\nIntegration passiert vor Ort. Deshalb arbeitet...\n\n\n9\nIch frage mich: Wer ist als nächstes dran Frau...",
+    "crumbs": [
+      "Anleitungen",
+      "2 Kategoriespezifisches Encoder-Modell"
+    ]
+  },
+  {
+    "objectID": "02_kategoriespezifisches_Encoder-Modell.html#daten-laden",
+    "href": "02_kategoriespezifisches_Encoder-Modell.html#daten-laden",
+    "title": "Kategoriespezifisches Encoder-Modell",
+    "section": "",
+    "text": "Unabhängig vom verwendeten Modell laden wir zunächst die bereits installierten Pakete sowie unsere Textdaten und speichern diese in einem Listenobjekt:\n\nimport pandas as pd\nfrom transformers import pipeline\n\ndaten = pd.read_csv(\"data/example_dataset.csv\")\ndatenliste = list(daten[\"text\"])\n\ndaten\n\n\n\n\n\n\n\n\ntext\n\n\n\n\n0\nDie orthodoxe Gemeinde feiert heute #Ostern. I...\n\n\n1\nVielen Dank Gregor Rutz für die Unterstützung ...\n\n\n2\nWird ja immer schlimmer mit den Intoleranten d...\n\n\n3\nLiebe Junge, geht wählen. Kann ja nicht sein, ...\n\n\n4\n‘— Das war unser EU-Wahl-Abschluss der SP– mit...\n\n\n5\nAufschlussreicher Blick hinter die Mauern! Tol...\n\n\n6\nDenn ein Hard-Brexit würde der #EU, aber noch ...\n\n\n7\nFamilienbonus: Es ist erstaunlich wie viele Me...\n\n\n8\nIntegration passiert vor Ort. Deshalb arbeitet...\n\n\n9\nIch frage mich: Wer ist als nächstes dran Frau...",
+    "crumbs": [
+      "Anleitungen",
+      "2 Kategoriespezifisches Encoder-Modell"
+    ]
+  },
+  {
+    "objectID": "02_kategoriespezifisches_Encoder-Modell.html#klassifikation",
+    "href": "02_kategoriespezifisches_Encoder-Modell.html#klassifikation",
+    "title": "Kategoriespezifisches Encoder-Modell",
+    "section": "Klassifikation",
+    "text": "Klassifikation\nNun erfolgt die eigentliche Klassifikation über den pipeline()-Befehl. In diesem können wir je nach Bedarf noch weitere Parameter festlegen, die der Dokumentation von HuggingFace oder unserem Beispielcode im OSF entnommen werden können. Wichtig ist etwa bei kleineren Modellen das Kürzen langer Texte in Abhängigkeit der maximalen Inputlänge des gewählten Modells (z. B. max_length = 512, truncation=True). Die Ausführung des pipeline()-Befehls kann mitunter lange dauern, vor allem beim ersten Mal, da das LLM geladen werden muss.\n\nsentiment_classifier = pipeline(\"sentiment-analysis\",\n                                 model=\"oliverguhr/german-sentiment-bert\",\n                                 max_length = 512, truncation=True)\n\nergebnis = sentiment_classifier(datenliste)\nergebnis = pd.DataFrame(classifi)\nergebnis[\"text\"] = daten[\"text\"]\nergebnis\n\n\n\n\n\n\n\n\nlabel\nscore\ntext\n\n\n\n\n0\nneutral\n0.988959\nDie orthodoxe Gemeinde feiert heute #Ostern. I...\n\n\n1\nneutral\n0.753388\nVielen Dank Gregor Rutz für die Unterstützung ...\n\n\n2\nnegative\n0.976087\nWird ja immer schlimmer mit den Intoleranten d...\n\n\n3\nnegative\n0.732691\nLiebe Junge, geht wählen. Kann ja nicht sein, ...\n\n\n4\nnegative\n0.903959\n‘— Das war unser EU-Wahl-Abschluss der SP– mit...\n\n\n5\npositive\n0.942041\nAufschlussreicher Blick hinter die Mauern! Tol...\n\n\n6\nnegative\n0.685230\nDenn ein Hard-Brexit würde der #EU, aber noch ...\n\n\n7\nnegative\n0.609906\nFamilienbonus: Es ist erstaunlich wie viele Me...\n\n\n8\nneutral\n0.998905\nIntegration passiert vor Ort. Deshalb arbeitet...\n\n\n9\nneutral\n0.950086\nIch frage mich: Wer ist als nächstes dran Frau...",
+    "crumbs": [
+      "Anleitungen",
+      "2 Kategoriespezifisches Encoder-Modell"
     ]
   },
   {
