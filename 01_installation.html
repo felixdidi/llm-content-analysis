@@ -6,7 +6,6 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Anonym">
 
 <title>Installation</title>
 <style>
@@ -86,7 +85,7 @@ div.csl-indent {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./02_kategoriespezifisches_Encoder-Modell.html" rel="next">
+<link href="./02_setup.html" rel="next">
 <link href="./index.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -97,7 +96,7 @@ div.csl-indent {
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-541d1840fe0299ec4c9bf9ceaf6b9fb6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-8a5fba379e31ba61f28f52b73b3be454.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-7abf1c683b15f91743e6ad3fed8656fb.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -130,7 +129,7 @@ div.csl-indent {
 
 </head>
 
-<body class="nav-sidebar floating fullcontent quarto-light">
+<body class="nav-sidebar floating quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -139,7 +138,7 @@ div.csl-indent {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Seitenleiste umschalten" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./01_installation.html">Anleitungen</a></li><li class="breadcrumb-item"><a href="./01_installation.html">1 Installation</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Anleitungen</a></li><li class="breadcrumb-item"><a href="./01_installation.html">Installation</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Seitenleiste umschalten" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Suchen" onclick="window.quartoOpenSearch();">
@@ -164,15 +163,9 @@ div.csl-indent {
         </div>
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Startseite</span></a>
-  </div>
-</li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+            <a href="./index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Anleitungen</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Abschnitt umschalten">
             <i class="bi bi-chevron-right ms-2"></i>
@@ -182,77 +175,101 @@ div.csl-indent {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./01_installation.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">1 Installation</span></a>
+ <span class="menu-text">Installation</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./02_kategoriespezifisches_Encoder-Modell.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">2 Kategoriespezifisches Encoder-Modell</span></a>
+  <a href="./02_setup.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Vorbereitung</span></a>
   </div>
 </li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./03_aufgabenspezifisches_Encoder-Modell.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3 Aufgabenspezifisches Encoder-Modell</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./04_universelles_Decoder-Modell.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">4 Universelles Decoder-Modell</span></a>
-  </div>
-</li>
-      </ul>
-  </li>
-        <li class="sidebar-item sidebar-item-section">
+          <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
- <span class="menu-text">Beispielstudie</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Abschnitt umschalten">
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false">
+ <span class="menu-text">Textklassifikation</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false" aria-label="Abschnitt umschalten">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth2 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./beispielstudie/01_goldstandard.qmd" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Goldstandard</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./beispielstudie/02_kategoriespezifisches_Encoder-Modell.qmd" class="sidebar-item-text sidebar-link">
+  <a href="./03_kategoriespezifisches_Encoder-Modell.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Kategoriespezifisches Encoder-Modell</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./beispielstudie/03_aufgabenspezifisches_Encoder-Modell.qmd" class="sidebar-item-text sidebar-link">
+  <a href="./04_aufgabenspezifisches_Encoder-Modell.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Aufgabenspezifisches Encoder-Modell</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./beispielstudie/04_universelles_Decoder-Modell.qmd" class="sidebar-item-text sidebar-link">
+  <a href="./05_universelles_Decoder-Modell.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Universelles Decoder-Modell</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+      </ul>
+  </li>
+        <li class="px-0"><hr class="sidebar-divider hi "></li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./beispielstudie/00_beispielstudie.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Beispielstudie</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false" aria-label="Abschnitt umschalten">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./beispielstudie/00_goldstandard.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Goldstandard</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./beispielstudie/01_kategoriespezifisches_Encoder-Modell.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Kategoriespezifisches Encoder-Modell</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./beispielstudie/02_aufgabenspezifisches_Encoder-Modell.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Aufgabenspezifisches Encoder-Modell</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./beispielstudie/03_universelles_Decoder-Modell.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Universelles Decoder-Modell</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./05_dictionary.qmd" class="sidebar-item-text sidebar-link">
+  <a href="./beispielstudie/04_manuelle_Inhaltsanalyse.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Manuelle Inhaltsanalyse</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./beispielstudie/05_dictionary.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Off-the-shelf Diktionär</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./06_machine_learning.qmd" class="sidebar-item-text sidebar-link">
+  <a href="./beispielstudie/06_machine_learning.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Überwachtes maschinelles Lernen</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./07_validierung.qmd" class="sidebar-item-text sidebar-link">
+  <a href="./beispielstudie/07_validierung.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Validierung</span></a>
   </div>
 </li>
@@ -263,33 +280,31 @@ div.csl-indent {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Auf dieser Seite</h2>
+   
+  <ul>
+  <li><a href="#projektordner-anlegen" id="toc-projektordner-anlegen" class="nav-link active" data-scroll-target="#projektordner-anlegen">1 Projektordner anlegen</a></li>
+  <li><a href="#virtuelle-python-umgebung-anlegen" id="toc-virtuelle-python-umgebung-anlegen" class="nav-link" data-scroll-target="#virtuelle-python-umgebung-anlegen">2 Virtuelle Python-Umgebung anlegen</a></li>
+  <li><a href="#pakete-installieren" id="toc-pakete-installieren" class="nav-link" data-scroll-target="#pakete-installieren">3 Pakete installieren</a></li>
+  <li><a href="#jupyter-notebook-öffnen" id="toc-jupyter-notebook-öffnen" class="nav-link" data-scroll-target="#jupyter-notebook-öffnen">4 Jupyter Notebook öffnen</a></li>
+  </ul>
+</nav>
+    </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./01_installation.html">Anleitungen</a></li><li class="breadcrumb-item"><a href="./01_installation.html">1 Installation</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Anleitungen</a></li><li class="breadcrumb-item"><a href="./01_installation.html">Installation</a></li></ol></nav>
 <div class="quarto-title">
 <h1 class="title">Installation</h1>
 </div>
 
 
-<div class="quarto-title-meta-author">
-  <div class="quarto-title-meta-heading">Autor:in</div>
-  <div class="quarto-title-meta-heading">Universität</div>
-  
-    <div class="quarto-title-meta-contents">
-    <p class="author">Anonym </p>
-  </div>
-  <div class="quarto-title-meta-contents">
-        <p class="affiliation">
-            Anonym
-          </p>
-      </div>
-  </div>
 
 <div class="quarto-title-meta">
 
-      
+    
   
     
   </div>
@@ -299,7 +314,59 @@ div.csl-indent {
 </header>
 
 
-<p>Bevor wir beginnen, müssen wir Python zunächst auf dem eigenen Computer installieren (siehe hierzu <a href="https://python.org" class="uri">https://python.org</a>). Für den Beispielcode in diesem Artikel empfehlen wir die Python-Version 3.12.8. Anschließend legen wir (1) einen Projektordner und (2) eine virtuelle Python-Umgebung an, in die dann (3) alle benötigten Pakete installiert werden. Schließlich (4) öffnen wir die Jupyter Notebook-Umgebung, in der wir die Beispiele aus diesem Artikel ausprobieren können.</p>
+<p>Bevor wir beginnen, müssen wir Python zunächst auf dem eigenen Computer installieren. Aktuelle Versionen von Python zum Herunterladen sowie weitere Informationen zur Installation auf unterschiedlichen Betriebssystemen finden Sie unter <a href="https://python.org" class="uri">https://python.org</a>. Für den Beispielcode in diesem Artikel empfehlen wir die Python-Version 3.12.8. Für neuere Modelle kann es jedoch in der Zukunft sein, dass eine neuere Version von Python installiert werden muss, damit auch alle Pakete in den benötigten Versionen laufen können.</p>
+<p>Nach der Installation von Python legen wir (1) einen Projektordner und (2) eine virtuelle Python-Umgebung an, in die dann (3) alle benötigten Pakete installiert werden. Es ist nicht unbedingt notwendig, eine virtuelle Umgebung anzulegen. Allerdings empfehlen wir diesen Schritt, um Konflikte mit unterschiedlichen Software-Versionen zu vermeiden. Schließlich (4) öffnen wir die Jupyter Notebook-Umgebung, in der wir die Beispiele aus diesem Artikel ausprobieren können.</p>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Voraussetzungen
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Auf Hugging Face zur Verfügung gestellte Modelle können über die Programmiersprache Python in wenigen Zeilen Code geladen und auf Texte angewendet werden. Voraussetzung für die in dieser Anleitung vorgestellten Modelle ist, dass mindestens 10GB freier Festplattenspeicher sowie ausreichend Arbeitsspeicher (mindestens 8GB, besser mehr) zur Verfügung stehen. Achtung: Abseits der hier vorgestellten Modelle gibt es auch sehr große Modelle, die deutlich mehr Speicherplatz benötigen und auf handelsüblicher Hardware (Laptop oder PC) nicht ausgeführt werden können. Diese sind für die meisten Anwendungsfälle in der Inhaltsanalyse jedoch nicht notwendig. Prüfen Sie vor der Nutzung anderer Modelle auf Hugging Face immer die jeweiligen Anforderungen an die Hardware, diese lässt sich grob anhand der Modellgröße abschätzen.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Fragen zum Code?
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Kein Problem! Erklärungen zu den einzelnen Schritten des Codes verbergen sich hinter den Nummern an der rechten Seite. Einfach mit der Maus über die Nummer fahren, um die Erklärung zu sehen. Wo der jeweilige Code ausgeführt wird (in Python, R, oder dem Terminal), steht in der Kopfzeile des Codeblocks.</p>
+<div class="cell">
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Python</strong></pre>
+</div>
+<div class="sourceCode cell-code" id="annotated-cell-4"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><button class="code-annotation-anchor" data-target-cell="annotated-cell-4" data-target-annotation="1">1</button><span id="annotated-cell-4-1" class="code-annotation-target"><a href="#annotated-cell-4-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Hallo! 👋"</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell-annotation">
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-4" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-4" data-code-lines="1" data-code-annotation="1">Das ist ein einfacher Python-Befehl, der den Text “Hallo” in der Konsole ausgibt. Der Output erscheint unter dem Codeblock.</span>
+</dd>
+</dl>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Hallo! 👋</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
 <section id="projektordner-anlegen" class="level2">
 <h2 class="anchored" data-anchor-id="projektordner-anlegen">1 Projektordner anlegen</h2>
 <p>Den Projektordner können wir über den Dateimanager (Windows) bzw. Finder (Mac) anlegen. Anschließend navigieren wir zu unserem Projektordner und öffnen darin die Kommandozeile unseres Computers:</p>
@@ -317,13 +384,19 @@ div.csl-indent {
 </section>
 <section id="virtuelle-python-umgebung-anlegen" class="level2">
 <h2 class="anchored" data-anchor-id="virtuelle-python-umgebung-anlegen">2 Virtuelle Python-Umgebung anlegen</h2>
-<p>Dort führen wir den folgenden Befehl aus, der die virtuelle Python-Umgebung anlegt:</p>
+<p>In der Kommandozeile führen wir den folgenden Befehl aus, der die virtuelle Python-Umgebung anlegt:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>Terminal</strong></pre>
 </div>
-<div class="sourceCode" id="cb1" data-filename="Terminal"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="ex">python3.12</span> <span class="at">-m</span> venv env</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="annotated-cell-1" data-filename="Terminal"><pre class="sourceCode bash code-annotation-code code-with-copy code-annotated"><code class="sourceCode bash"><button class="code-annotation-anchor" data-target-cell="annotated-cell-1" data-target-annotation="1">1</button><span id="annotated-cell-1-1" class="code-annotation-target"><a href="#annotated-cell-1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python3.12</span> <span class="at">-m</span> venv env</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-1" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-1" data-code-lines="1" data-code-annotation="1">Wir legen eine virtuelle Python-Umgebung mit dem Namen <code>env</code> an. Der Name der virtuellen Umgebung kann beliebig gewählt werden, sollte aber idealerweise keine Leer- oder Sonderzeichen enthalten.</span>
+</dd>
+</dl>
 <p>Mit dem nachfolgenden Befehl aktivieren wir die virtuelle Umgebung. Diesen zweiten Befehl müssen wir jedes Mal ausführen, wenn wir in der virtuelle Python-Umgebung arbeiten wollen:</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset" data-group="os">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true">Linux/Mac</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false">Windows</a></li></ul>
@@ -333,16 +406,28 @@ div.csl-indent {
 <div class="code-with-filename-file">
 <pre><strong>Terminal</strong></pre>
 </div>
-<div class="sourceCode" id="cb2" data-filename="Terminal"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1"></a><span class="bu">source</span> env/bin/activate</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="annotated-cell-6" data-filename="Terminal"><pre class="sourceCode bash code-annotation-code code-with-copy code-annotated"><code class="sourceCode bash"><button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="1">1</button><span id="annotated-cell-6-1" class="code-annotation-target"><a href="#annotated-cell-6-1" aria-hidden="true" tabindex="-1"></a><span class="bu">source</span> env/bin/activate</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-6" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-6" data-code-lines="1" data-code-annotation="1">Wir aktivieren die virtuelle Python-Umgebung mit dem Namen <code>env</code>. Der Name der virtuellen Umgebung muss mit dem Namen übereinstimmen, den wir im vorherigen Schritt gewählt haben.</span>
+</dd>
+</dl>
 </div>
 <div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>Terminal</strong></pre>
 </div>
-<div class="sourceCode" id="cb3" data-filename="Terminal"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1"></a><span class="bu">.</span><span class="dt">\e</span>nv<span class="dt">\S</span>cripts<span class="dt">\a</span>ctivate</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="annotated-cell-7" data-filename="Terminal"><pre class="sourceCode bash code-annotation-code code-with-copy code-annotated"><code class="sourceCode bash"><button class="code-annotation-anchor" data-target-cell="annotated-cell-7" data-target-annotation="1">1</button><span id="annotated-cell-7-1" class="code-annotation-target"><a href="#annotated-cell-7-1" aria-hidden="true" tabindex="-1"></a><span class="bu">.</span><span class="dt">\e</span>nv<span class="dt">\S</span>cripts<span class="dt">\a</span>ctivate</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-7" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-7" data-code-lines="1" data-code-annotation="1">Wir aktivieren die virtuelle Python-Umgebung mit dem Namen <code>env</code>. Der Name der virtuellen Umgebung muss mit dem Namen übereinstimmen, den wir im vorherigen Schritt gewählt haben.</span>
+</dd>
+</dl>
 </div>
 </div>
 </div>
@@ -350,18 +435,65 @@ div.csl-indent {
 <section id="pakete-installieren" class="level2">
 <h2 class="anchored" data-anchor-id="pakete-installieren">3 Pakete installieren</h2>
 <p>Anschließend können wir die benötigten Pakete installieren, konkret die <code>transformers</code>-Bibliothek von HuggingFace <span class="citation" data-cites="wolfHuggingFacesTransformersStateoftheart2020">(<a href="#ref-wolfHuggingFacesTransformersStateoftheart2020" role="doc-biblioref">Wolf et al., 2020</a>)</span>, die <code>pandas</code>-Bibliothek zur Datenverarbeitung <span class="citation" data-cites="mckinneyDataStructuresStatistical2010">(<a href="#ref-mckinneyDataStructuresStatistical2010" role="doc-biblioref">McKinney, 2010</a>)</span> sowie einige Machine Learning-Bibliotheken, die von <code>transformers</code> im Hintergrund benötigt werden. Abhängig vom verwendeten Transformer-Modell benötigen wir eventuell weitere Pakete, worauf entsprechende Fehlermeldungen im weiteren Prozess hinweisen. Diese können wir dann ebenfalls über <code>pip install [paketname]</code> installieren. Für die Beispiele aus diesem Artikel benötigen wir die im folgenden Code installierten Pakete:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1"></a><span class="ex">pip</span> install jupyter pandas transformers torch tensorflow flax tf-keras</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</section>
-<section id="jupyter-notebook-öffnen" class="level2">
-<h2 class="anchored" data-anchor-id="jupyter-notebook-öffnen">4 Jupyter Notebook öffnen</h2>
-<p>Mit dem folgenden Befehl können wir schließlich die Jupyter Notebook-Umgebung öffnen, in der wir die Beispiele aus diesem Artikel ausprobieren können. In der Jupyter Notebook-Umgebung können wir dann die Python-Skripte ausführen, die in den folgenden Kapiteln beschrieben werden. Zunächst öfnnen wir hierzu eines der Beispiel <code>.ipynb</code>-Notebooks, die im Projektordner liegen.</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>Terminal</strong></pre>
 </div>
-<div class="sourceCode" id="cb5" data-filename="Terminal"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1"></a><span class="ex">jupyter</span> notebook</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="annotated-cell-2" data-filename="Terminal"><pre class="sourceCode bash code-annotation-code code-with-copy code-annotated"><code class="sourceCode bash"><button class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="1">1</button><span id="annotated-cell-2-1" class="code-annotation-target"><a href="#annotated-cell-2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install jupyter pandas transformers torch tensorflow flax tf-keras</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Alternativ können wir auch ein neues Notebook erstellen, indem wir im Jupyter-Dashboard auf “File”, dann “New” klicken und dann “Notebook” auswählen. Dadurch wird eine neue Notebook-Datei erstellt, in der wir unseren Python-Code schreiben und ausführen können. Wenn wir das Notebook öffnen, werden wir zunächst gefragt, wie wir den Code ausführen wollen. Wir wählen hierzu “Python 3 (ipykernel)” aus, um sicherzustellen, dass wir die Python-Version verwenden, die wir zuvor installiert haben.</p>
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-2" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-2" data-code-lines="1" data-code-annotation="1">Wir installieren die benötigten Pakete in der virtuellen Python-Umgebung. Dies kann einige Minuten dauern.</span>
+</dd>
+</dl>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Paket-Versionen für die vorgestellten Beispiele
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Die in dieser Anleitung vorgestellten Beispiele wurden mit den folgenden Paket-Versionen getestet. Es kann sein, dass in der Zukunft neuere Versionen der Pakete veröffentlicht werden, die eventuell nicht mehr mit dem Beispielcode kompatibel sind. In diesem Fall können Sie die untenstehenden Versionen der Pakete gezielt installieren, indem Sie den jeweiligen Paketnamen mit <code>==</code> und der Versionsnummer angeben. Zum Beispiel: <code>pip install transformers==4.5.1</code>.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode md code-with-copy"><code class="sourceCode markdown"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>flax==0.11.1</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>jupyter==1.1.1</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>jupyter-console==6.6.3</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>jupyter-events==0.12.0</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>jupyter-lsp==2.2.6</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>jupyter_client==8.6.3</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>jupyter_core==5.8.1</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>jupyter_server==2.16.0</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>jupyter_server_terminals==0.5.3</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>jupyterlab==4.4.5</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>jupyterlab_pygments==0.3.0</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>jupyterlab_server==2.27.3</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>jupyterlab_widgets==3.0.15</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>pandas==2.3.1</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>tensorflow==2.19.0</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>torch==2.8.0</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>transformers==4.55.1</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</section>
+<section id="jupyter-notebook-öffnen" class="level2">
+<h2 class="anchored" data-anchor-id="jupyter-notebook-öffnen">4 Jupyter Notebook öffnen</h2>
+<p>Mit dem folgenden Befehl können wir schließlich die Jupyter Notebook-Umgebung öffnen, in der wir die Beispiele aus diesem Artikel ausprobieren können. In der Jupyter Notebook-Umgebung können wir dann die Python-Skripte ausführen, die in den folgenden Kapiteln beschrieben werden. Diese Beispiel-Notebooks (<code>.ipynb</code>) können auf der jeweiligen Anleitungsseite (oder aus dem OSF) heruntergeladen und anschließend im Projektordner abgelegt werden. Alternativ können wir auch ein neues Notebook erstellen (siehe unten).</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Terminal</strong></pre>
+</div>
+<div class="sourceCode" id="annotated-cell-3" data-filename="Terminal"><pre class="sourceCode bash code-annotation-code code-with-copy code-annotated"><code class="sourceCode bash"><button class="code-annotation-anchor" data-target-cell="annotated-cell-3" data-target-annotation="1">1</button><span id="annotated-cell-3-1" class="code-annotation-target"><a href="#annotated-cell-3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">jupyter</span> notebook</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-3" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-3" data-code-lines="1" data-code-annotation="1">Wir öffnen die Jupyter Notebook-Umgebung. Dadurch wird ein neues Fenster in unserem Webbrowser geöffnet, in dem wir die Jupyter Notebook-Umgebung sehen können.</span>
+</dd>
+</dl>
+<p>Anstelle eines der Beispiel-Notebooks zu nutzen, können wir auch ein neues Notebook erstellen, indem wir im Jupyter-Dashboard auf “File”, dann “New” klicken und dann “Notebook” auswählen. Dadurch wird eine neue Notebook-Datei erstellt, in der wir unseren Python-Code schreiben und ausführen können. Wenn wir das Notebook öffnen, werden wir zunächst gefragt, wie wir den Code ausführen wollen. Wir wählen hierzu “Python 3 (ipykernel)” aus, um sicherzustellen, dass wir die Python-Version verwenden, die wir zuvor installiert haben.</p>
 <p>Im Jupyter Notebook können wir dann die einzelnen Zellen ausführen, indem wir auf die Schaltfläche “Run” klicken oder die Tastenkombination <code>Shift + Enter</code> verwenden. Die Ergebnisse der Ausführung werden direkt unter der jeweiligen Zelle angezeigt.</p>
 
 
@@ -721,25 +853,64 @@ Wolf, T., Debut, L., Sanh, V., Chaumond, J., Delangue, C., Moi, A., Cistac, P., 
           }
         };
       }
-        // Attach click handler to the DT
-        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
-        for (const annoteDlNode of annoteDls) {
-          annoteDlNode.addEventListener('click', (event) => {
-            const clickedEl = event.target;
-            if (clickedEl !== selectedAnnoteEl) {
-              unselectCodeLines();
-              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
-              if (activeEl) {
-                activeEl.classList.remove('code-annotation-active');
-              }
-              selectCodeLines(clickedEl);
-              clickedEl.classList.add('code-annotation-active');
-            } else {
-              // Unselect the line
-              unselectCodeLines();
-              clickedEl.classList.remove('code-annotation-active');
+        const annoteTargets = window.document.querySelectorAll('.code-annotation-anchor');
+        for (let i=0; i<annoteTargets.length; i++) {
+          const annoteTarget = annoteTargets[i];
+          const targetCell = annoteTarget.getAttribute("data-target-cell");
+          const targetAnnotation = annoteTarget.getAttribute("data-target-annotation");
+          const contentFn = () => {
+            const content = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+            if (content) {
+              const tipContent = content.cloneNode(true);
+              tipContent.classList.add("code-annotation-tip-content");
+              return tipContent.outerHTML;
             }
-          });
+          }
+          const config = {
+            allowHTML: true,
+            content: contentFn,
+            onShow: (instance) => {
+              selectCodeLines(instance.reference);
+              instance.reference.classList.add('code-annotation-active');
+              window.tippy.hideAll();
+            },
+            onHide: (instance) => {
+              unselectCodeLines();
+              instance.reference.classList.remove('code-annotation-active');
+            },
+            maxWidth: 300,
+            delay: [50, 0],
+            duration: [200, 0],
+            offset: [5, 10],
+            arrow: true,
+            appendTo: function(el) {
+              return el.parentElement.parentElement.parentElement;
+            },
+            interactive: true,
+            interactiveBorder: 10,
+            theme: 'quarto',
+            placement: 'right',
+            popperOptions: {
+              modifiers: [
+              {
+                name: 'flip',
+                options: {
+                  flipVariations: false, // true by default
+                  allowedAutoPlacements: ['right'],
+                  fallbackPlacements: ['right', 'top', 'top-start', 'top-end', 'bottom', 'bottom-start', 'bottom-end', 'left'],
+                },
+              },
+              {
+                name: 'preventOverflow',
+                options: {
+                  mainAxis: false,
+                  altAxis: false
+                }
+              }
+              ]        
+            }      
+          };
+          window.tippy(annoteTarget, config); 
         }
     const findCites = (el) => {
       const parentEl = el.parentElement;
@@ -782,13 +953,13 @@ Wolf, T., Debut, L., Sanh, V., Chaumond, J., Delangue, C., Moi, A., Cistac, P., 
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./index.html" class="pagination-link" aria-label="Startseite">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Startseite</span>
+      <a href="./index.html" class="pagination-link" aria-label="Anleitungen">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Anleitungen</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./02_kategoriespezifisches_Encoder-Modell.html" class="pagination-link" aria-label="2 Kategoriespezifisches Encoder-Modell">
-        <span class="nav-page-text">2 Kategoriespezifisches Encoder-Modell</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./02_setup.html" class="pagination-link" aria-label="Vorbereitung">
+        <span class="nav-page-text">Vorbereitung</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

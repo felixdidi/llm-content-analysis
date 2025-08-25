@@ -6,9 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Anonym">
 
-<title>Gebrauchsfertige, Open Source Large-Language Models auf Hugging Face</title>
+<title>Vorbereitung</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -21,6 +20,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -31,7 +65,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./01_installation.html" rel="next">
+<link href="./03_kategoriespezifisches_Encoder-Modell.html" rel="next">
+<link href="./01_installation.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -83,7 +118,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Seitenleiste umschalten" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Anleitungen</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Anleitungen</a></li><li class="breadcrumb-item"><a href="./02_setup.html">Vorbereitung</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Seitenleiste umschalten" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Suchen" onclick="window.quartoOpenSearch();">
@@ -110,7 +145,7 @@ ul.task-list li input[type="checkbox"] {
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="./index.html" class="sidebar-item-text sidebar-link active">
+            <a href="./index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Anleitungen</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Abschnitt umschalten">
             <i class="bi bi-chevron-right ms-2"></i>
@@ -125,7 +160,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./02_setup.html" class="sidebar-item-text sidebar-link">
+  <a href="./02_setup.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Vorbereitung</span></a>
   </div>
 </li>
@@ -225,36 +260,31 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Auf dieser Seite</h2>
+   
+  <ul>
+  <li><a href="#projektordner-öffnen" id="toc-projektordner-öffnen" class="nav-link active" data-scroll-target="#projektordner-öffnen">1 Projektordner öffnen</a></li>
+  <li><a href="#texte-vorbereiten" id="toc-texte-vorbereiten" class="nav-link" data-scroll-target="#texte-vorbereiten">2 Texte vorbereiten</a></li>
+  <li><a href="#virtuelle-python-umgebung-aktivieren" id="toc-virtuelle-python-umgebung-aktivieren" class="nav-link" data-scroll-target="#virtuelle-python-umgebung-aktivieren">3 Virtuelle Python-Umgebung aktivieren</a></li>
+  <li><a href="#jupyter-notebook-öffnen" id="toc-jupyter-notebook-öffnen" class="nav-link" data-scroll-target="#jupyter-notebook-öffnen">4 Jupyter Notebook öffnen</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Anleitungen</a></li><li class="breadcrumb-item"><a href="./02_setup.html">Vorbereitung</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Gebrauchsfertige, Open Source Large-Language Models auf Hugging Face</h1>
-<p class="subtitle lead">als Forschungsinfrastruktur für die standardisierte Inhaltsanalyse von Texten</p>
+<h1 class="title">Vorbereitung</h1>
 </div>
 
 
-<div class="quarto-title-meta-author">
-  <div class="quarto-title-meta-heading">Autor:in</div>
-  <div class="quarto-title-meta-heading">Universität</div>
-  
-    <div class="quarto-title-meta-contents">
-    <p class="author">Anonym </p>
-  </div>
-  <div class="quarto-title-meta-contents">
-        <p class="affiliation">
-            Anonym
-          </p>
-      </div>
-  </div>
 
 <div class="quarto-title-meta">
 
-      
+    
   
     
   </div>
@@ -264,19 +294,156 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="herzlich-willkommen" class="level2 unnumbered unlisted">
-<h2 class="unnumbered unlisted anchored" data-anchor-id="herzlich-willkommen">Herzlich Willkommen!</h2>
-<p>Der vorliegende Beitrag untersucht das Potenzial gebrauchsfertiger LLM-basierter Modelle auf Hugging Face als Forschungsinfrastruktur für die standardisierte Inhaltsanalyse von Texten. Dabei werden drei Modelltypen für die Textcodierung vorgestellt: (1) kategoriespezifische Encoder-Modelle, (2) aufgabenspezifische Encoder-Modelle und (3) universelle Decoder-Modelle. Eine detaillierte Anleitung erläutert die Anwendung der drei Modelltypen über die Hugging Face-Bibliothek für die Textcodierung. In einer empirischen Evaluationsstudie werden die Modelltypen mit herkömmlichen Methoden der standardisierten Inhaltsanalyse verglichen, insbesondere mit der manuellen Codierung, diktionärsbasierten Analyse und Analyse mittels überwachter maschineller Lernalgorithmen. Die Ergebnisse zeigen, dass LLM-basierte Modelle auf Hugging Face vergleichsweise einfach zugänglich, gut skalierbar und kostengünstig sind und eine hohe Leistungsfähigkeit aufweisen, die mit manuellen Inhaltsanalysen konkurrieren kann.</p>
-<p>Wir dokumentieren Schritt für Schritt, wie Sie die Beispiele aus diesem Artikel selbst ausprobieren können. Mithilfe der zur Verfügung gestellten Notebooks ist es sehr einfach möglich, die vorgestellten Methoden auf eigene Texte anzuwenden und auch andere, über Hugging Face zur Verfügung gestellte Modelle für die Inhaltsanalyse von Texten zu nutzen. Nach einer einmaligen <a href="./01_installation.html">Installation von Python und allen benötigten Paketen</a> sind nur wenige Schritte der <a href="./02_setup.html">Vorbereitung</a> notwendig. Danach können wir unsere Texte mit einem <a href="./03_kategoriespezifisches_Encoder-Modell.html">kategoriespezifischen Encoder-Modell</a>, einem <a href="./04_aufgabenspezifisches_Encoder-Modell.html">aufgabenspezifischen Encoder-Modell</a> oder einem <a href="./05_universelles_Decoder-Modell.html">universellen Decoder-Modell</a> codieren.</p>
-<p>In einer <a href="./beispielstudie/00_beispielstudie.html">empirischen Evaluationsstudie</a> vergleichen wir die drei Modelltypen mit herkömmlichen Methoden der standardisierten Inhaltsanalyse, insbesondere mit der manuellen Codierung, diktionärsbasierten Analyse und Analyse mittels überwachter maschineller Lernalgorithmen.</p>
+<p>Nachdem wir im vorherigen Abschnitt bereits alle Voraussetzungen geschaffen haben (Python installiert, Projektordner und virtuelle Umgebung angelegt, benötigte Pakete installiert), wollen wir hier noch einmal Schritt für Schritt durchgehen, wie wir die Arbeitsumgebung für die Beispiele aus diesem Artikel einrichten können. Die folgenden Schritte müssen nämlich, im Gegensatz zur Installation, jedes Mal durchgeführt werden, wenn wir eine neue Textcodierung beginnen wollen.</p>
+<section id="projektordner-öffnen" class="level2">
+<h2 class="anchored" data-anchor-id="projektordner-öffnen">1 Projektordner öffnen</h2>
+<p>Den bereits angelegten Projektordner können wir über den Dateimanager (Windows) bzw. Finder (Mac) öffnen. Anschließend navigieren wir zu unserem Projektordner und öffnen darin die Kommandozeile unseres Computers:</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset" data-group="os">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" aria-current="page">Linux/Mac</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">Windows</a></li></ul>
+<div class="tab-content" data-group="os">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<p>Rechtsklick auf Projektordner im Finder und “Neues Terminal beim Ordner” auswählen</p>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<p>Shift + Rechtsklick auf Projektordner im Explorer und “PowerShell-Fenster hier öffnen” auswählen</p>
+</div>
+</div>
+</div>
+</section>
+<section id="texte-vorbereiten" class="level2">
+<h2 class="anchored" data-anchor-id="texte-vorbereiten">2 Texte vorbereiten</h2>
+<p>Die Texte, die wir codieren wollen, müssen in einer CSV-Datei im Projektordner vorliegen. Die CSV-Datei muss dabei mindestens eine Spalte mit den zu codierenden Texten enthalten. Optional können weitere Spalten mit Metadaten (z.B. ID, Quelle, Datum) enthalten sein. In den Beispielen aus diesem Artikel liegen die Text in der Spalte <code>text</code>. Sollten die Texte in einer anderen Spalte liegen, muss der entsprechende Spaltenname im Code angepasst werden. In den folgenden Beispielen verwenden wir eine Beispieldatei mit dem Namen <code>example_dataset.csv</code>, die im Ordner <code>data</code> liegt. Diese Beispieldatei enthält zehn Beispieltexte:</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Code einblenden
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Code, der nicht unmittelbar für das Verständnis der Beispiele notwendig ist, wird standardmäßig ausgeblendet. Über den Button “Code” kann der Code bei Bedarf jedoch jederzeit eingeblendet werden.</p>
+</div>
+</div>
+<div class="cell">
+<div class="code-with-filename">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-with-filename-file">
+<pre><strong>R</strong></pre>
+</div>
+<div class="sourceCode cell-code" id="annotated-cell-1"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><button class="code-annotation-anchor" data-target-cell="annotated-cell-1" data-target-annotation="1">1</button><span id="annotated-cell-1-1" class="code-annotation-target"><a href="#annotated-cell-1-1" aria-hidden="true" tabindex="-1"></a>readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">"data/example_dataset.csv"</span>, <span class="at">show_col_types =</span> <span class="cn">FALSE</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell-annotation">
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-1" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-1" data-code-lines="1" data-code-annotation="1">Wir lesen die Beispieldatei <code>example_dataset.csv</code> ein, die im Ordner <code>data</code> liegt. Die Datei enthält zehn Beispieltexte in der Spalte <code>text</code>.</span>
+</dd>
+</dl>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 1
+   text                                                                         
+   &lt;chr&gt;                                                                        
+ 1 Die orthodoxe Gemeinde feiert heute #Ostern. Ich wünsche ein frohes und gese…
+ 2 Vielen Dank Gregor Rutz für die Unterstützung bei den Regierungsratswahlen v…
+ 3 Wird ja immer schlimmer mit den Intoleranten die keine anderen Meinungen akz…
+ 4 Liebe Junge, geht wählen. Kann ja nicht sein, dass 50 über eure Zukunft ents…
+ 5 ‘— Das war unser EU-Wahl-Abschluss der SP– mit mir Andreas Schieder und eini…
+ 6 Aufschlussreicher Blick hinter die Mauern! Tolle Reportage über tolle Arbeit…
+ 7 Denn ein Hard-Brexit würde der #EU, aber noch viel mehr #Großbritannien scha…
+ 8 Familienbonus: Es ist erstaunlich wie viele Menschen mir diese eine Frage st…
+ 9 Integration passiert vor Ort. Deshalb arbeitet der Kanton sehr eng mit den G…
+10 Ich frage mich: Wer ist als nächstes dran Frau Bundesministerin Beate Hartin…</code></pre>
+</div>
+</div>
+</section>
+<section id="virtuelle-python-umgebung-aktivieren" class="level2">
+<h2 class="anchored" data-anchor-id="virtuelle-python-umgebung-aktivieren">3 Virtuelle Python-Umgebung aktivieren</h2>
+<p>Auch wenn wir die virtuelle Python-Umgebung bereits angelegt haben, müssen wir diese jedes Mal aktivieren, wenn wir in der virtuellen Umgebung arbeiten wollen. Hierzu führen wir den folgenden Befehl aus:</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Achtung
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Ist die virtuelle Umgebung bereits aktiviert, darf der folgende Befehl nicht erneut ausgeführt werden, da dies zu Fehlern führen kann. In der Kommandozeile ist die virtuelle Umgebung an einem veränderten Prompt erkennbar, der den Namen der virtuellen Umgebung enthält (z.B. <code>(env)</code>). Alternativ können wir in der Konsole den Befehl <code>echo $VIRTUAL_ENV</code> (Linux/Mac) bzw. <code>echo %VIRTUAL_ENV%</code> (Windows) ausführen. Wenn der Pfad zur virtuellen Umgebung angezeigt wird, ist die virtuelle Umgebung aktiviert. Andernfalls wird eine leere Zeile angezeigt.</p>
+</div>
+</div>
+<div class="tabset-margin-container"></div><div class="panel-tabset" data-group="os">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true">Linux/Mac</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false">Windows</a></li></ul>
+<div class="tab-content" data-group="os">
+<div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Terminal</strong></pre>
+</div>
+<div class="sourceCode" id="annotated-cell-4" data-filename="Terminal"><pre class="sourceCode bash code-annotation-code code-with-copy code-annotated"><code class="sourceCode bash"><button class="code-annotation-anchor" data-target-cell="annotated-cell-4" data-target-annotation="1">1</button><span id="annotated-cell-4-1" class="code-annotation-target"><a href="#annotated-cell-4-1" aria-hidden="true" tabindex="-1"></a><span class="bu">source</span> env/bin/activate</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-4" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-4" data-code-lines="1" data-code-annotation="1">Wir aktivieren die virtuelle Python-Umgebung mit dem Namen <code>env</code>. Der Name der virtuellen Umgebung kann beliebig gewählt werden, sollte aber idealerweise keine Leer- oder Sonderzeichen enthalten. Er muss außerdem mit dem Namen übereinstimmen, der bei der Anlage der virtuellen Umgebung verwendet wurde.</span>
+</dd>
+</dl>
+</div>
+<div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Terminal</strong></pre>
+</div>
+<div class="sourceCode" id="annotated-cell-5" data-filename="Terminal"><pre class="sourceCode bash code-annotation-code code-with-copy code-annotated"><code class="sourceCode bash"><button class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="1">1</button><span id="annotated-cell-5-1" class="code-annotation-target"><a href="#annotated-cell-5-1" aria-hidden="true" tabindex="-1"></a><span class="bu">.</span><span class="dt">\e</span>nv<span class="dt">\S</span>cripts<span class="dt">\a</span>ctivate</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-5" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-5" data-code-lines="1" data-code-annotation="1">Wir aktivieren die virtuelle Python-Umgebung mit dem Namen <code>env</code>. Der Name der virtuellen Umgebung kann beliebig gewählt werden, sollte aber idealerweise keine Leer- oder Sonderzeichen enthalten. Er muss außerdem mit dem Namen übereinstimmen, der bei der Anlage der virtuellen Umgebung verwendet wurde.</span>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+</section>
+<section id="jupyter-notebook-öffnen" class="level2">
+<h2 class="anchored" data-anchor-id="jupyter-notebook-öffnen">4 Jupyter Notebook öffnen</h2>
+<p>Mit dem folgenden Befehl können wir schließlich die Jupyter Notebook-Umgebung öffnen, in der wir die Beispiele aus diesem Artikel ausprobieren können. In der Jupyter Notebook-Umgebung können wir dann die Python-Skripte ausführen, die in den folgenden Kapiteln beschrieben werden.</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Terminal</strong></pre>
+</div>
+<div class="sourceCode" id="annotated-cell-2" data-filename="Terminal"><pre class="sourceCode bash code-annotation-code code-with-copy code-annotated"><code class="sourceCode bash"><button class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="1">1</button><span id="annotated-cell-2-1" class="code-annotation-target"><a href="#annotated-cell-2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">jupyter</span> notebook</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-2" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-2" data-code-lines="1" data-code-annotation="1">Wir öffnen die Jupyter Notebook-Umgebung. Dadurch wird ein neues Fenster in unserem Webbrowser geöffnet, in dem wir die Jupyter Notebook-Umgebung sehen können.</span>
+</dd>
+</dl>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Gut zu wissen
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Während die Jupyter Notebook-Umgebung läuft, sollte die Kommandozeile nicht geschlossen werden. Wir sehen in der Kommandozeile währenddessen verschiedene Informationen, z.B. ob die Jupyter Notebook-Umgebung erfolgreich gestartet wurde und unter welcher URL wir die Jupyter Notebook-Umgebung im Browser erreichen können (in der Regel <code>http://localhost:8888</code>). Wenn wir die Jupyter Notebook-Umgebung schließen wollen, können wir dies über die Kommandozeile mit <code>CTRL + C</code> tun. Anschließend müssen wir die Eingabe mit <code>y</code> bestätigen.</p>
+</div>
+</div>
 
 
 </section>
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Zitat</h2><div><div class="quarto-appendix-secondary-label">Bitte zitieren Sie diese Arbeit als:</div><div id="ref-untitled" class="csl-entry quarto-appendix-citeas" role="listitem">
-Anonym. n.d. <span>“Gebrauchsfertige, Open Source Large-Language Models
-auf Hugging Face.”</span> <em>Publizistik</em>. <a href="https://doi.org/12345">https://doi.org/12345</a>.
-</div></div></section></div></main> <!-- /main -->
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
@@ -722,10 +889,13 @@ auf Hugging Face.”</span> <em>Publizistik</em>. <a href="https://doi.org/12345
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
+      <a href="./01_installation.html" class="pagination-link" aria-label="Installation">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Installation</span>
+      </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./01_installation.html" class="pagination-link" aria-label="Installation">
-        <span class="nav-page-text">Installation</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./03_kategoriespezifisches_Encoder-Modell.html" class="pagination-link" aria-label="Kategoriespezifisches Encoder-Modell">
+        <span class="nav-page-text">Kategoriespezifisches Encoder-Modell</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

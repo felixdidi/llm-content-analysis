@@ -6,9 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Anonym">
 
-<title>Gebrauchsfertige, Open Source Large-Language Models auf Hugging Face</title>
+<title>Manuelle Inhaltsanalyse</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -21,27 +20,48 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<link href="./01_installation.html" rel="next">
-<script src="site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-541d1840fe0299ec4c9bf9ceaf6b9fb6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-7abf1c683b15f91743e6ad3fed8656fb.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../beispielstudie/05_dictionary.html" rel="next">
+<link href="../beispielstudie/03_universelles_Decoder-Modell.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-541d1840fe0299ec4c9bf9ceaf6b9fb6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-7abf1c683b15f91743e6ad3fed8656fb.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -83,7 +103,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Seitenleiste umschalten" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Anleitungen</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../beispielstudie/00_beispielstudie.html">Beispielstudie</a></li><li class="breadcrumb-item"><a href="../beispielstudie/04_manuelle_Inhaltsanalyse.html">Manuelle Inhaltsanalyse</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Seitenleiste umschalten" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Suchen" onclick="window.quartoOpenSearch();">
@@ -97,8 +117,8 @@ ul.task-list li input[type="checkbox"] {
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
     <div class="pt-lg-2 mt-2 text-center sidebar-header">
-      <a href="./index.html" class="sidebar-logo-link">
-      <img src="./img/transformer.png" alt="" class="sidebar-logo py-0 d-lg-inline d-none">
+      <a href="../index.html" class="sidebar-logo-link">
+      <img src="../img/transformer.png" alt="" class="sidebar-logo py-0 d-lg-inline d-none">
       </a>
       </div>
         <div class="mt-2 flex-shrink-0 align-items-center">
@@ -110,22 +130,22 @@ ul.task-list li input[type="checkbox"] {
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="./index.html" class="sidebar-item-text sidebar-link active">
+            <a href="../index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Anleitungen</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Abschnitt umschalten">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false" aria-label="Abschnitt umschalten">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./01_installation.html" class="sidebar-item-text sidebar-link">
+  <a href="../01_installation.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Installation</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./02_setup.html" class="sidebar-item-text sidebar-link">
+  <a href="../02_setup.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Vorbereitung</span></a>
   </div>
 </li>
@@ -140,19 +160,19 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth2 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./03_kategoriespezifisches_Encoder-Modell.html" class="sidebar-item-text sidebar-link">
+  <a href="../03_kategoriespezifisches_Encoder-Modell.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Kategoriespezifisches Encoder-Modell</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./04_aufgabenspezifisches_Encoder-Modell.html" class="sidebar-item-text sidebar-link">
+  <a href="../04_aufgabenspezifisches_Encoder-Modell.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Aufgabenspezifisches Encoder-Modell</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./05_universelles_Decoder-Modell.html" class="sidebar-item-text sidebar-link">
+  <a href="../05_universelles_Decoder-Modell.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Universelles Decoder-Modell</span></a>
   </div>
 </li>
@@ -163,58 +183,58 @@ ul.task-list li input[type="checkbox"] {
         <li class="px-0"><hr class="sidebar-divider hi "></li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="./beispielstudie/00_beispielstudie.html" class="sidebar-item-text sidebar-link">
+            <a href="../beispielstudie/00_beispielstudie.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Beispielstudie</span></a>
-          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false" aria-label="Abschnitt umschalten">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Abschnitt umschalten">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 ">  
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./beispielstudie/00_goldstandard.html" class="sidebar-item-text sidebar-link">
+  <a href="../beispielstudie/00_goldstandard.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Goldstandard</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./beispielstudie/01_kategoriespezifisches_Encoder-Modell.html" class="sidebar-item-text sidebar-link">
+  <a href="../beispielstudie/01_kategoriespezifisches_Encoder-Modell.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Kategoriespezifisches Encoder-Modell</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./beispielstudie/02_aufgabenspezifisches_Encoder-Modell.html" class="sidebar-item-text sidebar-link">
+  <a href="../beispielstudie/02_aufgabenspezifisches_Encoder-Modell.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Aufgabenspezifisches Encoder-Modell</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./beispielstudie/03_universelles_Decoder-Modell.html" class="sidebar-item-text sidebar-link">
+  <a href="../beispielstudie/03_universelles_Decoder-Modell.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Universelles Decoder-Modell</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./beispielstudie/04_manuelle_Inhaltsanalyse.html" class="sidebar-item-text sidebar-link">
+  <a href="../beispielstudie/04_manuelle_Inhaltsanalyse.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Manuelle Inhaltsanalyse</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./beispielstudie/05_dictionary.html" class="sidebar-item-text sidebar-link">
+  <a href="../beispielstudie/05_dictionary.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Off-the-shelf Diktionär</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./beispielstudie/06_machine_learning.html" class="sidebar-item-text sidebar-link">
+  <a href="../beispielstudie/06_machine_learning.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Überwachtes maschinelles Lernen</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./beispielstudie/07_validierung.html" class="sidebar-item-text sidebar-link">
+  <a href="../beispielstudie/07_validierung.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Validierung</span></a>
   </div>
 </li>
@@ -225,36 +245,29 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Auf dieser Seite</h2>
+   
+  <ul>
+  <li><a href="#die-methode" id="toc-die-methode" class="nav-link active" data-scroll-target="#die-methode">Die Methode</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../beispielstudie/00_beispielstudie.html">Beispielstudie</a></li><li class="breadcrumb-item"><a href="../beispielstudie/04_manuelle_Inhaltsanalyse.html">Manuelle Inhaltsanalyse</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Gebrauchsfertige, Open Source Large-Language Models auf Hugging Face</h1>
-<p class="subtitle lead">als Forschungsinfrastruktur für die standardisierte Inhaltsanalyse von Texten</p>
+<h1 class="title">Manuelle Inhaltsanalyse</h1>
+<p class="subtitle lead">Beispielstudie</p>
 </div>
 
 
-<div class="quarto-title-meta-author">
-  <div class="quarto-title-meta-heading">Autor:in</div>
-  <div class="quarto-title-meta-heading">Universität</div>
-  
-    <div class="quarto-title-meta-contents">
-    <p class="author">Anonym </p>
-  </div>
-  <div class="quarto-title-meta-contents">
-        <p class="affiliation">
-            Anonym
-          </p>
-      </div>
-  </div>
 
 <div class="quarto-title-meta">
 
-      
+    
   
     
   </div>
@@ -264,19 +277,19 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="herzlich-willkommen" class="level2 unnumbered unlisted">
-<h2 class="unnumbered unlisted anchored" data-anchor-id="herzlich-willkommen">Herzlich Willkommen!</h2>
-<p>Der vorliegende Beitrag untersucht das Potenzial gebrauchsfertiger LLM-basierter Modelle auf Hugging Face als Forschungsinfrastruktur für die standardisierte Inhaltsanalyse von Texten. Dabei werden drei Modelltypen für die Textcodierung vorgestellt: (1) kategoriespezifische Encoder-Modelle, (2) aufgabenspezifische Encoder-Modelle und (3) universelle Decoder-Modelle. Eine detaillierte Anleitung erläutert die Anwendung der drei Modelltypen über die Hugging Face-Bibliothek für die Textcodierung. In einer empirischen Evaluationsstudie werden die Modelltypen mit herkömmlichen Methoden der standardisierten Inhaltsanalyse verglichen, insbesondere mit der manuellen Codierung, diktionärsbasierten Analyse und Analyse mittels überwachter maschineller Lernalgorithmen. Die Ergebnisse zeigen, dass LLM-basierte Modelle auf Hugging Face vergleichsweise einfach zugänglich, gut skalierbar und kostengünstig sind und eine hohe Leistungsfähigkeit aufweisen, die mit manuellen Inhaltsanalysen konkurrieren kann.</p>
-<p>Wir dokumentieren Schritt für Schritt, wie Sie die Beispiele aus diesem Artikel selbst ausprobieren können. Mithilfe der zur Verfügung gestellten Notebooks ist es sehr einfach möglich, die vorgestellten Methoden auf eigene Texte anzuwenden und auch andere, über Hugging Face zur Verfügung gestellte Modelle für die Inhaltsanalyse von Texten zu nutzen. Nach einer einmaligen <a href="./01_installation.html">Installation von Python und allen benötigten Paketen</a> sind nur wenige Schritte der <a href="./02_setup.html">Vorbereitung</a> notwendig. Danach können wir unsere Texte mit einem <a href="./03_kategoriespezifisches_Encoder-Modell.html">kategoriespezifischen Encoder-Modell</a>, einem <a href="./04_aufgabenspezifisches_Encoder-Modell.html">aufgabenspezifischen Encoder-Modell</a> oder einem <a href="./05_universelles_Decoder-Modell.html">universellen Decoder-Modell</a> codieren.</p>
-<p>In einer <a href="./beispielstudie/00_beispielstudie.html">empirischen Evaluationsstudie</a> vergleichen wir die drei Modelltypen mit herkömmlichen Methoden der standardisierten Inhaltsanalyse, insbesondere mit der manuellen Codierung, diktionärsbasierten Analyse und Analyse mittels überwachter maschineller Lernalgorithmen.</p>
+<section id="die-methode" class="level2">
+<h2 class="anchored" data-anchor-id="die-methode">Die Methode</h2>
+<p>Die Daten der manuellen Inhaltsanalyse stammen aus der Studie von <span class="citation" data-cites="spatzeneggerSocialMediaAls2020">Spatzenegger (<a href="#ref-spatzeneggerSocialMediaAls2020" role="doc-biblioref">2020</a>)</span>. Es handelt sich hierbei also nicht um die manuelle Codierung des <a href="../beispielstudie/00_goldstandard.html">Goldstandards</a>, sondern um die ursprüngliche Codierung von <span class="citation" data-cites="spatzeneggerSocialMediaAls2020">Spatzenegger (<a href="#ref-spatzeneggerSocialMediaAls2020" role="doc-biblioref">2020</a>)</span>. Die Daten können als typische Ergebnis einer publizierten manuellen kommunikationswissenschaftlichen Inhaltsanalyse betrachtet werden.</p>
+
 
 
 </section>
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Zitat</h2><div><div class="quarto-appendix-secondary-label">Bitte zitieren Sie diese Arbeit als:</div><div id="ref-untitled" class="csl-entry quarto-appendix-citeas" role="listitem">
-Anonym. n.d. <span>“Gebrauchsfertige, Open Source Large-Language Models
-auf Hugging Face.”</span> <em>Publizistik</em>. <a href="https://doi.org/12345">https://doi.org/12345</a>.
-</div></div></section></div></main> <!-- /main -->
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">Literatur</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list">
+<div id="ref-spatzeneggerSocialMediaAls2020" class="csl-entry" role="listitem">
+Spatzenegger, A. (2020). Social Media als Quelle journalistischer Arbeit. <em>Journalistik</em>, <em>3</em>(3), 197–215. <a href="https://doi.org/10/g8336z">https://doi.org/10/g8336z</a>
+</div>
+</div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
@@ -622,64 +635,25 @@ auf Hugging Face.”</span> <em>Publizistik</em>. <a href="https://doi.org/12345
           }
         };
       }
-        const annoteTargets = window.document.querySelectorAll('.code-annotation-anchor');
-        for (let i=0; i<annoteTargets.length; i++) {
-          const annoteTarget = annoteTargets[i];
-          const targetCell = annoteTarget.getAttribute("data-target-cell");
-          const targetAnnotation = annoteTarget.getAttribute("data-target-annotation");
-          const contentFn = () => {
-            const content = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
-            if (content) {
-              const tipContent = content.cloneNode(true);
-              tipContent.classList.add("code-annotation-tip-content");
-              return tipContent.outerHTML;
-            }
-          }
-          const config = {
-            allowHTML: true,
-            content: contentFn,
-            onShow: (instance) => {
-              selectCodeLines(instance.reference);
-              instance.reference.classList.add('code-annotation-active');
-              window.tippy.hideAll();
-            },
-            onHide: (instance) => {
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
               unselectCodeLines();
-              instance.reference.classList.remove('code-annotation-active');
-            },
-            maxWidth: 300,
-            delay: [50, 0],
-            duration: [200, 0],
-            offset: [5, 10],
-            arrow: true,
-            appendTo: function(el) {
-              return el.parentElement.parentElement.parentElement;
-            },
-            interactive: true,
-            interactiveBorder: 10,
-            theme: 'quarto',
-            placement: 'right',
-            popperOptions: {
-              modifiers: [
-              {
-                name: 'flip',
-                options: {
-                  flipVariations: false, // true by default
-                  allowedAutoPlacements: ['right'],
-                  fallbackPlacements: ['right', 'top', 'top-start', 'top-end', 'bottom', 'bottom-start', 'bottom-end', 'left'],
-                },
-              },
-              {
-                name: 'preventOverflow',
-                options: {
-                  mainAxis: false,
-                  altAxis: false
-                }
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
               }
-              ]        
-            }      
-          };
-          window.tippy(annoteTarget, config); 
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
         }
     const findCites = (el) => {
       const parentEl = el.parentElement;
@@ -722,10 +696,13 @@ auf Hugging Face.”</span> <em>Publizistik</em>. <a href="https://doi.org/12345
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
+      <a href="../beispielstudie/03_universelles_Decoder-Modell.html" class="pagination-link" aria-label="Universelles Decoder-Modell">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Universelles Decoder-Modell</span>
+      </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./01_installation.html" class="pagination-link" aria-label="Installation">
-        <span class="nav-page-text">Installation</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../beispielstudie/05_dictionary.html" class="pagination-link" aria-label="Off-the-shelf Diktionär">
+        <span class="nav-page-text">Off-the-shelf Diktionär</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
@@ -734,5 +711,5 @@ auf Hugging Face.”</span> <em>Publizistik</em>. <a href="https://doi.org/12345
 
 
 
-<script src="site_libs/quarto-html/zenscroll-min.js"></script>
+<script src="../site_libs/quarto-html/zenscroll-min.js"></script>
 </body></html>

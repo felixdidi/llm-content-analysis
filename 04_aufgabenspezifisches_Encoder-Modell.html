@@ -6,9 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Anonym">
 
-<title>Gebrauchsfertige, Open Source Large-Language Models auf Hugging Face</title>
+<title>Aufgabenspezifisches Encoder-Modell</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -21,7 +20,62 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -31,7 +85,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./01_installation.html" rel="next">
+<link href="./05_universelles_Decoder-Modell.html" rel="next">
+<link href="./03_kategoriespezifisches_Encoder-Modell.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -83,7 +138,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Seitenleiste umschalten" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Anleitungen</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Anleitungen</a></li><li class="breadcrumb-item"><a href="./03_kategoriespezifisches_Encoder-Modell.html">Textklassifikation</a></li><li class="breadcrumb-item"><a href="./04_aufgabenspezifisches_Encoder-Modell.html">Aufgabenspezifisches Encoder-Modell</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Seitenleiste umschalten" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Suchen" onclick="window.quartoOpenSearch();">
@@ -110,7 +165,7 @@ ul.task-list li input[type="checkbox"] {
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="./index.html" class="sidebar-item-text sidebar-link active">
+            <a href="./index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Anleitungen</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Abschnitt umschalten">
             <i class="bi bi-chevron-right ms-2"></i>
@@ -131,13 +186,13 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
  <span class="menu-text">Textklassifikation</span></a>
-          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false" aria-label="Abschnitt umschalten">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Abschnitt umschalten">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth2 ">  
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth2 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./03_kategoriespezifisches_Encoder-Modell.html" class="sidebar-item-text sidebar-link">
@@ -146,7 +201,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./04_aufgabenspezifisches_Encoder-Modell.html" class="sidebar-item-text sidebar-link">
+  <a href="./04_aufgabenspezifisches_Encoder-Modell.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Aufgabenspezifisches Encoder-Modell</span></a>
   </div>
 </li>
@@ -225,36 +280,30 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Auf dieser Seite</h2>
+   
+  <ul>
+  <li><a href="#daten-laden" id="toc-daten-laden" class="nav-link active" data-scroll-target="#daten-laden">Daten laden</a></li>
+  <li><a href="#modell-laden" id="toc-modell-laden" class="nav-link" data-scroll-target="#modell-laden">Modell laden</a></li>
+  <li><a href="#klassifikation" id="toc-klassifikation" class="nav-link" data-scroll-target="#klassifikation">Klassifikation</a></li>
+  </ul>
+<div class="quarto-alternate-notebooks"><h2>Notebooks</h2><ul><li><a href="notebooks/04_aufgabenspezifisches_Encoder-Modell-preview.html"><i class="bi bi-journal-code"></i>04_aufgabenspezifisches_Encoder-Modell.ipynb</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Anleitungen</a></li><li class="breadcrumb-item"><a href="./03_kategoriespezifisches_Encoder-Modell.html">Textklassifikation</a></li><li class="breadcrumb-item"><a href="./04_aufgabenspezifisches_Encoder-Modell.html">Aufgabenspezifisches Encoder-Modell</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Gebrauchsfertige, Open Source Large-Language Models auf Hugging Face</h1>
-<p class="subtitle lead">als Forschungsinfrastruktur für die standardisierte Inhaltsanalyse von Texten</p>
+<h1 class="title">Aufgabenspezifisches Encoder-Modell</h1>
 </div>
 
 
-<div class="quarto-title-meta-author">
-  <div class="quarto-title-meta-heading">Autor:in</div>
-  <div class="quarto-title-meta-heading">Universität</div>
-  
-    <div class="quarto-title-meta-contents">
-    <p class="author">Anonym </p>
-  </div>
-  <div class="quarto-title-meta-contents">
-        <p class="affiliation">
-            Anonym
-          </p>
-      </div>
-  </div>
 
 <div class="quarto-title-meta">
 
-      
+    
   
     
   </div>
@@ -264,19 +313,184 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="herzlich-willkommen" class="level2 unnumbered unlisted">
-<h2 class="unnumbered unlisted anchored" data-anchor-id="herzlich-willkommen">Herzlich Willkommen!</h2>
-<p>Der vorliegende Beitrag untersucht das Potenzial gebrauchsfertiger LLM-basierter Modelle auf Hugging Face als Forschungsinfrastruktur für die standardisierte Inhaltsanalyse von Texten. Dabei werden drei Modelltypen für die Textcodierung vorgestellt: (1) kategoriespezifische Encoder-Modelle, (2) aufgabenspezifische Encoder-Modelle und (3) universelle Decoder-Modelle. Eine detaillierte Anleitung erläutert die Anwendung der drei Modelltypen über die Hugging Face-Bibliothek für die Textcodierung. In einer empirischen Evaluationsstudie werden die Modelltypen mit herkömmlichen Methoden der standardisierten Inhaltsanalyse verglichen, insbesondere mit der manuellen Codierung, diktionärsbasierten Analyse und Analyse mittels überwachter maschineller Lernalgorithmen. Die Ergebnisse zeigen, dass LLM-basierte Modelle auf Hugging Face vergleichsweise einfach zugänglich, gut skalierbar und kostengünstig sind und eine hohe Leistungsfähigkeit aufweisen, die mit manuellen Inhaltsanalysen konkurrieren kann.</p>
-<p>Wir dokumentieren Schritt für Schritt, wie Sie die Beispiele aus diesem Artikel selbst ausprobieren können. Mithilfe der zur Verfügung gestellten Notebooks ist es sehr einfach möglich, die vorgestellten Methoden auf eigene Texte anzuwenden und auch andere, über Hugging Face zur Verfügung gestellte Modelle für die Inhaltsanalyse von Texten zu nutzen. Nach einer einmaligen <a href="./01_installation.html">Installation von Python und allen benötigten Paketen</a> sind nur wenige Schritte der <a href="./02_setup.html">Vorbereitung</a> notwendig. Danach können wir unsere Texte mit einem <a href="./03_kategoriespezifisches_Encoder-Modell.html">kategoriespezifischen Encoder-Modell</a>, einem <a href="./04_aufgabenspezifisches_Encoder-Modell.html">aufgabenspezifischen Encoder-Modell</a> oder einem <a href="./05_universelles_Decoder-Modell.html">universellen Decoder-Modell</a> codieren.</p>
-<p>In einer <a href="./beispielstudie/00_beispielstudie.html">empirischen Evaluationsstudie</a> vergleichen wir die drei Modelltypen mit herkömmlichen Methoden der standardisierten Inhaltsanalyse, insbesondere mit der manuellen Codierung, diktionärsbasierten Analyse und Analyse mittels überwachter maschineller Lernalgorithmen.</p>
+<p>Um den Beispielcode selbst auszuführen oder zu modifizieren, können Sie das dieser Seite zugrundeliegende Jupyter Notebook über die Seitenleiste öffnen und herunterladen.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Fragen zum Code?
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Kein Problem! Erklärungen zu den einzelnen Schritten des Codes verbergen sich hinter den Nummern an der rechten Seite. Einfach mit der Maus über die Nummer fahren, um die Erklärung zu sehen. Wo der jeweilige Code ausgeführt wird (in Python, R, oder dem Terminal), steht in der Kopfzeile des Codeblocks.</p>
+<div class="cell">
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Python</strong></pre>
+</div>
+<div class="sourceCode cell-code" id="annotated-cell-4"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><button class="code-annotation-anchor" data-target-cell="annotated-cell-4" data-target-annotation="1">1</button><span id="annotated-cell-4-1" class="code-annotation-target"><a href="#annotated-cell-4-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Hallo! 👋"</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell-annotation">
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-4" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-4" data-code-lines="1" data-code-annotation="1">Das ist ein einfacher Python-Befehl, der den Text “Hallo” in der Konsole ausgibt. Der Output erscheint unter dem Codeblock.</span>
+</dd>
+</dl>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Hallo! 👋</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<section id="daten-laden" class="level2">
+<h2 class="anchored" data-anchor-id="daten-laden">Daten laden</h2>
+<p>Unabhängig vom verwendeten Modell laden wir zunächst die bereits installierten Pakete sowie unsere Textdaten und speichern diese in einem Listenobjekt:</p>
+<div class="cell">
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Python</strong></pre>
+</div>
+<div class="sourceCode cell-code" id="annotated-cell-1"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><button class="code-annotation-anchor" data-target-cell="annotated-cell-1" data-target-annotation="1">1</button><span id="annotated-cell-1-1" class="code-annotation-target"><a href="#annotated-cell-1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="annotated-cell-1-2"><a href="#annotated-cell-1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> transformers <span class="im">import</span> pipeline</span>
+<span id="annotated-cell-1-3"><a href="#annotated-cell-1-3" aria-hidden="true" tabindex="-1"></a></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-1" data-target-annotation="2">2</button><span id="annotated-cell-1-4" class="code-annotation-target"><a href="#annotated-cell-1-4" aria-hidden="true" tabindex="-1"></a>daten <span class="op">=</span> pd.read_csv(<span class="st">"data/example_dataset.csv"</span>)</span>
+<span id="annotated-cell-1-5"><a href="#annotated-cell-1-5" aria-hidden="true" tabindex="-1"></a>datenliste <span class="op">=</span> <span class="bu">list</span>(daten[<span class="st">"text"</span>])</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell-annotation">
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-1" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-1" data-code-lines="1,2" data-code-annotation="1">Importieren der benötigten Bibliotheken</span>
+</dd>
+<dt data-target-cell="annotated-cell-1" data-target-annotation="2">2</dt>
+<dd>
+<span data-code-cell="annotated-cell-1" data-code-lines="4,5" data-code-annotation="2">Laden der Textdaten aus einer CSV-Datei und Speichern in einer Liste</span>
+</dd>
+</dl>
+</div>
+</div>
+</section>
+<section id="modell-laden" class="level2">
+<h2 class="anchored" data-anchor-id="modell-laden">Modell laden</h2>
+<p>Im Gegensatz zu kategoriespezifischen Modellen können wir mit aufgabenspezifischen Encoder-Modellen jede beliebige Kategorie codieren. Als Beispiel verwenden wir hier das NLI-Modell von <span class="citation" data-cites="laurerBuildingEfficientUniversal2024">Laurer et al. (<a href="#ref-laurerBuildingEfficientUniversal2024" role="doc-biblioref">2024</a>)</span>.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Gut zu wissen
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Anstelle des hier verwendeten Modells <code>MoritzLaurer/bge-m3-zeroshot-v2.0</code> können Sie auch andere aufgabenspezifische Encoder-Modelle (üblicherweise gekennzeichnet für “Zero-Shot-Classification”) für verschiedene Sprachen und Anwendungsfälle verwenden. Eine Übersicht über verfügbare Modelle finden Sie auf <a href="https://huggingface.co/models">Hugging Face</a>. Achten Sie darauf, dass das gewählte Modell für Ihre spezifische Aufgabe geeignet ist (z. B. Sentiment-Analyse, Themenklassifikation etc.) und die Sprache Ihrer Texte unterstützt.</p>
+</div>
+</div>
+<div class="cell">
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Python</strong></pre>
+</div>
+<div class="sourceCode cell-code" id="annotated-cell-2"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><button class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="3">3</button><span id="annotated-cell-2-1" class="code-annotation-target"><a href="#annotated-cell-2-1" aria-hidden="true" tabindex="-1"></a>zeroshot_classifier <span class="op">=</span> pipeline(<span class="st">"zero-shot-classification"</span>,</span>
+<span id="annotated-cell-2-2"><a href="#annotated-cell-2-2" aria-hidden="true" tabindex="-1"></a>                                model <span class="op">=</span> <span class="st">"MoritzLaurer/bge-m3-zeroshot-v2.0"</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell-annotation">
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-2" data-target-annotation="3">3</dt>
+<dd>
+<span data-code-cell="annotated-cell-2" data-code-lines="1,2" data-code-annotation="3">Laden des aufgabenspezifischen Encoder-Modells für Zero-Shot-Klassifikation</span>
+</dd>
+</dl>
+</div>
+</div>
+</section>
+<section id="klassifikation" class="level2">
+<h2 class="anchored" data-anchor-id="klassifikation">Klassifikation</h2>
+<p>Für die Klassifikation mit dem NLI-Modell spezifizieren wir zusätzlich zum Modell noch die Ausprägungen der Kategorie (<code>candidate_labels</code>) und eine “Hypothese”, die auf Grundlage des Textes geprüft werden soll (<code>hypothesis_template</code>). Bei der Ausführung des <code>pipeline()</code>-Befehls werden die zu codierenden Ausprägungen der Kategorie automatisch anstelle der geschwungenen Klammern in die Hypothese eingesetzt. Auf diese Weise wird der Befehl für jede Ausprägung einzeln durchgeführt (hier für “positiv”, “negativ” und “neutral”). Wir erhalten also als Ergebnis einen Datensatz, der uns pro Text für jede spezifizierte Ausprägung einen Wahrscheinlichkeitswert ausgibt (in unserem Beispiel die Wahrscheinlichkeit für “positiv”, “negativ” und “neutral”). Nun erfolgt die eigentliche Klassifikation, indem wir den zuvor definierten <code>zeroshot_classifier</code>-Befehl auf unsere Textdaten anwenden. Anschließend extrahieren wir die vergebenen Labels aus dem Response. Das Ergebnis speichern wir in einem DataFrame-Objekt, um es übersichtlich darstellen zu können. Über den Parameter <code>multi_label</code> können wir festlegen, ob prinzipiell mehrere Kategorien gleichzeitig in einem Text vorkommen können.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="annotated-cell-3"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><button class="code-annotation-anchor" data-target-cell="annotated-cell-3" data-target-annotation="4">4</button><span id="annotated-cell-3-1" class="code-annotation-target"><a href="#annotated-cell-3-1" aria-hidden="true" tabindex="-1"></a>template <span class="op">=</span> <span class="st">"Die Stimmung beziehungsweise Tonalität des Textes ist </span><span class="sc">{}</span><span class="st">"</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-3" data-target-annotation="5">5</button><span id="annotated-cell-3-2" class="code-annotation-target"><a href="#annotated-cell-3-2" aria-hidden="true" tabindex="-1"></a>labels <span class="op">=</span> [<span class="st">"positiv"</span>, <span class="st">"neutral"</span>, <span class="st">"negativ"</span>]</span>
+<span id="annotated-cell-3-3"><a href="#annotated-cell-3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-3-4"><a href="#annotated-cell-3-4" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> zeroshot_classifier(datenliste, candidate_labels<span class="op">=</span>labels,</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-3" data-target-annotation="6">6</button><span id="annotated-cell-3-5" class="code-annotation-target"><a href="#annotated-cell-3-5" aria-hidden="true" tabindex="-1"></a>                               hypothesis_template<span class="op">=</span>template, multi_label<span class="op">=</span><span class="va">False</span>)</span>
+<span id="annotated-cell-3-6"><a href="#annotated-cell-3-6" aria-hidden="true" tabindex="-1"></a></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-3" data-target-annotation="7">7</button><span id="annotated-cell-3-7" class="code-annotation-target"><a href="#annotated-cell-3-7" aria-hidden="true" tabindex="-1"></a>labels <span class="op">=</span> <span class="bu">set</span>(label <span class="cf">for</span> item <span class="kw">in</span> results <span class="cf">for</span> label <span class="kw">in</span> item[<span class="st">'labels'</span>])</span>
+<span id="annotated-cell-3-8"><a href="#annotated-cell-3-8" aria-hidden="true" tabindex="-1"></a>out_dict <span class="op">=</span> {label: [] <span class="cf">for</span> label <span class="kw">in</span> labels}</span>
+<span id="annotated-cell-3-9"><a href="#annotated-cell-3-9" aria-hidden="true" tabindex="-1"></a>out_dict[<span class="st">'sequence'</span>] <span class="op">=</span> []</span>
+<span id="annotated-cell-3-10"><a href="#annotated-cell-3-10" aria-hidden="true" tabindex="-1"></a></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-3" data-target-annotation="8">8</button><span id="annotated-cell-3-11" class="code-annotation-target"><a href="#annotated-cell-3-11" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> item <span class="kw">in</span> results:</span>
+<span id="annotated-cell-3-12"><a href="#annotated-cell-3-12" aria-hidden="true" tabindex="-1"></a>    out_dict[<span class="st">'sequence'</span>].append(item[<span class="st">'sequence'</span>])</span>
+<span id="annotated-cell-3-13"><a href="#annotated-cell-3-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> label <span class="kw">in</span> labels:</span>
+<span id="annotated-cell-3-14"><a href="#annotated-cell-3-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> label <span class="kw">in</span> item[<span class="st">'labels'</span>]:</span>
+<span id="annotated-cell-3-15"><a href="#annotated-cell-3-15" aria-hidden="true" tabindex="-1"></a>            out_dict[label].append(item[<span class="st">'scores'</span>][item[<span class="st">'labels'</span>].index(label)])</span>
+<span id="annotated-cell-3-16"><a href="#annotated-cell-3-16" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
+<span id="annotated-cell-3-17"><a href="#annotated-cell-3-17" aria-hidden="true" tabindex="-1"></a>            out_dict[label].append(<span class="va">None</span>)</span>
+<span id="annotated-cell-3-18"><a href="#annotated-cell-3-18" aria-hidden="true" tabindex="-1"></a></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-3" data-target-annotation="9">9</button><span id="annotated-cell-3-19" class="code-annotation-target"><a href="#annotated-cell-3-19" aria-hidden="true" tabindex="-1"></a>ergebnis <span class="op">=</span> pd.DataFrame(out_dict)</span>
+<span id="annotated-cell-3-20"><a href="#annotated-cell-3-20" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(ergebnis)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-annotation">
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-3" data-target-annotation="4">4</dt>
+<dd>
+<span data-code-cell="annotated-cell-3" data-code-lines="1" data-code-annotation="4">Definieren der Hypothese mit Platzhalter für die Kategorieausprägungen</span>
+</dd>
+<dt data-target-cell="annotated-cell-3" data-target-annotation="5">5</dt>
+<dd>
+<span data-code-cell="annotated-cell-3" data-code-lines="2" data-code-annotation="5">Definieren der Kategorieausprägungen</span>
+</dd>
+<dt data-target-cell="annotated-cell-3" data-target-annotation="6">6</dt>
+<dd>
+<span data-code-cell="annotated-cell-3" data-code-lines="5" data-code-annotation="6">Anwenden des Klassifikationsbefehls auf die Textdaten mit den spezifizierten Kategorieausprägungen und der Hypothese</span>
+</dd>
+<dt data-target-cell="annotated-cell-3" data-target-annotation="7">7</dt>
+<dd>
+<span data-code-cell="annotated-cell-3" data-code-lines="7,8,9" data-code-annotation="7">Initialisieren eines Wörterbuchs zur Speicherung der Ergebnisse</span>
+</dd>
+<dt data-target-cell="annotated-cell-3" data-target-annotation="8">8</dt>
+<dd>
+<span data-code-cell="annotated-cell-3" data-code-lines="11,12,13,14,15,16,17" data-code-annotation="8">Extrahieren der Labels und Wahrscheinlichkeitswerte aus dem Klassifikationsergebnis</span>
+</dd>
+<dt data-target-cell="annotated-cell-3" data-target-annotation="9">9</dt>
+<dd>
+<span data-code-cell="annotated-cell-3" data-code-lines="19,20" data-code-annotation="9">Speichern der Ergebnisse in einem DataFrame und Ausgabe</span>
+</dd>
+</dl>
+</div>
+</div>
+<div class="quarto-embed-nb-cell">
+<div id="classify" class="cell" data-execution_count="3">
+<div class="cell-output cell-output-stdout">
+<pre><code>    positiv   negativ   neutral                                           sequence
+0  0.707576  0.006816  0.285608  Die orthodoxe Gemeinde feiert heute #Ostern. I...
+1  0.654405  0.003431  0.342164  Vielen Dank Gregor Rutz für die Unterstützung ...
+2  0.010227  0.809285  0.180488  Wird ja immer schlimmer mit den Intoleranten d...
+3  0.350793  0.387819  0.261388  Liebe Junge, geht wählen. Kann ja nicht sein, ...
+4  0.440438  0.019927  0.539635  ‘— Das war unser EU-Wahl-Abschluss der SP– mit...
+5  0.985130  0.002250  0.012621  Aufschlussreicher Blick hinter die Mauern! Tol...
+6  0.007550  0.790673  0.201777  Denn ein Hard-Brexit würde der #EU, aber noch ...
+7  0.375643  0.056651  0.567706  Familienbonus: Es ist erstaunlich wie viele Me...
+8  0.301832  0.008279  0.689889  Integration passiert vor Ort. Deshalb arbeitet...
+9  0.044657  0.208825  0.746518  Ich frage mich: Wer ist als nächstes dran Frau...</code></pre>
+</div>
+</div>
+<a class="quarto-notebook-link" id="nblink-1" href="notebooks/04_aufgabenspezifisches_Encoder-Modell-preview.html#cell-classify">Quelle: 04_aufgabenspezifisches_Encoder-Modell.ipynb</a></div>
+
 
 
 </section>
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Zitat</h2><div><div class="quarto-appendix-secondary-label">Bitte zitieren Sie diese Arbeit als:</div><div id="ref-untitled" class="csl-entry quarto-appendix-citeas" role="listitem">
-Anonym. n.d. <span>“Gebrauchsfertige, Open Source Large-Language Models
-auf Hugging Face.”</span> <em>Publizistik</em>. <a href="https://doi.org/12345">https://doi.org/12345</a>.
-</div></div></section></div></main> <!-- /main -->
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">Literatur</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list">
+<div id="ref-laurerBuildingEfficientUniversal2024" class="csl-entry" role="listitem">
+Laurer, M., Atteveldt, W. van, Casas, A., &amp; Welbers, K. (2024, März 22). <em>Building Efficient Universal Classifiers with Natural Language Inference</em>. <a href="https://doi.org/10.48550/arXiv.2312.17543">https://doi.org/10.48550/arXiv.2312.17543</a>
+</div>
+</div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
@@ -722,10 +936,13 @@ auf Hugging Face.”</span> <em>Publizistik</em>. <a href="https://doi.org/12345
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
+      <a href="./03_kategoriespezifisches_Encoder-Modell.html" class="pagination-link" aria-label="Kategoriespezifisches Encoder-Modell">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Kategoriespezifisches Encoder-Modell</span>
+      </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./01_installation.html" class="pagination-link" aria-label="Installation">
-        <span class="nav-page-text">Installation</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./05_universelles_Decoder-Modell.html" class="pagination-link" aria-label="Universelles Decoder-Modell">
+        <span class="nav-page-text">Universelles Decoder-Modell</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

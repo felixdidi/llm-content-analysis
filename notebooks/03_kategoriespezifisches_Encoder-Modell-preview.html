@@ -1,84 +1,169 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="de-DE" xml:lang="de-DE"><head>
+    <meta charset="utf-8">
+    <meta name="generator" content="quarto-1.7.33">
 
-<meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.33">
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-
-<meta name="author" content="Anonym">
-
-<title>Kategoriespezifisches Encoder-Modell</title>
-<style>
-code{white-space: pre-wrap;}
-span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
-div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-ul.task-list{list-style: none;}
-ul.task-list li input[type="checkbox"] {
-  width: 0.8em;
-  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
-  vertical-align: middle;
-}
-/* CSS for syntax highlighting */
-html { -webkit-text-size-adjust: 100%; }
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
-</style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<link href="./03_aufgabenspezifisches_Encoder-Modell.html" rel="next">
-<link href="./01_installation.html" rel="prev">
-<script src="site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-541d1840fe0299ec4c9bf9ceaf6b9fb6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-8a5fba379e31ba61f28f52b73b3be454.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
-<script id="quarto-search-options" type="application/json">{
+    <title>kategoriespezifisches_encoder-modell</title>
+    <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      div.columns{display: flex; gap: min(4vw, 1.5em);}
+      div.column{flex: auto; overflow-x: auto;}
+      div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+      ul.task-list{list-style: none;}
+      ul.task-list li input[type="checkbox"] {
+        width: 0.8em;
+        margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+        vertical-align: middle;
+      }
+      /* CSS for syntax highlighting */
+      html { -webkit-text-size-adjust: 100%; }
+      pre > code.sourceCode { white-space: pre; position: relative; }
+      pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+      pre > code.sourceCode > span:empty { height: 1.2em; }
+      .sourceCode { overflow: visible; }
+      code.sourceCode > span { color: inherit; text-decoration: inherit; }
+      div.sourceCode { margin: 1em 0; }
+      pre.sourceCode { margin: 0; }
+      @media screen {
+      div.sourceCode { overflow: auto; }
+      }
+      @media print {
+      pre > code.sourceCode { white-space: pre-wrap; }
+      pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+      }
+      pre.numberSource code
+        { counter-reset: source-line 0; }
+      pre.numberSource code > span
+        { position: relative; left: -4em; counter-increment: source-line; }
+      pre.numberSource code > span > a:first-child::before
+        { content: counter(source-line);
+          position: relative; left: -1em; text-align: right; vertical-align: baseline;
+          border: none; display: inline-block;
+          -webkit-touch-callout: none; -webkit-user-select: none;
+          -khtml-user-select: none; -moz-user-select: none;
+          -ms-user-select: none; user-select: none;
+          padding: 0 4px; width: 4em;
+        }
+      pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+      div.sourceCode
+        {   }
+      @media screen {
+      pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+      }
+    </style>
+
+    <style>
+      body.hypothesis-enabled #quarto-embed-header {
+        padding-right: 36px;
+      }
+
+      #quarto-embed-header {
+        height: 3em;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: solid 1px;
+      }
+
+      #quarto-embed-header h6 {
+        font-size: 1.1em;
+        padding-top: 0.6em;
+        margin-left: 1em;
+        margin-right: 1em;
+        font-weight: 400;
+      }
+
+      #quarto-embed-header a.quarto-back-link,
+      #quarto-embed-header a.quarto-download-embed {
+        font-size: 0.8em;
+        margin-top: 1em;
+        margin-bottom: 1em;
+        margin-left: 1em;
+        margin-right: 1em;
+      }
+
+      .quarto-back-container {
+        padding-left: 0.5em;
+        display: flex;
+      }
+
+      .headroom {
+          will-change: transform;
+          transition: transform 200ms linear;
+      }
+
+      .headroom--pinned {
+          transform: translateY(0%);
+      }
+
+      .headroom--unpinned {
+          transform: translateY(-100%);
+      }      
+    </style>
+
+    <script>
+    window.document.addEventListener("DOMContentLoaded", function () {
+
+      var header = window.document.querySelector("#quarto-embed-header");
+      const titleBannerEl = window.document.querySelector("body > #title-block-header");
+      if (titleBannerEl) {
+        titleBannerEl.style.paddingTop = header.clientHeight + "px";
+      }
+      const contentEl = window.document.getElementById('quarto-content');
+      for (const child of contentEl.children) {
+        child.style.paddingTop = header.clientHeight + "px";
+        child.style.marginTop = "1em";
+      }
+
+      // Use the article root if the `back` call doesn't work. This isn't perfect
+      // but should typically work
+      window.quartoBackToArticle = () => {
+        var currentUrl = window.location.href;
+        window.history.back();
+        setTimeout(() => {
+            // if location was not changed in 100 ms, then there is no history back
+            if(currentUrl === window.location.href){              
+                // redirect to site root
+                window.location.href = '/';
+            }
+        }, 100);
+      }
+
+      const headroom = new window.Headroom(header, {
+        tolerance: 5,
+        onPin: function () {
+        },
+        onUnpin: function () {
+        },
+      });
+      headroom.init();
+    });
+    </script>
+
+    
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-541d1840fe0299ec4c9bf9ceaf6b9fb6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-7abf1c683b15f91743e6ad3fed8656fb.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+     <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
@@ -104,25 +189,26 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-submit-button-title": "Abschicken",
     "search-label": "Suchen"
   }
-}</script>
-<style>html{ scroll-behavior: smooth; }</style>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+}</script>  <style>html{ scroll-behavior: smooth; }</style>  
+      </head>
 
-<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+  <body class="nav-sidebar floating quarto-notebook quarto-light">
+    <div id="quarto-embed-header" class="headroom fixed-top bg-primary">
+      
+      <a onclick="window.quartoBackToArticle(); return false;" class="btn btn-primary quarto-back-link"><i class="bi bi-caret-left"></i> Zurück zum Artikel</a>
+      <h6><i class="bi bi-journal-code"></i> 03_kategoriespezifisches_Encoder-Modell.ipynb</h6>
 
+            <a href="../notebooks/03_kategoriespezifisches_Encoder-Modell.ipynb" class="btn btn-primary quarto-download-embed" download="03_kategoriespezifisches_Encoder-Modell.ipynb">Notizbuch herunterladen</a>
+          </div>
 
-</head>
-
-<body class="nav-sidebar floating fullcontent quarto-light">
-
-<div id="quarto-search-results"></div>
+     <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
   <nav class="quarto-secondary-nav">
     <div class="container-fluid d-flex">
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Seitenleiste umschalten" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./01_installation.html">Anleitungen</a></li><li class="breadcrumb-item"><a href="./02_kategoriespezifisches_Encoder-Modell.html">2 Kategoriespezifisches Encoder-Modell</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Seitenleiste umschalten" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Suchen" onclick="window.quartoOpenSearch();">
@@ -136,8 +222,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
     <div class="pt-lg-2 mt-2 text-center sidebar-header">
-      <a href="./index.html" class="sidebar-logo-link">
-      <img src="./img/transformer.png" alt="" class="sidebar-logo py-0 d-lg-inline d-none">
+      <a href="../index.html" class="sidebar-logo-link">
+      <img src="../img/transformer.png" alt="" class="sidebar-logo py-0 d-lg-inline d-none">
       </a>
       </div>
         <div class="mt-2 flex-shrink-0 align-items-center">
@@ -147,95 +233,113 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         </div>
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Startseite</span></a>
-  </div>
-</li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+            <a href="../index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Anleitungen</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Abschnitt umschalten">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false" aria-label="Abschnitt umschalten">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./01_installation.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1 Installation</span></a>
+  <a href="../01_installation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Installation</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./02_kategoriespezifisches_Encoder-Modell.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">2 Kategoriespezifisches Encoder-Modell</span></a>
+  <a href="../02_setup.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Vorbereitung</span></a>
   </div>
 </li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./03_aufgabenspezifisches_Encoder-Modell.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3 Aufgabenspezifisches Encoder-Modell</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./04_universelles_Decoder-Modell.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">4 Universelles Decoder-Modell</span></a>
-  </div>
-</li>
-      </ul>
-  </li>
-        <li class="sidebar-item sidebar-item-section">
+          <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
- <span class="menu-text">Beispielstudie</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Abschnitt umschalten">
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false">
+ <span class="menu-text">Textklassifikation</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false" aria-label="Abschnitt umschalten">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth2 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./beispielstudie/01_goldstandard.qmd" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Goldstandard</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./beispielstudie/02_kategoriespezifisches_Encoder-Modell.qmd" class="sidebar-item-text sidebar-link">
+  <a href="../03_kategoriespezifisches_Encoder-Modell.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Kategoriespezifisches Encoder-Modell</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./beispielstudie/03_aufgabenspezifisches_Encoder-Modell.qmd" class="sidebar-item-text sidebar-link">
+  <a href="../04_aufgabenspezifisches_Encoder-Modell.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Aufgabenspezifisches Encoder-Modell</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./beispielstudie/04_universelles_Decoder-Modell.qmd" class="sidebar-item-text sidebar-link">
+  <a href="../05_universelles_Decoder-Modell.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Universelles Decoder-Modell</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+      </ul>
+  </li>
+        <li class="px-0"><hr class="sidebar-divider hi "></li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../beispielstudie/00_beispielstudie.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Beispielstudie</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false" aria-label="Abschnitt umschalten">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../beispielstudie/00_goldstandard.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Goldstandard</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../beispielstudie/01_kategoriespezifisches_Encoder-Modell.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Kategoriespezifisches Encoder-Modell</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../beispielstudie/02_aufgabenspezifisches_Encoder-Modell.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Aufgabenspezifisches Encoder-Modell</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../beispielstudie/03_universelles_Decoder-Modell.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Universelles Decoder-Modell</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./05_dictionary.qmd" class="sidebar-item-text sidebar-link">
+  <a href="../beispielstudie/04_manuelle_Inhaltsanalyse.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Manuelle Inhaltsanalyse</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../beispielstudie/05_dictionary.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Off-the-shelf Diktionär</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./06_machine_learning.qmd" class="sidebar-item-text sidebar-link">
+  <a href="../beispielstudie/06_machine_learning.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Überwachtes maschinelles Lernen</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./07_validierung.qmd" class="sidebar-item-text sidebar-link">
+  <a href="../beispielstudie/07_validierung.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Validierung</span></a>
   </div>
 </li>
@@ -243,213 +347,50 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>
     </ul>
     </div>
+    
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+    </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
-
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./01_installation.html">Anleitungen</a></li><li class="breadcrumb-item"><a href="./02_kategoriespezifisches_Encoder-Modell.html">2 Kategoriespezifisches Encoder-Modell</a></li></ol></nav>
-<div class="quarto-title">
-<h1 class="title">Kategoriespezifisches Encoder-Modell</h1>
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>    <div class="cell-container"><div class="cell-decorator"><pre>In [1]:</pre></div><div id="e2a357de-5671-4248-b5d3-3123a0b019d8" class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> transformers <span class="im">import</span> logging</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>logging.set_verbosity_error()  <span class="co"># Mitteilungen muten</span></span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [2]:</pre></div><div id="4f95a582-2d6f-40c7-8e8e-c4b69e8ee3a8" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> transformers <span class="im">import</span> pipeline</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>daten <span class="op">=</span> pd.read_csv(<span class="st">"../data/example_dataset.csv"</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>datenliste <span class="op">=</span> <span class="bu">list</span>(daten[<span class="st">"text"</span>])</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [3]:</pre></div><div id="classify" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>sentiment_classifier <span class="op">=</span> pipeline(<span class="st">"sentiment-analysis"</span>,</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>                                 model<span class="op">=</span><span class="st">"oliverguhr/german-sentiment-bert"</span>,</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>                                 max_length <span class="op">=</span> <span class="dv">512</span>, truncation<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>ergebnis <span class="op">=</span> sentiment_classifier(datenliste)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>ergebnis <span class="op">=</span> pd.DataFrame(ergebnis)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>ergebnis[<span class="st">"text"</span>] <span class="op">=</span> daten[<span class="st">"text"</span>]</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(ergebnis)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      label     score                                               text
+0   neutral  0.988959  Die orthodoxe Gemeinde feiert heute #Ostern. I...
+1   neutral  0.753388  Vielen Dank Gregor Rutz für die Unterstützung ...
+2  negative  0.976087  Wird ja immer schlimmer mit den Intoleranten d...
+3  negative  0.732691  Liebe Junge, geht wählen. Kann ja nicht sein, ...
+4  negative  0.903959  ‘— Das war unser EU-Wahl-Abschluss der SP– mit...
+5  positive  0.942041  Aufschlussreicher Blick hinter die Mauern! Tol...
+6  negative  0.685230  Denn ein Hard-Brexit würde der #EU, aber noch ...
+7  negative  0.609906  Familienbonus: Es ist erstaunlich wie viele Me...
+8   neutral  0.998905  Integration passiert vor Ort. Deshalb arbeitet...
+9   neutral  0.950086  Ich frage mich: Wer ist als nächstes dran Frau...</code></pre>
 </div>
+</div></div>
 
 
-<div class="quarto-title-meta-author">
-  <div class="quarto-title-meta-heading">Autor:in</div>
-  <div class="quarto-title-meta-heading">Universität</div>
-  
-    <div class="quarto-title-meta-contents">
-    <p class="author">Anonym </p>
-  </div>
-  <div class="quarto-title-meta-contents">
-        <p class="affiliation">
-            Anonym
-          </p>
-      </div>
-  </div>
-
-<div class="quarto-title-meta">
-
-      
-  
-    
-  </div>
-  
-
-
-</header>
-
-
-<section id="daten-laden" class="level2">
-<h2 class="anchored" data-anchor-id="daten-laden">Daten laden</h2>
-<p>Unabhängig vom verwendeten Modell laden wir zunächst die bereits installierten Pakete sowie unsere Textdaten und speichern diese in einem Listenobjekt:</p>
-<div id="4f95a582-2d6f-40c7-8e8e-c4b69e8ee3a8" class="cell" data-execution_count="2">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb1-2"><a href="#cb1-2"></a><span class="im">from</span> transformers <span class="im">import</span> pipeline</span>
-<span id="cb1-3"><a href="#cb1-3"></a></span>
-<span id="cb1-4"><a href="#cb1-4"></a>daten <span class="op">=</span> pd.read_csv(<span class="st">"data/example_dataset.csv"</span>)</span>
-<span id="cb1-5"><a href="#cb1-5"></a>datenliste <span class="op">=</span> <span class="bu">list</span>(daten[<span class="st">"text"</span>])</span>
-<span id="cb1-6"><a href="#cb1-6"></a></span>
-<span id="cb1-7"><a href="#cb1-7"></a>daten</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="2">
-<div>
-
-
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
-<thead>
-<tr class="header">
-<th data-quarto-table-cell-role="th"></th>
-<th data-quarto-table-cell-role="th">text</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">0</td>
-<td>Die orthodoxe Gemeinde feiert heute #Ostern. I...</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">1</td>
-<td>Vielen Dank Gregor Rutz für die Unterstützung ...</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">2</td>
-<td>Wird ja immer schlimmer mit den Intoleranten d...</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">3</td>
-<td>Liebe Junge, geht wählen. Kann ja nicht sein, ...</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">4</td>
-<td>‘— Das war unser EU-Wahl-Abschluss der SP– mit...</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">5</td>
-<td>Aufschlussreicher Blick hinter die Mauern! Tol...</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">6</td>
-<td>Denn ein Hard-Brexit würde der #EU, aber noch ...</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">7</td>
-<td>Familienbonus: Es ist erstaunlich wie viele Me...</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">8</td>
-<td>Integration passiert vor Ort. Deshalb arbeitet...</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">9</td>
-<td>Ich frage mich: Wer ist als nächstes dran Frau...</td>
-</tr>
-</tbody>
-</table>
-
-</div>
-</div>
-</div>
-</section>
-<section id="klassifikation" class="level2">
-<h2 class="anchored" data-anchor-id="klassifikation">Klassifikation</h2>
-<p>Nun erfolgt die eigentliche Klassifikation über den <code>pipeline()</code>-Befehl. In diesem können wir je nach Bedarf noch weitere Parameter festlegen, die der Dokumentation von HuggingFace oder unserem Beispielcode im OSF entnommen werden können. Wichtig ist etwa bei kleineren Modellen das Kürzen langer Texte in Abhängigkeit der maximalen Inputlänge des gewählten Modells (z. B. <code>max_length = 512, truncation=True</code>). Die Ausführung des <code>pipeline()</code>-Befehls kann mitunter lange dauern, vor allem beim ersten Mal, da das LLM geladen werden muss.</p>
-<div id="3f695332-8b12-44ea-86a7-a17265f14b23" class="cell" data-execution_count="3">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a>sentiment_classifier <span class="op">=</span> pipeline(<span class="st">"sentiment-analysis"</span>,</span>
-<span id="cb2-2"><a href="#cb2-2"></a>                                 model<span class="op">=</span><span class="st">"oliverguhr/german-sentiment-bert"</span>,</span>
-<span id="cb2-3"><a href="#cb2-3"></a>                                 max_length <span class="op">=</span> <span class="dv">512</span>, truncation<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb2-4"><a href="#cb2-4"></a></span>
-<span id="cb2-5"><a href="#cb2-5"></a>ergebnis <span class="op">=</span> sentiment_classifier(datenliste)</span>
-<span id="cb2-6"><a href="#cb2-6"></a>ergebnis <span class="op">=</span> pd.DataFrame(ergebnis)</span>
-<span id="cb2-7"><a href="#cb2-7"></a>ergebnis[<span class="st">"text"</span>] <span class="op">=</span> daten[<span class="st">"text"</span>]</span>
-<span id="cb2-8"><a href="#cb2-8"></a>ergebnis</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="3">
-<div>
-
-
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
-<thead>
-<tr class="header">
-<th data-quarto-table-cell-role="th"></th>
-<th data-quarto-table-cell-role="th">label</th>
-<th data-quarto-table-cell-role="th">score</th>
-<th data-quarto-table-cell-role="th">text</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">0</td>
-<td>neutral</td>
-<td>0.988959</td>
-<td>Die orthodoxe Gemeinde feiert heute #Ostern. I...</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">1</td>
-<td>neutral</td>
-<td>0.753388</td>
-<td>Vielen Dank Gregor Rutz für die Unterstützung ...</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">2</td>
-<td>negative</td>
-<td>0.976087</td>
-<td>Wird ja immer schlimmer mit den Intoleranten d...</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">3</td>
-<td>negative</td>
-<td>0.732691</td>
-<td>Liebe Junge, geht wählen. Kann ja nicht sein, ...</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">4</td>
-<td>negative</td>
-<td>0.903959</td>
-<td>‘— Das war unser EU-Wahl-Abschluss der SP– mit...</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">5</td>
-<td>positive</td>
-<td>0.942041</td>
-<td>Aufschlussreicher Blick hinter die Mauern! Tol...</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">6</td>
-<td>negative</td>
-<td>0.685230</td>
-<td>Denn ein Hard-Brexit würde der #EU, aber noch ...</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">7</td>
-<td>negative</td>
-<td>0.609906</td>
-<td>Familienbonus: Es ist erstaunlich wie viele Me...</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">8</td>
-<td>neutral</td>
-<td>0.998905</td>
-<td>Integration passiert vor Ort. Deshalb arbeitet...</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">9</td>
-<td>neutral</td>
-<td>0.950086</td>
-<td>Ich frage mich: Wer ist als nächstes dran Frau...</td>
-</tr>
-</tbody>
-</table>
-
-</div>
-</div>
-</div>
-
-
-</section>
-
-</main> <!-- /main -->
-<script id="quarto-html-after-body" type="application/javascript">
+     </main> <!-- /main -->  <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
     const anchorJS = new window.AnchorJS();
@@ -852,23 +793,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       }
     }
   });
-  </script>
-<nav class="page-navigation">
-  <div class="nav-page nav-page-previous">
-      <a href="./01_installation.html" class="pagination-link" aria-label="1 Installation">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">1 Installation</span>
-      </a>          
-  </div>
-  <div class="nav-page nav-page-next">
-      <a href="./03_aufgabenspezifisches_Encoder-Modell.html" class="pagination-link" aria-label="3 Aufgabenspezifisches Encoder-Modell">
-        <span class="nav-page-text">3 Aufgabenspezifisches Encoder-Modell</span> <i class="bi bi-arrow-right-short"></i>
-      </a>
-  </div>
-</nav>
-</div> <!-- /content -->
-
-
-
-
-<script src="site_libs/quarto-html/zenscroll-min.js"></script>
+  </script>  </div> <!-- /content --> 
+  
+<script src="../site_libs/quarto-html/zenscroll-min.js"></script>
 </body></html>
