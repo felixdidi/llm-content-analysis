@@ -1,0 +1,302 @@
+---
+title: "Kategoriespezifisches Encoder-Modell"
+subtitle: "Beispielstudie"
+engine: knitr
+bibliography: "../bib/refs.bib"
+csl: https://www.zotero.org/styles/apa
+code-annotations: hover
+---
+
+## Die Methode
+
+Als kategoriespezifisches Encoder-Modell wurde das off-the-shelf Modell *German Sentiment Bert* von @guhrTrainingBroadcoverageGerman2020 ausgewählt. Dieses Modell basiert auf German BERT [@deepsetGermanBERTState2019], einem mit deutschsprachigen Texten trainierten Encoder-Modell, das anschließend mit Hilfe von 1.834 Millionen gelabelten deutschen Texten verschiedenster Textsorten für die Sentimentanalyse weiter trainiert wurde [vgl. @guhrTrainingBroadcoverageGerman2020, S. 1628–1629]. Obwohl @guhrTrainingBroadcoverageGerman2020 vor der Anwendung eine Textbereinigung vorschlagen (z. B. Entfernen von URLs), wurde das Modell in der vorliegenden Studie – wie auch alle weiteren LLM-basierten Modelle – ohne Preprocessing genutzt, da diese Modelle i. d. R. sehr gut mit unbereinigten Daten umgehen können [vgl. @tornbergHowUseLLMs2023] und wir daran interessiert waren, die off-the-shelf Anwendung der Modelle zu evaluieren (d. h. ohne aufwändige Vorbereitung). Eine Robustheitsanalyse ergab zudem, dass die Leistung durch Preprocessing oder Aufteilung langer Texte nur geringfügig und nicht konsistent verbessert werden konnte.
+
+## Klassifikation mit Kürzung langer Texte
+
+Um die off-the-shelf Anwendung des Modells (über die Hugging Face-Pipeline) zu evaluieren, wurde zunächst eine einfache Klassifikation der Texte durchgeführt. Hierbei wurden die Texte auf 512 Tokens gekürzt, da dies die maximale Länge ist, die das Modell verarbeiten kann.
+
+```{python filename="Python"}
+#| eval: false
+
+import pandas as pd                                                            # <1>
+from transformers import pipeline                                              # <1>
+
+daten = pd.read_csv("beispielstudie/data/00_goldstandard.csv")                 # <2>
+datenliste = list(daten["text"])                                               # <2>
+
+sentiment_classifier = pipeline("sentiment-analysis",                          # <3>
+                                 model="oliverguhr/german-sentiment-bert",     # <3>
+                                 max_length = 512, truncation=True)            # <3>
+
+ergebnis = sentiment_classifier(datenliste)                                    # <4>
+
+vergleich = pd.DataFrame(ergebnis).join(daten)                                 # <5>
+vergleich.to_csv("beispielstudie/data/01_kategoriespezifisches_Encoder-Modell.csv", index=False) # <5>
+
+```
+
+1. Import der notwendigen Bibliotheken.
+2. Laden der Daten.
+3. Initialisierung der Sentiment-Analyse-Pipeline mit dem spezifischen Modell und Setzen der maximalen Textlänge.
+4. Durchführung der Klassifikation.
+5. Zusammenführen der Ergebnisse mit den Originaldaten und Speichern in einer CSV-Datei.
+
+## Ergebnisse
+
+Schauen wir uns eine kleine Auswahl der Ergebnisse an. Wir setzen einen Seed, um die gleiche Auswahl an Texten zu bekommen wie bei den anderen Modellen:
+
+```{r filename="R"}
+#| code-fold: true
+set.seed(42)
+readr::read_csv(here::here("beispielstudie/data/01_kategoriespezifisches_Encoder-Modell.csv"), show_col_types = FALSE) |>
+  dplyr::arrange(desc(id)) |>
+  dplyr::select(label, score, sentiment_gs, textart, text) |>
+  dplyr::sample_n(5)
+```
+
+## Klassifikation mit Preprocessing
+
+@guhrTrainingBroadcoverageGerman2020 schlagen zur Anwendung ihres Modells Preprocessing-Schritte vor. Dabei werden URLs, @-Erwähnungen und Zahlen entfernt, sowie die Texte in Kleinbuchstaben umgewandelt und bereinigt. Anschließend wird das Modell auf die bereinigten Texte angewendet. Die Umsetzung dieses Verfahrens inkl. Preprocessing ist deutlich aufwändiger als die off-the-shelf Anwendung, da das Preprocessing i. d. R. manuell implementiert werden muss. Zwar haben @guhrTrainingBroadcoverageGerman2020 zur Anwendung ihres Modells ein Python-Paket entwickelt, welches die Preprocessing-Schritte vereinfacht (<https://github.com/oliverguhr/german-sentiment-lib>). Solche zusätzlichen Bibliotheken stehen jedoch kaum für andere Modelle zur Verfügung und widersprechen somit der allgemeinen Verfügbarkeit und einfachen Anwendbarkeiten von Modellen über die Hugging Face-Pipeline. Der Code zur Anwendung des Modells inkl. Preprocessing kann durch aufklappen des nachfolgenden Codeblocks eingesehen werden.
+
+```{python filename="Python"}
+#| eval: false
+#| code-fold: true
+
+# Basierend auf den Preprocessing-Schritten von @guhrTrainingBroadcoverageGerman2020:
+# https://github.com/oliverguhr/german-sentiment-lib/blob/master/germansentiment/sentimentmodel.py
+
+import pandas as pd
+from transformers import AutoModelForSequenceClassification, AutoTokenizer
+from typing import List
+import torch
+import re
+
+class SentimentModel():
+    def __init__(self, model_name: str = "oliverguhr/german-sentiment-bert"):
+        if torch.cuda.is_available():
+            self.device = 'cuda'
+        else:
+            self.device = 'cpu'        
+            
+        self.model = AutoModelForSequenceClassification.from_pretrained(model_name)
+        self.model = self.model.to(self.device)
+        self.tokenizer = AutoTokenizer.from_pretrained(model_name)
+
+        self.clean_chars = re.compile(r'[^A-Za-züöäÖÜÄß ]', re.MULTILINE)
+        self.clean_http_urls = re.compile(r'https*\S+', re.MULTILINE)
+        self.clean_at_mentions = re.compile(r'@\S+', re.MULTILINE)
+
+    def predict_sentiment(self, texts: List[str], output_probabilities = False)-> List[str]:
+        texts = [self.clean_text(text) for text in texts]
+        # Add special tokens takes care of adding [CLS], [SEP], <s>... tokens in the right way for each model.
+        # truncation=True limits number of tokens to model's limitations (512)
+        encoded = self.tokenizer.batch_encode_plus(texts,padding=True, add_special_tokens=True,truncation=True, return_tensors="pt")
+        encoded = encoded.to(self.device)
+        with torch.no_grad():
+                logits = self.model(**encoded)
+        
+        label_ids = torch.argmax(logits[0], axis=1)
+
+        if output_probabilities == False:
+            return [self.model.config.id2label[label_id.item()] for label_id in label_ids]
+        else:
+            predictions = torch.softmax(logits[0], dim=-1).tolist()  
+            probabilities = []
+            for prediction in predictions:
+                probabilities += [[[self.model.config.id2label[index], item] for index, item in enumerate(prediction)]]
+                
+            return [self.model.config.id2label[label_id.item()] for label_id in label_ids], probabilities
+
+    def replace_numbers(self,text: str) -> str:
+            return text.replace("0"," null").replace("1"," eins").replace("2"," zwei")\
+                .replace("3"," drei").replace("4"," vier").replace("5"," fünf") \
+                .replace("6"," sechs").replace("7"," sieben").replace("8"," acht") \
+                .replace("9"," neun")         
+
+    def clean_text(self,text: str)-> str:    
+            text = text.replace("\n", " ")        
+            text = self.clean_http_urls.sub('',text)
+            text = self.clean_at_mentions.sub('',text)        
+            text = self.replace_numbers(text)                
+            text = self.clean_chars.sub('', text) # use only text chars                          
+            text = ' '.join(text.split()) # substitute multiple whitespace with single whitespace   
+            text = text.strip().lower()
+            return text
+
+# Klassifikation der Texte mit Preprocessing
+daten = pd.read_csv("beispielstudie/data/00_goldstandard.csv")
+datenliste = list(daten["text"])
+
+model = SentimentModel()
+ergebnis = model.predict_sentiment(datenliste, output_probabilities=True)
+
+vergleich = pd.DataFrame({"label": ergebnis[0], "scores": ergebnis[1]}).join(daten)
+vergleich.to_csv("beispielstudie/data/01_kategoriespezifisches_Encoder-Modell_preprocessed.csv", index=False)
+
+```
+
+## Ergebnisse
+
+Schauen wir uns auch hier die Ergebnisse an:
+
+```{r filename="R"}
+#| code-fold: true
+set.seed(42)
+readr::read_csv(here::here("beispielstudie/data/01_kategoriespezifisches_Encoder-Modell_preprocessed.csv"), show_col_types = FALSE) |>
+  dplyr::arrange(desc(id)) |>
+  dplyr::select(label, scores, sentiment_gs, textart, text) |>
+  dplyr::sample_n(5)
+```
+
+## Klassifikation mit Aufteilung langer Texte
+
+Da die Ergebnisse möglicherweise auch durch die Kürzung langer Texte beeinflusst werden, wurde eine weitere Klassifikation durchgeführt, bei der lange Texte in kleinere Abschnitte aufgeteilt werden. Dies kann helfen, die Leistung des Modells zu verbessern, da es so besser mit langen Texten umgehen kann. Auch hierzu ist der Code wieder deutlich aufwendiger als bei der off-the-shelf Anwendung. Die Umsetzung können wir uns durch Aufklappen des nachfolgenden Codeblocks ansehen. Hierbei wird der Text in Abschnitte von maximal 500 Tokens unterteilt. Anschließend wird jeder Abschnitt einzeln klassifiziert und die Ergebnisse werden aggregiert, um ein finales Ergebnis zu erhalten.
+
+```{python filename="Python"}
+#| eval: false
+#| code-fold: true
+
+import pandas as pd
+import numpy as np
+from transformers import pipeline, AutoTokenizer
+from typing import List, Dict, Any
+
+def split_text_into_chunks(text: str, tokenizer, max_tokens: int = 500) -> List[str]:
+
+    # Tokenize den gesamten Text
+    tokens = tokenizer.encode(text, add_special_tokens=False)
+    
+    # Wenn der Text bereits kurz genug ist, gib ihn zurück
+    if len(tokens) <= max_tokens:
+        return [text]
+    
+    chunks = []
+    sentences = text.split('.')  # Einfache Satzaufteilung
+    current_chunk = ""
+    current_tokens = 0
+    
+    for sentence in sentences:
+        sentence = sentence.strip()
+        if not sentence:
+            continue
+            
+        # Füge den Punkt wieder hinzu (außer beim letzten Satz)
+        sentence_with_dot = sentence + "."
+        sentence_tokens = len(tokenizer.encode(sentence_with_dot, add_special_tokens=False))
+        
+        # Wenn der aktuelle Satz allein schon zu lang ist, teile ihn weiter auf
+        if sentence_tokens > max_tokens:
+            # Speichere den aktuellen Chunk falls er nicht leer ist
+            if current_chunk:
+                chunks.append(current_chunk.strip())
+                current_chunk = ""
+                current_tokens = 0
+            
+            # Teile den langen Satz in Wörter auf
+            words = sentence.split()
+            temp_chunk = ""
+            temp_tokens = 0
+            
+            for word in words:
+                word_tokens = len(tokenizer.encode(word + " ", add_special_tokens=False))
+                if temp_tokens + word_tokens <= max_tokens:
+                    temp_chunk += word + " "
+                    temp_tokens += word_tokens
+                else:
+                    if temp_chunk:
+                        chunks.append(temp_chunk.strip() + ".")
+                    temp_chunk = word + " "
+                    temp_tokens = word_tokens
+            
+            if temp_chunk:
+                chunks.append(temp_chunk.strip() + ".")
+        
+        # Wenn der Satz in den aktuellen Chunk passt
+        elif current_tokens + sentence_tokens <= max_tokens:
+            current_chunk += sentence_with_dot + " "
+            current_tokens += sentence_tokens
+        
+        # Wenn der Satz nicht mehr passt, starte einen neuen Chunk
+        else:
+            if current_chunk:
+                chunks.append(current_chunk.strip())
+            current_chunk = sentence_with_dot + " "
+            current_tokens = sentence_tokens
+    
+    # Füge den letzten Chunk hinzu
+    if current_chunk:
+        chunks.append(current_chunk.strip())
+    
+    return chunks
+
+def classify_text_with_chunking(text: str, classifier, tokenizer, max_tokens: int = 500) -> Dict[str, Any]:
+
+    chunks = split_text_into_chunks(text, tokenizer, max_tokens)
+    
+    # Klassifiziere jeden Chunk
+    chunk_results = classifier(chunks)
+    
+    # Aggregiere die Ergebnisse
+    labels = [result['label'] for result in chunk_results]
+    scores = [result['score'] for result in chunk_results]
+    
+    # Berechne den Durchschnittsscore für jedes Label
+    unique_labels = list(set(labels))
+    label_scores = {}
+    
+    for label in unique_labels:
+        label_indices = [i for i, l in enumerate(labels) if l == label]
+        label_scores[label] = np.mean([scores[i] for i in label_indices])
+    
+    # Bestimme das finale Label (höchster Durchschnittsscore)
+    final_label = max(label_scores.keys(), key=lambda k: label_scores[k])
+    final_score = label_scores[final_label]
+    
+    return {
+        'label': final_label,
+        'score': final_score,
+        'chunk_count': len(chunks),
+        'chunk_results': chunk_results,
+        'aggregated_scores': label_scores
+    }
+
+# Klassifikation der Texte mit Chunking
+daten = pd.read_csv("beispielstudie/data/00_goldstandard.csv")
+datenliste = list(daten["text"])
+
+model_name = "oliverguhr/german-sentiment-bert"
+sentiment_classifier = pipeline("sentiment-analysis", model=model_name)
+tokenizer = AutoTokenizer.from_pretrained(model_name)
+
+ergebnisse = []
+
+for i, text in enumerate(datenliste):
+    try:
+        result = classify_text_with_chunking(text, sentiment_classifier, tokenizer, max_tokens=500)
+        ergebnisse.append({
+            'aggregated_label': result['label'],
+            'aggregated_score': result['score'],
+            'chunk_count': result['chunk_count'],
+            'chunk_results': result['chunk_results'],
+        })
+    except Exception as e:
+        print(f"Fehler bei Text {i}: {e}")
+
+ergebnis_df = pd.DataFrame(ergebnisse)
+vergleich = ergebnis_df.join(daten)
+vergleich.to_csv("beispielstudie/data/01_kategoriespezifisches_Encoder-Modell_chunked.csv", index=False)
+
+```
+
+## Ergebnisse
+
+Schauen wir uns auch hier die Ergebnisse an:
+
+```{r filename="R"}
+#| code-fold: true
+set.seed(42)
+readr::read_csv(here::here("beispielstudie/data/01_kategoriespezifisches_Encoder-Modell_chunked.csv"), show_col_types = FALSE) |>
+  dplyr::arrange(desc(id)) |>
+  dplyr::select(aggregated_label, aggregated_score, chunk_count, sentiment_gs, textart, text) |> 
+  dplyr::sample_n(5)
+```

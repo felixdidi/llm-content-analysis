@@ -1,0 +1,96 @@
+---
+title: Aufgabenspezifisches Encoder-Modell
+engine: knitr
+code-annotations: hover
+bibliography: "bib/refs.bib"
+csl: https://www.zotero.org/styles/apa
+---
+
+Um den Beispielcode selbst auszuführen oder zu modifizieren, können Sie das dieser Seite zugrundeliegende Jupyter Notebook über die Seitenleiste öffnen und herunterladen.
+
+:::{.callout-note collapse="true"}
+## Fragen zum Code?
+Kein Problem! Erklärungen zu den einzelnen Schritten des Codes verbergen sich hinter den Nummern an der rechten Seite. Einfach mit der Maus über die Nummer fahren, um die Erklärung zu sehen. Wo der jeweilige Code ausgeführt wird (in Python, R, oder dem Terminal), steht in der Kopfzeile des Codeblocks.
+
+```{python filename="Python"}
+print("Hallo! 👋") # <1>
+```
+
+1. Das ist ein einfacher Python-Befehl, der den Text "Hallo" in der Konsole ausgibt. Der Output erscheint unter dem Codeblock.
+
+:::
+
+## Daten laden
+
+Unabhängig vom verwendeten Modell laden wir zunächst die bereits installierten Pakete sowie unsere Textdaten und speichern diese in einem Listenobjekt: 
+
+```{python filename="Python"}
+#| eval: false
+
+import pandas as pd                              #<1>
+from transformers import pipeline                #<1>
+
+daten = pd.read_csv("data/example_dataset.csv")  #<2>
+datenliste = list(daten["text"])                 #<2>
+
+```
+
+1. Importieren der benötigten Bibliotheken
+2. Laden der Textdaten aus einer CSV-Datei und Speichern in einer Liste
+
+## Modell laden
+
+Im Gegensatz zu kategoriespezifischen Modellen können wir mit aufgabenspezifischen Encoder-Modellen jede beliebige Kategorie codieren. Als Beispiel verwenden wir hier das NLI-Modell von @laurerBuildingEfficientUniversal2024.
+
+:::{.callout-tip}
+## Gut zu wissen
+
+Anstelle des hier verwendeten Modells `MoritzLaurer/bge-m3-zeroshot-v2.0` können Sie auch andere aufgabenspezifische Encoder-Modelle (üblicherweise gekennzeichnet für "Zero-Shot-Classification") für verschiedene Sprachen und Anwendungsfälle verwenden. Eine Übersicht über verfügbare Modelle finden Sie auf [Hugging Face](https://huggingface.co/models). Achten Sie darauf, dass das gewählte Modell für Ihre spezifische Aufgabe geeignet ist (z. B. Sentiment-Analyse, Themenklassifikation etc.) und die Sprache Ihrer Texte unterstützt.
+:::
+
+```{python filename="Python"}
+#| eval: false                              #<4>
+
+zeroshot_classifier = pipeline("zero-shot-classification",                    #<3>
+                                model = "MoritzLaurer/bge-m3-zeroshot-v2.0")  #<3>
+```
+
+3. Laden des aufgabenspezifischen Encoder-Modells für Zero-Shot-Klassifikation
+
+## Klassifikation 
+
+Für die Klassifikation mit dem NLI-Modell spezifizieren wir zusätzlich zum Modell noch die Ausprägungen der Kategorie (`candidate_labels`) und eine "Hypothese", die auf Grundlage des Textes geprüft werden soll (`hypothesis_template`). Bei der Ausführung des `pipeline()`-Befehls werden die zu codierenden Ausprägungen der Kategorie automatisch anstelle der geschwungenen Klammern in die Hypothese eingesetzt. Auf diese Weise wird der Befehl für jede Ausprägung einzeln durchgeführt (hier für "positiv", "negativ" und "neutral"). Wir erhalten also als Ergebnis einen Datensatz, der uns pro Text für jede spezifizierte Ausprägung einen Wahrscheinlichkeitswert ausgibt (in unserem Beispiel die Wahrscheinlichkeit für "positiv", "negativ" und "neutral"). Nun erfolgt die eigentliche Klassifikation, indem wir den zuvor definierten `zeroshot_classifier`-Befehl auf unsere Textdaten anwenden. Anschließend extrahieren wir die vergebenen Labels aus dem Response. Das Ergebnis speichern wir in einem DataFrame-Objekt, um es übersichtlich darstellen zu können. Über den Parameter `multi_label` können wir festlegen, ob prinzipiell mehrere Kategorien gleichzeitig in einem Text vorkommen können.
+
+```{python}
+#| eval: false
+
+template = "Die Stimmung beziehungsweise Tonalität des Textes ist {}"           #<4>
+labels = ["positiv", "neutral", "negativ"]                                      #<5>
+
+results = zeroshot_classifier(datenliste, candidate_labels=labels,
+                               hypothesis_template=template, multi_label=False) #<6>
+
+labels = set(label for item in results for label in item['labels'])             #<7>
+out_dict = {label: [] for label in labels}                                      #<7>
+out_dict['sequence'] = []                                                       #<7>
+
+for item in results:                                                            #<8>
+    out_dict['sequence'].append(item['sequence'])                               #<8>
+    for label in labels:                                                        #<8>
+        if label in item['labels']:                                             #<8>
+            out_dict[label].append(item['scores'][item['labels'].index(label)]) #<8>
+        else:                                                                   #<8>
+            out_dict[label].append(None)                                        #<8>
+
+ergebnis = pd.DataFrame(out_dict)                                               #<9>
+print(ergebnis)                                                                 #<9>
+```
+
+4. Definieren der Hypothese mit Platzhalter für die Kategorieausprägungen
+5. Definieren der Kategorieausprägungen
+6. Anwenden des Klassifikationsbefehls auf die Textdaten mit den spezifizierten Kategorieausprägungen und der Hypothese
+7. Initialisieren eines Wörterbuchs zur Speicherung der Ergebnisse
+8. Extrahieren der Labels und Wahrscheinlichkeitswerte aus dem Klassifikationsergebnis
+9. Speichern der Ergebnisse in einem DataFrame und Ausgabe
+
+{{< embed notebooks/04_aufgabenspezifisches_Encoder-Modell.ipynb#classify >}}

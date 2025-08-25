@@ -1,0 +1,5 @@
+text,response
+Die orthodoxe Gemeinde feiert heute #Ostern. Ich wünsche ein frohes und gesegnetes Fest!,"{
+  ""sentiment"": ""positiv"",
+  ""reasoning"": ""Der Text wünscht ein 'frohes und gesegnetes Fest', was auf eine positive Stimmung hinweist. Die Verwendung von positiven Adjektiven wie 'froh' und 'gesegnet' unterstreicht diese Stimmung.""
+}"

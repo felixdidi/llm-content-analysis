@@ -2,10 +2,6 @@ project:
   type: website
   lib-dir: site_libs
   
-author:
-  - name: "Anonym"
-    affiliation: "Anonym"
-  
 lang: de
 language:
   title-block-author-single: "Autor:in"
@@ -19,46 +15,54 @@ website:
     align: "center"
     logo: "img/transformer.png"
     search: true
+    collapse-level: 1
     contents:
-      - href: "index.qmd"
-        text: "Startseite"
       - section: "Anleitungen"
+        href: "index.qmd"
         contents:
           - href: "01_installation.qmd"
-            text: "1 Installation"
-          - href: "02_kategoriespezifisches_Encoder-Modell.ipynb"
-            text: "2 Kategoriespezifisches Encoder-Modell"
-          - href: "03_aufgabenspezifisches_Encoder-Modell.ipynb"
-            text: "3 Aufgabenspezifisches Encoder-Modell"
-          - href: "04_universelles_Decoder-Modell.ipynb"
-            text: "4 Universelles Decoder-Modell"
+            text: "Installation"
+          - href: "02_setup.qmd"
+            text: "Vorbereitung"
+          - section: "Textklassifikation"
+            contents:
+              - href: "03_kategoriespezifisches_Encoder-Modell.qmd"
+                text: "Kategoriespezifisches Encoder-Modell"
+              - href: "04_aufgabenspezifisches_Encoder-Modell.qmd"
+                text: "Aufgabenspezifisches Encoder-Modell"
+              - href: "05_universelles_Decoder-Modell.qmd"
+                text: "Universelles Decoder-Modell"
+      - text: "---"
       - section: "Beispielstudie"
+        href: "beispielstudie/00_beispielstudie.qmd"
         contents:
-          - href: "beispielstudie/01_goldstandard.qmd"
+          - href: "beispielstudie/00_goldstandard.qmd"
             text: "Goldstandard"
-          - href: "beispielstudie/02_kategoriespezifisches_Encoder-Modell.qmd"
+          - href: "beispielstudie/01_kategoriespezifisches_Encoder-Modell.qmd"
             text: "Kategoriespezifisches Encoder-Modell"
-          - href: "beispielstudie/03_aufgabenspezifisches_Encoder-Modell.qmd"
+          - href: "beispielstudie/02_aufgabenspezifisches_Encoder-Modell.qmd"
             text: "Aufgabenspezifisches Encoder-Modell"
-          - href: "beispielstudie/04_universelles_Decoder-Modell.qmd"
+          - href: "beispielstudie/03_universelles_Decoder-Modell.qmd"
             text: "Universelles Decoder-Modell"
-          - href: "05_dictionary.qmd"
+          - href: "beispielstudie/04_manuelle_Inhaltsanalyse.qmd"
+            text: "Manuelle Inhaltsanalyse"
+          - href: "beispielstudie/05_dictionary.qmd"
             text: "Off-the-shelf Diktionär"
-          - href: "06_machine_learning.qmd"
+          - href: "beispielstudie/06_machine_learning.qmd"
             text: "Überwachtes maschinelles Lernen"
-          - href: "07_validierung.qmd"
+          - href: "beispielstudie/07_validierung.qmd"
             text: "Validierung"
 
 format:
   html:
-    toc: false
+    toc: true
     page-navigation: true
     number-sections: false
     smooth-scroll: true
     footnotes-hover: true
     code-fold: false
     code-tools: false
-    code-line-numbers: true
+    code-line-numbers: false
     highlight-style: gruvbox
     lang: de-DE
     link-external-newwindow: true

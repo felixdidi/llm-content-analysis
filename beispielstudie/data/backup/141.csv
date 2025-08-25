@@ -1,0 +1,5 @@
+text,response
+Ein schöner Abend beim Eiger-Club Winterthur!,"{
+  ""sentiment"": ""positiv"",
+  ""reasoning"": ""Der Text enthält das Wort'schöner', was eine positive Konnotation hat, und beschreibt eine soziale Veranstaltung, was eine positive Atmosphäre nahelegt.""
+}"

@@ -1,0 +1,80 @@
+---
+title: Kategoriespezifisches Encoder-Modell
+engine: knitr
+code-annotations: hover
+bibliography: "bib/refs.bib"
+csl: https://www.zotero.org/styles/apa
+---
+
+Um den Beispielcode selbst auszuführen oder zu modifizieren, können Sie das dieser Seite zugrundeliegende Jupyter Notebook über die Seitenleiste öffnen und herunterladen.
+
+:::{.callout-note collapse="true"}
+## Fragen zum Code?
+Kein Problem! Erklärungen zu den einzelnen Schritten des Codes verbergen sich hinter den Nummern an der rechten Seite. Einfach mit der Maus über die Nummer fahren, um die Erklärung zu sehen. Wo der jeweilige Code ausgeführt wird (in Python, R, oder dem Terminal), steht in der Kopfzeile des Codeblocks.
+
+```{python filename="Python"}
+print("Hallo! 👋") # <1>
+```
+
+1. Das ist ein einfacher Python-Befehl, der den Text "Hallo" in der Konsole ausgibt. Der Output erscheint unter dem Codeblock.
+
+:::
+
+## Daten laden
+
+Unabhängig vom verwendeten Modell laden wir zunächst die bereits installierten Pakete sowie unsere Textdaten und speichern diese in einem Listenobjekt: 
+
+```{python filename="Python"}
+#| eval: false
+
+import pandas as pd                              #<1>
+from transformers import pipeline                #<1>
+
+daten = pd.read_csv("data/example_dataset.csv")  #<2>
+datenliste = list(daten["text"])                 #<2>
+
+```
+
+1. Importieren der benötigten Bibliotheken
+2. Laden der Textdaten aus einer CSV-Datei und Speichern in einer Liste
+
+## Modell laden
+
+Hier verwenden wir ein kategoriespezifisches Encoder-Modell für die Sentiment-Analyse in deutscher Sprache, das auf dem BERT-Modell basiert [@guhrTrainingBroadcoverageGerman2020]. Dieses Modell ist auf Hugging Face frei verfügbar und kann direkt über den `pipeline()`-Befehl geladen werden. In diesem können wir je nach Bedarf noch weitere Parameter festlegen, die der Dokumentation von Hugging Face entnommen werden können. Wichtig ist etwa bei kleineren Modellen das Kürzen langer Texte in Abhängigkeit der maximalen Inputlänge des gewählten Modells (z. B. `max_length = 512, truncation=True`). Die Ausführung des `pipeline()`-Befehls kann mitunter lange dauern, vor allem beim ersten Mal, da das LLM geladen werden muss.
+
+:::{.callout-tip}
+## Gut zu wissen
+
+Anstelle des hier verwendeten Modells `oliverguhr/german-sentiment-bert` können Sie auch andere kategoriespezifische Encoder-Modelle (üblicherweise gekennzeichnet für "Text Classification") für verschiedene Sprachen und Anwendungsfälle verwenden. Eine Übersicht über verfügbare Modelle finden Sie auf [Hugging Face](https://huggingface.co/models). Achten Sie darauf, dass das gewählte Modell für Ihre spezifische Aufgabe geeignet ist (z. B. Sentiment-Analyse, Themenklassifikation etc.) und die Sprache Ihrer Texte unterstützt.
+:::
+
+```{python filename="Python"}
+#| eval: false
+sentiment_classifier = pipeline("sentiment-analysis",                       #<3>
+                                 model="oliverguhr/german-sentiment-bert",  #<4>
+                                 max_length = 512, truncation=True)         #<5>
+```
+
+3. Initialisieren der Pipeline für die Sentiment-Analyse (bzw. generischer Textklassifikation)
+4. Spezifizieren des Modells, hier ein kategoriespezifisches Encoder-Modell für die deutsche Sprache
+5. Festlegen der maximalen Eingabelänge und Aktivieren der Kürzung langer Texte
+
+## Klassifikation durchführen
+
+Nun wenden wir das Modell auf unsere Liste der Texte an. Das Ergebnis speichern wir in einem DataFrame-Objekt, um es übersichtlich darstellen zu können.
+
+```{python filename="Python"}
+#| eval: false
+
+ergebnis = sentiment_classifier(datenliste) #<6>
+ergebnis = pd.DataFrame(ergebnis)           #<7>
+ergebnis["text"] = daten["text"]            #<8>
+print(ergebnis)                             #<9>
+```
+
+6. Anwenden der Sentiment-Analyse auf die Liste der Texte
+7. Umwandeln des Ergebnisses in ein DataFrame für eine bessere Übersicht
+8. Hinzufügen der Originaltexte zum Ergebnis-DataFrame
+9. Ausgabe des Ergebnis-DataFrames mit den Klassifikationen
+
+{{< embed notebooks/03_kategoriespezifisches_Encoder-Modell.ipynb#classify >}}

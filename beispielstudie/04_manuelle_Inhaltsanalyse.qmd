@@ -1,0 +1,10 @@
+---
+title: "Manuelle Inhaltsanalyse"
+subtitle: "Beispielstudie"
+bibliography: "../bib/refs.bib"
+csl: https://www.zotero.org/styles/apa
+---
+
+## Die Methode
+
+Die Daten der manuellen Inhaltsanalyse stammen aus der Studie von @spatzeneggerSocialMediaAls2020. Es handelt sich hierbei also nicht um die manuelle Codierung des [Goldstandards](00_goldstandard.qmd), sondern um die ursprüngliche Codierung von @spatzeneggerSocialMediaAls2020. Die Daten können als typische Ergebnis einer publizierten manuellen kommunikationswissenschaftlichen Inhaltsanalyse betrachtet werden.

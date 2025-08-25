@@ -1,8 +1,22 @@
 ---
-title: "Gebrauchsfertige, Open Source Large-Language Models auf HuggingFace"
+title: "Gebrauchsfertige, Open Source Large-Language Models auf Hugging Face"
 subtitle: "als Forschungsinfrastruktur für die standardisierte Inhaltsanalyse von Texten"
+author:
+  - name: "Anonym"
+    affiliation: "Anonym"
+citation:
+  type: article-journal
+  container-title: "Publizistik"
+  doi: "12345"
+appendix-cite-as: display
+engine: knitr
+code-annotations: hover
 ---
 
-## Herzlich Willkommen!
+## Herzlich Willkommen! {.unnumbered .unlisted}
 
-Mit der steigenden Verfügbarkeit großer Textmengen und hoher Rechenleistung gewinnt die automatisierte Inhaltsanalyse in der Kommunikationswissenschaft zunehmend an Bedeutung. Bislang mangelt es jedoch an einfach zu bedienenden und leistungsfähigen Tools für die standardisierte automatisierte Inhaltsanalyse von Texten. Large Language Models (LLMs) und darauf aufbauende Modelle zur Textcodierung können dazu beitragen, diesen Mangel zu beheben. Die Modelle zeichnen sich durch ein tiefes Sprachverständnis aus und versprechen daher eine besonders valide Textcodierungen. Zudem sind gebrauchsfertige (off-the-shelf) LLM-basierter Modelle auf der Plattform HuggingFace frei verfügbar (Open Source) und können mit wenigen Zeilen Python-Code für die Inhaltsanalyse verwendet werden. Der vorliegende Beitrag untersucht das Potenzial solcher gebrauchsfertiger LLM-basierter Modelle auf HuggingFace als Forschungsinfrastruktur für die standardisierte Inhaltsanalyse von Texten. Nach einer Einführung in die Funktionsweise von LLMs werden drei Modelltypen für die Textcodierung vorgestellt: (1) kategoriespezifische Encoder-Modelle, (2) aufgabenspezifische Encoder-Modelle und (3) universelle Decoder-Modelle. Eine detaillierte Anleitung erläutert die Anwendung der drei Modelltypen über die HuggingFace-Bibliothek für die Textcodierung. In einer theoretischen Kontextualisierung und einer anschließenden empirischen Evaluationsstudie werden die Modelltypen mit herkömmlichen Methoden der standardisierten Inhaltsanalyse verglichen, insbesondere mit der manuellen Codierung, diktionärsbasierten Analyse und Analyse mittels überwachter maschineller Lernalgorithmen. Die Ergebnisse zeigen, dass LLM-basierte Modelle auf HuggingFace vergleichsweise einfach zugänglich, gut skalierbar und kostengünstig sind und eine hohe Leistungsfähigkeit aufweisen, die mit manuellen Inhaltsanalysen konkurrieren kann. Es werden aber auch Limitationen deutlich, wie die mangelnde Transparenz der Modelle hinsichtlich getroffener Codierungsentscheidungen. Insgesamt verdeutlicht der Beitrag jedoch das große Potenzial gebrauchsfertiger LLM-basierter Modelle auf HuggingFace als Forschungsinfrastruktur für die standardisierte Inhaltsanalyse von Texten.
+Der vorliegende Beitrag untersucht das Potenzial gebrauchsfertiger LLM-basierter Modelle auf Hugging Face als Forschungsinfrastruktur für die standardisierte Inhaltsanalyse von Texten. Dabei werden drei Modelltypen für die Textcodierung vorgestellt: (1) kategoriespezifische Encoder-Modelle, (2) aufgabenspezifische Encoder-Modelle und (3) universelle Decoder-Modelle. Eine detaillierte Anleitung erläutert die Anwendung der drei Modelltypen über die Hugging Face-Bibliothek für die Textcodierung. In einer empirischen Evaluationsstudie werden die Modelltypen mit herkömmlichen Methoden der standardisierten Inhaltsanalyse verglichen, insbesondere mit der manuellen Codierung, diktionärsbasierten Analyse und Analyse mittels überwachter maschineller Lernalgorithmen. Die Ergebnisse zeigen, dass LLM-basierte Modelle auf Hugging Face vergleichsweise einfach zugänglich, gut skalierbar und kostengünstig sind und eine hohe Leistungsfähigkeit aufweisen, die mit manuellen Inhaltsanalysen konkurrieren kann.
+
+Wir dokumentieren Schritt für Schritt, wie Sie die Beispiele aus diesem Artikel selbst ausprobieren können. Mithilfe der zur Verfügung gestellten Notebooks ist es sehr einfach möglich, die vorgestellten Methoden auf eigene Texte anzuwenden und auch andere, über Hugging Face zur Verfügung gestellte Modelle für die Inhaltsanalyse von Texten zu nutzen. Nach einer einmaligen [Installation von Python und allen benötigten Paketen](01_installation.qmd) sind nur wenige Schritte der [Vorbereitung](02_setup.qmd) notwendig. Danach können wir unsere Texte mit einem [kategoriespezifischen Encoder-Modell](03_kategoriespezifisches_Encoder-Modell.qmd), einem [aufgabenspezifischen Encoder-Modell](04_aufgabenspezifisches_Encoder-Modell.qmd) oder einem [universellen Decoder-Modell](05_universelles_Decoder-Modell.qmd) codieren.
+
+In einer [empirischen Evaluationsstudie](beispielstudie/00_beispielstudie.qmd) vergleichen wir die drei Modelltypen mit herkömmlichen Methoden der standardisierten Inhaltsanalyse, insbesondere mit der manuellen Codierung, diktionärsbasierten Analyse und Analyse mittels überwachter maschineller Lernalgorithmen.

@@ -1,0 +1,176 @@
+---
+title: "Off-the-shelf Diktionär"
+subtitle: "Beispielstudie"
+code-annotations: hover
+bibliography: "../bib/refs.bib"
+csl: https://www.zotero.org/styles/apa
+---
+
+## Die Methode
+
+Als off-the-shelf-Diktionär wurde *SentimentWortschatz* [*SentiWS*, @remusSentiWSPubliclyAvailable2010] genutzt. Das Diktionär enthält insgesamt ca. 1.650 positive und 1.800 negative Wörter. Um das Diktionär anwenden zu können, wurden die *N* = 197 Dokumente des Goldstandards in einzelne Wörter (sog. Tokens) zerlegt (*N* = 22.557 Tokens). Im Rahmen der Analyse wurde anschließend jedem Wort auf Basis des SentiWS-Diktionärs ein Wert zugewiesen und daraus für jeden Text eine Gesamttonalität berechnet, wobei Texte als positiv bzw. negativ codiert wurden, wenn ihre durchschnittliche Tonalität mindestens 20% über bzw. unter dem Median lag.
+
+## Klassifikation
+
+```{r filename="R"}
+#| message: false
+library(tidyverse) # <1>
+library(udpipe) # <1>
+# Einmaliges Herunterladen des UDPipe-Modells für Deutsch
+# udpipe_download_model("german", model_dir = "beispielstudie/udpipe") # <1>
+library(hrbrthemes) # <1>
+theme_set(theme_ipsum_rc()) # <1>
+
+data <- # <2>
+  read_csv(here::here("beispielstudie/data/00_goldstandard.csv")) |> # <2>
+  mutate(text = str_replace_all(text, "[[:digit:]]", "")) |> # <2>
+  mutate(text = str_replace_all(text, "[[:punct:]]", "")) |> # <2>
+  mutate(text = str_to_lower(text)) # <2>
+
+ud_model <- udpipe_load_model( # <3>
+  here::here("beispielstudie/udpipe/german-gsd-ud-2.5-191206.udpipe") # <3>
+) # <3>
+
+for (row in 1:nrow(data)) { # <4>
+  if (row == 1) { # <4>
+    sentence <- data$text[row] # <4>
+    lemma_tokens <- udpipe_annotate(ud_model, sentence) # <4>
+    lemma_tokens_df <- as_tibble(lemma_tokens) # <4>
+    lemma_tokens_df <- lemma_tokens_df |> mutate(id = data$id[row]) # <4>
+  } # <4>
+  if (row > 1) { # <4>
+    sentence <- data$text[row] # <4>
+    lemma_tokens <- udpipe_annotate(ud_model, sentence) # <4>
+    lemma_tokens_df_new <- as_tibble(lemma_tokens) # <4>
+    lemma_tokens_df_new <- lemma_tokens_df_new |> mutate(id = data$id[row]) # <4>
+    lemma_tokens_df <- lemma_tokens_df |> bind_rows(lemma_tokens_df_new) # <4>
+  } # <4>
+} # <4>
+
+stopwords <- tibble( # <5>
+  words = unique(c(lsa::stopwords_de, tm::stopwords("german"))) # <5>
+) # <5>
+
+tokens <- # <6>
+  lemma_tokens_df |> # <6>
+  filter(!is.na(lemma)) |> # <6>
+  select(id, lemma) |> # <6>
+  rename(words = lemma) |> # <6>
+  anti_join(stopwords, by = "words") |> # <6>
+  filter(nchar(words, type = "chars") > 1) |> # <6>
+  filter(words != "") # <6>
+
+extract_senti_ws <- # <7>
+  function(x) { # <7>
+    res <- strsplit(x, "\t", fixed = TRUE)[[1]] # <7>
+    return(data.frame(words = res[1], value = res[2], stringsAsFactors = FALSE)) # <7>
+  } # <7>
+
+sentiws <- # <8>
+  c( # <8>
+    readLines( # <8>
+      here::here("beispielstudie/sentiws_v2/SentiWS_v2.0_Positive.txt"), # <8>
+      encoding = "UTF-8" # <8>
+    ), # <8>
+    readLines( # <8>
+      here::here("beispielstudie/sentiws_v2/SentiWS_v2.0_Negative.txt"), # <8>
+      encoding = "UTF-8" # <8>
+    ) # <8>
+  ) |> # <8>
+  map(extract_senti_ws) |> # <8>
+  bind_rows() |> # <8>
+  mutate( # <8>
+    words = gsub("\\|.*", "", words) |> tolower(), # <8>
+    value = as.numeric(value) # <8>
+  ) |> # <8>
+  group_by(words) |> # <8>
+  summarise(value = mean(value)) |> # <8>
+  ungroup() # <8>
+
+tokens$words_1 <- sub("\\|.*", "", tokens$words) # <9>
+tokens$words_2 <- sub(".*\\|", "", tokens$words) # <9>
+
+tokens_sent <- left_join(tokens, sentiws, by = c("words_1" = "words")) # <10>
+tokens_sent <- left_join(tokens_sent, sentiws, by = c("words_2" = "words")) # <10>
+
+tokens_sent[is.na(tokens_sent)] <- 0 # <11>
+tokens_sent <- tokens_sent |> # <11>
+  mutate(isna_check = value.x + value.y) |> # <11>
+  filter(isna_check != 0) |> # <11>
+  mutate(value = if_else(value.x == 0, value.y, value.x)) |> # <11>
+  mutate(words_final = if_else(value.x == 0, words_2, words_1)) |> # <11>
+  select(id, words_final, value) |> # <11>
+  mutate(value = as.numeric(value)) # <11>
+
+ergebnis <- # <12>
+  tokens_sent |> # <12>
+  group_by(id) |> # <12>
+  summarise(sentiment = round(mean(value), digits = 5)) # <12>
+
+ergebnis |> # <13>
+  ggplot(aes(x = sentiment)) + # <13>
+  geom_hline(yintercept = c(0, 5, 10, 15, 20, 25, 30), colour = "lightgrey") + # <13>
+  geom_histogram(binwidth = 0.01) + # <13>
+  scale_x_continuous(n.breaks = 10) + # <13>
+  xlab("Tonalität") + # <13>
+  ylab("Anzahl") # <13>
+```
+
+1. Import der notwendigen Bibliotheken für Textverarbeitung, NLP und Visualisierung.
+2. Laden und Vorverarbeitung der Daten: Entfernung von Zahlen und Satzzeichen, Konvertierung zu Kleinbuchstaben.
+3. Laden des UDPipe-Modells für deutsche Lemmatisierung.
+4. Durchführung der Lemmatisierung für alle Textzeilen mit einer Schleife.
+5. Definition der deutschen Stoppwörter aus verschiedenen Quellen.
+6. Extraktion und Filterung der lemmatisierten Tokens: Entfernung von NA-Werten, Stoppwörtern und zu kurzen Wörtern.
+7. Hilfsfunktion zum Parsen der SentiWS-Diktionärdateien.
+8. Laden und Verarbeitung des SentiWS-Sentimentdiktionärs: Kombination positiver und negativer Wörter mit Mittelwertbildung bei Duplikaten.
+9. Trennung von Wörtern mit "|"-Zeichen in separate Spalten für die Sentimentanalyse.
+10. Verknüpfung der Tokens mit dem Sentimentdiktionär für beide Wortteile.
+11. Zusammenführung der Sentimentwerte und Auswahl des relevanten Wortes mit Sentiment.
+12. Berechnung des durchschnittlichen Sentiments pro Text-ID.
+13. Visualisierung der Sentimentverteilung mit einem Histogramm.
+
+```{r filename="R"}
+#| message: false
+
+sent_decile <- quantile( # <14>
+  ergebnis$sentiment, # <14>
+  probs = c(0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1) # <14>
+) # <14>
+
+upper_limit <- sent_decile[[7]] # <15>
+lower_limit <- sent_decile[[3]] # <15>
+
+ergebnis <- # <16>
+  ergebnis |> # <16>
+  mutate( # <16>
+    sentiment = case_when( # <16>
+      sentiment >= upper_limit ~ 1, # <16>
+      sentiment <= lower_limit ~ -1, # <16>
+      sentiment < upper_limit & sentiment > lower_limit ~ 0 # <16>
+    ) # <16>
+  ) |> # <16>
+  select(id, sentiment) |> # <16>
+  left_join(data, by = "id") # <16>
+
+ergebnis |> # <17>
+  write_csv(here::here("beispielstudie/data/05_diktionaer.csv")) # <17>
+```
+
+14. Berechnung der Dezile für die Kategorisierung der Sentiments.
+15. Definition der Grenzen für neutrale Sentiments (zwischen 30% und 70% Dezil).
+16. Umcodierung der kontinuierlichen Sentimentwerte zu einer dreistufigen Skala (-1, 0, 1).
+17. Speicherung der Ergebnisse in einer CSV-Datei.
+
+## Ergebnisse
+
+Schauen wir uns eine kleine Auswahl der Ergebnisse an. Wir setzen einen Seed, um die gleiche Auswahl an Texten zu bekommen wie bei den anderen Modellen.
+
+```{r filename="R"}
+#| code-fold: true
+set.seed(42)
+ergebnis |>
+  arrange(desc(id)) |>
+  select(sentiment, sentiment_gs, textart, text) |>
+  sample_n(5)
+```

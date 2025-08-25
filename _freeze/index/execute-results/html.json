@@ -1,0 +1,17 @@
+{
+  "hash": "6cd37fab34ef74c14e7166ff23a1d9b6",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"Gebrauchsfertige, Open Source Large-Language Models auf Hugging Face\"\nsubtitle: \"als Forschungsinfrastruktur für die standardisierte Inhaltsanalyse von Texten\"\nauthor:\n  - name: \"Anonym\"\n    affiliation: \"Anonym\"\ncitation:\n  type: article-journal\n  container-title: \"Publizistik\"\n  doi: \"12345\"\nappendix-cite-as: display\nengine: knitr\ncode-annotations: hover\n---\n\n## Herzlich Willkommen! {.unnumbered .unlisted}\n\nDer vorliegende Beitrag untersucht das Potenzial gebrauchsfertiger LLM-basierter Modelle auf Hugging Face als Forschungsinfrastruktur für die standardisierte Inhaltsanalyse von Texten. Dabei werden drei Modelltypen für die Textcodierung vorgestellt: (1) kategoriespezifische Encoder-Modelle, (2) aufgabenspezifische Encoder-Modelle und (3) universelle Decoder-Modelle. Eine detaillierte Anleitung erläutert die Anwendung der drei Modelltypen über die Hugging Face-Bibliothek für die Textcodierung. In einer empirischen Evaluationsstudie werden die Modelltypen mit herkömmlichen Methoden der standardisierten Inhaltsanalyse verglichen, insbesondere mit der manuellen Codierung, diktionärsbasierten Analyse und Analyse mittels überwachter maschineller Lernalgorithmen. Die Ergebnisse zeigen, dass LLM-basierte Modelle auf Hugging Face vergleichsweise einfach zugänglich, gut skalierbar und kostengünstig sind und eine hohe Leistungsfähigkeit aufweisen, die mit manuellen Inhaltsanalysen konkurrieren kann.\n\nWir dokumentieren Schritt für Schritt, wie Sie die Beispiele aus diesem Artikel selbst ausprobieren können. Mithilfe der zur Verfügung gestellten Notebooks ist es sehr einfach möglich, die vorgestellten Methoden auf eigene Texte anzuwenden und auch andere, über Hugging Face zur Verfügung gestellte Modelle für die Inhaltsanalyse von Texten zu nutzen. Nach einer einmaligen [Installation von Python und allen benötigten Paketen](01_installation.qmd) sind nur wenige Schritte der [Vorbereitung](02_setup.qmd) notwendig. Danach können wir unsere Texte mit einem [kategoriespezifischen Encoder-Modell](03_kategoriespezifisches_Encoder-Modell.qmd), einem [aufgabenspezifischen Encoder-Modell](04_aufgabenspezifisches_Encoder-Modell.qmd) oder einem [universellen Decoder-Modell](05_universelles_Decoder-Modell.qmd) codieren.\n\nIn einer [empirischen Evaluationsstudie](beispielstudie/00_beispielstudie.qmd) vergleichen wir die drei Modelltypen mit herkömmlichen Methoden der standardisierten Inhaltsanalyse, insbesondere mit der manuellen Codierung, diktionärsbasierten Analyse und Analyse mittels überwachter maschineller Lernalgorithmen.",
+    "supporting": [
+      "index_files"
+    ],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

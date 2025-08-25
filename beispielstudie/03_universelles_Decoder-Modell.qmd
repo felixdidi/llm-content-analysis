@@ -1,0 +1,149 @@
+---
+title: "Universelles Decoder-Modell"
+subtitle: "Beispielstudie"
+engine: knitr
+code-annotations: hover
+bibliography: "../bib/refs.bib"
+csl: https://www.zotero.org/styles/apa
+---
+
+## Die Methode
+
+Als universelles Decoder-Modell wurde das off-the-shelf Modell *Meta-Llama-3.1-8B-Instruct* [@grattafioriLlama3Herd2024] verwendet. Dieses Modell wurde mit öffentlich zugänglichen Texten (~15 Billionen Wörtern) vortrainiert und anschließend anhand öffentlich verfügbarer Instruktionsdatensätze sowie über 25 Millionen synthetisch generierter Beispiele auf das Führen von Dialogen verfeinert [@grattafioriLlama3Herd2024]. Da es sich bei dem Modell um ein universelles Decoder-Modell handelt, ermittelt das Modell nicht die Wahrscheinlichkeit des Vorliegens einer Ausprägung, sondern generiert einen Textoutput. Um diesen Output weiterverarbeiten zu können, wurde das Modell explizit instruiert, die Antwort in maschinenlesbarem Format zu formulieren.
+
+Der hier beschriebene Code ist deutlich umfangreicher als im Beispiel unter "Anleitungen" beschrieben, da er einige zusätzliche Funktionen enthält, die für die praktische Anwendung hilfreich sind. Dazu gehören:
+
+- **Backup-Funktion**: Zwischenergebnisse werden gespeichert, um bei Unterbrechungen den Prozess fortsetzen zu können.
+- **Fehlerbehandlung**: Das Skript kann Fehler bei der Verarbeitung einzelner Texte handhaben und den Prozess fortsetzen.
+- **GPU/CPU-Fallback**: Das Skript versucht zunächst, die GPU zu verwenden, und wechselt bei einem Fehler zur CPU.
+
+## Klassifikation
+
+```{python filename="Python"}
+#| eval: false
+
+import pandas as pd                       #<1>
+from transformers import pipeline         #<1>
+import os                                 #<1>
+import json                               #<1>
+
+# für CPU-Fallback:
+# pip install accelerate
+# und
+import torch                              #<1>
+
+daten = pd.read_csv("beispielstudie/data/00_goldstandard.csv")  #<2>
+datenliste = list(daten["text"])                                #<2>
+
+backup_dir = "beispielstudie/data/backup"                       #<3>
+os.makedirs(backup_dir, exist_ok=True)                          #<3> 
+
+generate_gpu = pipeline("text-generation", model="meta-llama/Meta-Llama-3.1-8B-Instruct", max_new_tokens=256, do_sample=False) #<4>
+
+def get_cpu_pipeline():                                               #<5>
+    print("Lade CPU-Pipeline...")                                     #<5>
+    cpu_pipeline = pipeline(                                          #<5>
+        "text-generation",                                            #<5>
+        model="meta-llama/Meta-Llama-3.1-8B-Instruct",                #<5>
+        model_kwargs={"torch_dtype": torch.bfloat16},                 #<5>
+        device_map="cpu",                                             #<5>
+        max_new_tokens=256, do_sample=False                           #<5>
+    )                                                                 #<5>
+    print("CPU-Pipeline geladen!")                                    #<5>
+    return cpu_pipeline                                               #<5>
+
+generate_cpu = None                                                   #<5>
+
+ergebnis = []                                                         #<6>
+
+for idx, text in enumerate(datenliste, start=1):                      #<7>
+    backup_file = f"{backup_dir}/{idx}.csv"                           #<7>
+    
+    if os.path.exists(backup_file):                                   #<8>
+        print(f"Text {idx} bereits klassifiziert, lade aus Backup...") #<8>
+        try:                                                           #<8>
+            existing_result = pd.read_csv(backup_file)                 #<8>
+            ergebnis.append({                                          #<8>
+                "text": existing_result.iloc[0]["text"],               #<8>
+                "response": existing_result.iloc[0]["response"]        #<8>
+            })                                                         #<8>
+            continue                                                   #<8>
+        except Exception as e:                                         #<8>
+            print(f"Fehler beim Laden des Backups für Text {idx}: {e}") #<8>
+            print("Führe neue Klassifikation durch...")                #<8>
+    
+    print(f"Verarbeite Text {idx} von {len(datenliste)} ...") 
+    
+    instructions = [                                                   #<9>
+        {"role": "system",                                             #<9>
+         "content": "Du bist ein trainierter Assistent für Inhaltsanalyse, der die allgemeine Stimmung beziehungsweise Tonalität von Texten analysiert. Antworte immer präzise im JSON-Format mit sentiment (positiv, neutral, negativ) und reasoning (eine Begründung auf Deutsch). Gib ausschließlich den JSON-Response, beginnend mit '{' und endend mit '}', mit diesen zwei Parametern zurück"}, #<9>
+        {"role": "user", "content": text}                              #<9>
+    ]                                                                  #<9>
+    
+    try:                                                               #<10>
+        outputs = generate_gpu(instructions)                           #<10>
+        print(f"Text {idx} erfolgreich auf GPU verarbeitet")           #<10>
+    except Exception as e:                                             #<10>
+        print(f"GPU-Fehler bei Text {idx} ({e}). Verwende CPU...")     #<10>
+         
+        if generate_cpu is None:                                       #<10>
+            generate_cpu = get_cpu_pipeline()                          #<10>
+        outputs = generate_cpu(instructions)                           #<10>
+        print(f"Text {idx} erfolgreich auf CPU verarbeitet")           #<10>
+    
+    result = {                                                         #<11>
+        "text": text,                                                  #<11>
+        "response": outputs[0]["generated_text"][-1]['content']        #<11>
+    }                                                                  #<11>
+    
+    ergebnis.append(result)                                            #<11>
+    
+    try:                                                                #<12>
+        pd.DataFrame([result]).to_csv(backup_file, index=False)         #<12>
+        print(f"Backup für Text {idx} gespeichert")                     #<12>
+    except Exception as e:                                              #<12>
+        print(f"Fehler beim Speichern des Backups für Text {idx}: {e}") #<12>
+
+def parse_response(response):                                           #<13>
+    try:                                                                #<13>
+        parsed = json.loads(response)                                   #<13>
+        return parsed['sentiment'], parsed['reasoning']                 #<13>
+    except (json.JSONDecodeError, KeyError):                            #<13>
+        return None, None                                               #<13>
+
+parsed_data = [(entry['text'], *parse_response(entry['response'])) for entry in ergebnis]  #<14>
+parsed_data = pd.DataFrame(parsed_data, columns=['text', 'sentiment', 'reasoning'])        #<14>
+
+vergleich = pd.DataFrame(parsed_data).drop("text", axis=1).join(daten)                     #<15>
+vergleich.to_csv("beispielstudie/data/03_universelles_Decoder-Modell.csv", index=False)    #<15>
+
+```
+
+1. Import der notwendigen Bibliotheken.
+2. Laden der Daten.
+3. Erstellen eines Backup-Verzeichnisses für Zwischenergebnisse.
+4. Initialisierung der Textgenerierungs-Pipeline für die GPU.
+5. Definition einer Funktion zur Initialisierung der CPU-Pipeline als Fallback.
+6. Initialisierung einer Liste zur Speicherung der Ergebnisse.
+7. Iteration über die Texte in den Daten.
+8. Überprüfung, ob ein Backup für den aktuellen Text existiert, und Laden dieses Backups, falls vorhanden.
+9. Definition der Anweisungen für das Modell, einschließlich der System- und Benutzerrollen.
+10. Versuch, den Text auf der GPU zu verarbeiten, und bei einem Fehler Wechsel zur CPU.
+11. Speichern des generierten Ergebnisses in der Ergebnisliste.
+12. Speichern des Ergebnisses in einer Backup-Datei.
+13. Definition einer Funktion zum Parsen der JSON-Antwort des Modells. Bei Fehlern im generierten JSON werden None-Werte zurückgegeben.
+14. Parsen der Antworten und Erstellen eines DataFrames mit den Ergebnissen.
+15. Zusammenführen der Ergebnisse mit den Originaldaten und Speichern in einer CSV-Datei.
+
+## Ergebnisse
+
+Schauen wir uns eine kleine Auswahl der Ergebnisse an. Wir setzen einen Seed, um die gleiche Auswahl an Texten zu bekommen wie bei den anderen Modellen.
+
+```{r filename="R"}
+#| code-fold: true
+set.seed(42)
+readr::read_csv(here::here("beispielstudie/data/03_universelles_Decoder-Modell.csv"), show_col_types = FALSE) |>
+  dplyr::arrange(desc(id)) |>
+  dplyr::select(sentiment, reasoning, sentiment_gs, textart, text) |>
+  dplyr::sample_n(5)
+```

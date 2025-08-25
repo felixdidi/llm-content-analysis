@@ -1,0 +1,291 @@
+---
+title: "Überwachtes maschinelles Lernen"
+subtitle: "Beispielstudie"
+engine: knitr
+code-annotations: hover
+bibliography: "../bib/refs.bib"
+csl: https://www.zotero.org/styles/apa
+---
+
+## Die Methode
+
+Die Sentiment-Analyse mittels überwachter maschineller Lernalgorithmen erfolgte anhand des Naïve-Bayes-Klassifikators *Multinomial Naïve Bayes* [*MNB*, @abbasMultinomialNaiveBayes2019] sowie des SVM-basierten *LinearSVC* Klassifikators [@pedregosaScikitlearnMachineLearning2011]. Das manuell codierte Datenmaterial von @spatzeneggerSocialMediaAls2020, exklusive der im Goldstandard enthaltenen Texte, diente für beide Verfahren als Trainingsmaterial (*N* = 2.812), der eigens codierte Goldstandard als Testmaterial (*N* = 197). Aufgrund der unterschiedlichen Textlängen und -formate wurden die Analysen getrennt für die drei Textsorten (Facebook-Posts, Tweets, Zeitungsartikel) durchgeführt.
+
+## Preprocessing der Daten
+
+Analog zum Preprocessing der Daten im Abschnitt [Diktionär](./05_dictionary.qmd) werden die Daten für das maschinelle Lernen vorbereitet [hier jedoch nicht nur die Goldstandard-Codierung, sondern die gesamte manuelle Codierung nach @spatzeneggerSocialMediaAls2020]. Dabei werden die Texte in Tokens zerlegt und Stoppwörter entfernt. Um das Preprocessing identisch zu gestalten, wurde dieses ebenfalls in R durchgeführt.
+
+```{r filename="R"}
+#| eval: false
+
+library(tidyverse) # <1>
+library(udpipe) # <1>
+
+data <- # <2>
+  read_csv("beispielstudie/data/04_manuell.csv") |> # <2>
+  mutate(id = ID, textart = TEXTART, text = TEXT, sentiment = sentiment, .keep = "none") |> # <2>
+  mutate(text = str_replace_all(text, "[[:digit:]]", "")) |> # <2>
+  mutate(text = str_replace_all(text, "[[:punct:]]", "")) |> # <2>
+  mutate(text = str_to_lower(text)) # <2>
+
+ud_model <- udpipe_load_model( # <3>
+  "beispielstudie/udpipe/german-gsd-ud-2.5-191206.udpipe" # <3>
+) # <3>
+
+for (row in 1:nrow(data)) { # <4>
+  if (row == 1) { # <4>
+    sentence <- data$text[row] # <4>
+    lemma_tokens <- udpipe_annotate(ud_model, sentence) # <4>
+    lemma_tokens_df <- as_tibble(lemma_tokens) # <4>
+    lemma_tokens_df <- lemma_tokens_df |> mutate(id = data$id[row]) # <4>
+  } # <4>
+  if (row > 1) { # <4>
+    sentence <- data$text[row] # <4>
+    lemma_tokens <- udpipe_annotate(ud_model, sentence) # <4>
+    lemma_tokens_df_new <- as_tibble(lemma_tokens) # <4>
+    lemma_tokens_df_new <- lemma_tokens_df_new |> mutate(id = data$id[row]) # <4>
+    lemma_tokens_df <- lemma_tokens_df |> bind_rows(lemma_tokens_df_new) # <4>
+  } # <4>
+} # <4>
+
+stopwords <- tibble( # <5>
+  words = unique(c(lsa::stopwords_de, tm::stopwords("german"))) # <5>
+) # <5>
+
+tokens <- # <6>
+  lemma_tokens_df |> # <6>
+  filter(!is.na(lemma)) |> # <6>
+  mutate(words = sub("\\|.*", "", lemma)) |> # <6>
+  select(id, words) |> # <6>
+  anti_join(stopwords, by = "words") |> # <6>
+  filter(nchar(words, type = "chars") > 1) |> # <6>
+  filter(words != "") # <6>
+
+tokens |> # <7>
+  group_by(id) |> # <7>
+  summarize(cleaned_text = str_flatten(words, " ")) |> # <7>
+  left_join(data, by = "id") |> # <7>
+  write_csv("beispielstudie/data/06_tokens.csv") # <7>
+
+```
+
+1. Import der notwendigen Bibliotheken für Textverarbeitung und NLP.
+2. Laden der manuell codierten Daten und Vorverarbeitung: Spaltenauswahl, Entfernung von Zahlen und Satzzeichen, Konvertierung zu Kleinbuchstaben.
+3. Laden des UDPipe-Modells für deutsche Lemmatisierung.
+4. Durchführung der Lemmatisierung für alle Textzeilen mit einer Schleife.
+5. Definition der deutschen Stoppwörter aus verschiedenen Quellen.
+6. Extraktion und Filterung der lemmatisierten Tokens: Entfernung von NA-Werten, Behandlung von "|"-getrennten Wörtern, Entfernung von Stoppwörtern und zu kurzen Wörtern.
+7. Zusammenfassung der Tokens zu bereinigten Texten pro ID und Speicherung für maschinelles Lernen.
+
+Anschließend wurden die vorverarbeiteten Daten in Python importiert und die Analysen für die drei Textsorten (Facebook-Posts, Tweets, Zeitungsartikel) separat durchgeführt.
+
+```{python filename="Python"}
+#| eval: false
+
+import pandas as pd # <1>
+
+df = pd.read_csv("beispielstudie/data/06_tokens.csv") # <2>
+
+df_facebook = df.loc[df["textart"] == "Facebook-Post"] # <3>
+df_twitter = df.loc[df["textart"] == "Tweet"] # <3>
+df_zeitungsartikel = df.loc[(df['textart'] == "Zeitungsartikel Online") | (df['textart'] == "Zeitungsartikel Offline")] # <3>
+
+goldstandard = pd.read_csv("beispielstudie/data/00_goldstandard.csv") # <4>
+goldstandard = goldstandard.merge(df[["id","cleaned_text"]], how = 'left', on="id") # <4>
+goldstandard_facebook = goldstandard.loc[goldstandard["textart"] == "Facebook-Post"] # <4>
+goldstandard_twitter = goldstandard.loc[goldstandard["textart"] == "Tweet"] # <4>
+goldstandard_zeitungsartikel = goldstandard.loc[(goldstandard['textart'] == "Zeitungsartikel Online") | (goldstandard['textart'] == "Zeitungsartikel Offline")] # <4>
+
+```
+
+1. Import der pandas-Bibliothek für Datenverarbeitung.
+2. Laden der vorverarbeiteten Token-Daten.
+3. Aufteilen der Daten nach Textarten: Facebook-Posts, Tweets und Zeitungsartikel.
+4. Laden des Goldstandards und Zusammenführung mit bereinigten Texten, aufgeteilt nach Textarten.
+
+## Facebook-Posts
+
+Im folgenden wird die Klassifikation exemplarisch für die Facebook-Posts dargestellt.
+
+```{python filename="Python"}
+#| eval: false
+
+# pip install scikit-learn
+from sklearn.feature_extraction.text import CountVectorizer # <1>
+from sklearn.naive_bayes import MultinomialNB # <1>
+from sklearn import svm # <1>
+
+test_data = goldstandard_facebook[["id", "sentiment_gs", "cleaned_text"]].copy() # <2>
+gold_ids = set(goldstandard_facebook["id"]) # <2>
+train_data = df_facebook[~df_facebook["id"].isin(gold_ids)][["id", "sentiment", "cleaned_text"]].copy() # <2>
+
+words = [word for text in df_facebook['cleaned_text'] for word in text.split()] # <3>
+my_vocabulary = list(dict.fromkeys([word for word in words if len(word) >= 2])) # <3>
+
+vectorizer = CountVectorizer(ngram_range = (1,1)) # <4>
+vectorizer.fit_transform(my_vocabulary) # <4>
+
+X_train = vectorizer.transform(train_data["cleaned_text"]) # <5>
+X_test = vectorizer.transform(test_data["cleaned_text"]) # <5>
+
+y_train = train_data["sentiment"] # <6>
+y_test = test_data["sentiment_gs"] # <6>
+
+nb_model = MultinomialNB() # <7>
+nb_model.fit(X_train, y_train) # <7>
+nb_predictions = nb_model.predict(X_test) # <7>
+
+ergebnis_facebook = goldstandard_facebook.assign(sentiment_nb=nb_predictions) # <8>
+
+svm_model = svm.LinearSVC() # <9>
+svm_model.fit(X_train, y_train) # <9>
+svm_predictions = svm_model.predict(X_test) # <9>
+
+ergebnis_facebook = ergebnis_facebook.assign(sentiment_svm=svm_predictions) # <10>
+
+ergebnis_facebook.to_csv("beispielstudie/data/06_ueberwachtes_maschinelles_Lernen_Facebook.csv", index=False) # <11>
+
+```
+
+1. Import der scikit-learn Bibliotheken für Vektorisierung, Naive Bayes und Support Vector Machine.
+2. Vorbereitung der Trainings- und Testdaten: Goldstandard als Test, restliche Facebook-Posts als Training.
+3. Erstellung des Vokabulars aus allen Facebook-Posts mit Mindestlänge von 2 Zeichen.
+4. Initialisierung und Training des CountVectorizers mit Unigramm-Features.
+5. Transformation der Trainings- und Testdaten zu numerischen Vektoren.
+6. Extraktion der Labels für Training und Test.
+7. Training des Multinomial Naive Bayes Modells und Vorhersage auf Testdaten.
+8. Hinzufügung der Naive Bayes Vorhersagen zu den Ergebnissen.
+9. Training des Linear Support Vector Machine Modells und Vorhersage auf Testdaten.
+10. Hinzufügung der SVM Vorhersagen zu den Ergebnissen.
+11. Speicherung der Facebook-Ergebnisse in CSV-Datei.
+
+## Tweets
+
+Die Klassifikation der Tweets erfolgt analog. Der entsprechende Code kann über den "Code"-Button ausgeklappt werden.
+
+```{python filename="Python"}
+#| eval: false
+#| code-fold: true
+
+# pip install scikit-learn
+from sklearn.feature_extraction.text import CountVectorizer # <1>
+from sklearn.naive_bayes import MultinomialNB # <1>
+from sklearn import svm # <1>
+
+test_data = goldstandard_twitter[["id", "sentiment_gs", "cleaned_text"]].copy() # <2>
+gold_ids = set(goldstandard_twitter["id"]) # <2>
+train_data = df_twitter[~df_twitter["id"].isin(gold_ids)][["id", "sentiment", "cleaned_text"]].copy() # <2>
+
+words = [word for text in df_twitter['cleaned_text'] for word in text.split()] # <3>
+my_vocabulary = list(dict.fromkeys([word for word in words if len(word) >= 2])) # <3>
+
+vectorizer = CountVectorizer(ngram_range = (1,1)) # <4>
+vectorizer.fit_transform(my_vocabulary) # <4>
+
+X_train = vectorizer.transform(train_data["cleaned_text"]) # <5>
+X_test = vectorizer.transform(test_data["cleaned_text"]) # <5>
+
+y_train = train_data["sentiment"] # <6>
+y_test = test_data["sentiment_gs"] # <6>
+
+nb_model = MultinomialNB() # <7>
+nb_model.fit(X_train, y_train) # <7>
+nb_predictions = nb_model.predict(X_test) # <7>
+
+ergebnis_twitter = goldstandard_twitter.assign(sentiment_nb=nb_predictions) # <8>
+
+svm_model = svm.LinearSVC() # <9>
+svm_model.fit(X_train, y_train) # <9>
+svm_predictions = svm_model.predict(X_test) # <9>
+
+ergebnis_twitter = ergebnis_twitter.assign(sentiment_svm=svm_predictions) # <10>
+
+ergebnis_twitter.to_csv("beispielstudie/data/06_ueberwachtes_maschinelles_Lernen_Twitter.csv", index=False) # <11>
+
+```
+
+1. Import der scikit-learn Bibliotheken für Vektorisierung, Naive Bayes und Support Vector Machine.
+2. Vorbereitung der Trainings- und Testdaten: Goldstandard als Test, restliche Tweets als Training.
+3. Erstellung des Vokabulars aus allen Tweets mit Mindestlänge von 2 Zeichen.
+4. Initialisierung und Training des CountVectorizers mit Unigramm-Features.
+5. Transformation der Trainings- und Testdaten zu numerischen Vektoren.
+6. Extraktion der Labels für Training und Test.
+7. Training des Multinomial Naive Bayes Modells und Vorhersage auf Testdaten.
+8. Hinzufügung der Naive Bayes Vorhersagen zu den Ergebnissen.
+9. Training des Linear Support Vector Machine Modells und Vorhersage auf Testdaten.
+10. Hinzufügung der SVM Vorhersagen zu den Ergebnissen.
+11. Speicherung der Twitter-Ergebnisse in CSV-Datei.
+
+## Zeitungsartikel
+
+Die Klassifikation der Zeitungsartikel erfolgt analog. Der entsprechende Code kann über den "Code"-Button ausgeklappt werden.
+
+```{python filename="Python"}
+#| eval: false
+#| code-fold: true
+
+# pip install scikit-learn
+from sklearn.feature_extraction.text import CountVectorizer # <1>
+from sklearn.naive_bayes import MultinomialNB # <1>
+from sklearn import svm # <1>
+
+test_data = goldstandard_zeitungsartikel[["id", "sentiment_gs", "cleaned_text"]].copy() # <2>
+gold_ids = set(goldstandard_zeitungsartikel["id"]) # <2>
+train_data = df_zeitungsartikel[~df_zeitungsartikel["id"].isin(gold_ids)][["id", "sentiment", "cleaned_text"]].copy() # <2>
+
+words = [word for text in df_zeitungsartikel['cleaned_text'] for word in text.split()] # <3>
+my_vocabulary = list(dict.fromkeys([word for word in words if len(word) >= 2])) # <3>
+
+vectorizer = CountVectorizer(ngram_range = (1,1)) # <4>
+vectorizer.fit_transform(my_vocabulary) # <4>
+
+X_train = vectorizer.transform(train_data["cleaned_text"]) # <5>
+X_test = vectorizer.transform(test_data["cleaned_text"]) # <5>
+
+y_train = train_data["sentiment"] # <6>
+y_test = test_data["sentiment_gs"] # <6>
+
+nb_model = MultinomialNB() # <7>
+nb_model.fit(X_train, y_train) # <7>
+nb_predictions = nb_model.predict(X_test) # <7>
+
+ergebnis_zeitungsartikel = goldstandard_zeitungsartikel.assign(sentiment_nb=nb_predictions) # <8>
+
+svm_model = svm.LinearSVC() # <9>
+svm_model.fit(X_train, y_train) # <9>
+svm_predictions = svm_model.predict(X_test) # <9>
+
+ergebnis_zeitungsartikel = ergebnis_zeitungsartikel.assign(sentiment_svm=svm_predictions) # <10>
+
+ergebnis_zeitungsartikel.to_csv("beispielstudie/data/06_ueberwachtes_maschinelles_Lernen_Zeitungsartikel.csv", index=False) # <11>
+
+```
+
+1. Import der scikit-learn Bibliotheken für Vektorisierung, Naive Bayes und Support Vector Machine.
+2. Vorbereitung der Trainings- und Testdaten: Goldstandard als Test, restliche Zeitungsartikel als Training.
+3. Erstellung des Vokabulars aus allen Zeitungsartikeln mit Mindestlänge von 2 Zeichen.
+4. Initialisierung und Training des CountVectorizers mit Unigramm-Features.
+5. Transformation der Trainings- und Testdaten zu numerischen Vektoren.
+6. Extraktion der Labels für Training und Test.
+7. Training des Multinomial Naive Bayes Modells und Vorhersage auf Testdaten.
+8. Hinzufügung der Naive Bayes Vorhersagen zu den Ergebnissen.
+9. Training des Linear Support Vector Machine Modells und Vorhersage auf Testdaten.
+10. Hinzufügung der SVM Vorhersagen zu den Ergebnissen.
+11. Speicherung der Zeitungsartikel-Ergebnisse in CSV-Datei.
+
+## Ergebnisse
+
+Schauen wir uns eine kleine Auswahl der Ergebnisse an. Wir setzen einen Seed, um die gleiche Auswahl an Texten zu bekommen wie bei den anderen Modellen.
+
+```{r filename="R"}
+#| code-fold: true
+set.seed(42)
+dplyr::bind_rows(
+  readr::read_csv(here::here("beispielstudie/data/06_ueberwachtes_maschinelles_Lernen_Facebook.csv"), show_col_types = FALSE),
+  readr::read_csv(here::here("beispielstudie/data/06_ueberwachtes_maschinelles_Lernen_Twitter.csv"), show_col_types = FALSE),
+  readr::read_csv(here::here("beispielstudie/data/06_ueberwachtes_maschinelles_Lernen_Zeitungsartikel.csv"), show_col_types = FALSE)
+) |>
+  dplyr::arrange(desc(id)) |>
+  dplyr::select(id, sentiment_nb, sentiment_svm, textart, text) |>
+  dplyr::sample_n(5)
+```

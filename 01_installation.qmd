@@ -2,9 +2,30 @@
 title: "Installation"
 bibliography: "bib/refs.bib"
 csl: https://www.zotero.org/styles/apa
+engine: knitr
+code-annotations: hover
 ---
 
-Bevor wir beginnen, müssen wir Python zunächst auf dem eigenen Computer installieren (siehe hierzu <https://python.org>). Für den Beispielcode in diesem Artikel empfehlen wir die Python-Version 3.12.8. Anschließend legen wir (1) einen Projektordner und (2) eine virtuelle Python-Umgebung an, in die dann (3) alle benötigten Pakete installiert werden. Schließlich (4) öffnen wir die Jupyter Notebook-Umgebung, in der wir die Beispiele aus diesem Artikel ausprobieren können.
+Bevor wir beginnen, müssen wir Python zunächst auf dem eigenen Computer installieren. Aktuelle Versionen von Python zum Herunterladen sowie weitere Informationen zur Installation auf unterschiedlichen Betriebssystemen finden Sie unter <https://python.org>. Für den Beispielcode in diesem Artikel empfehlen wir die Python-Version 3.12.8. Für neuere Modelle kann es jedoch in der Zukunft sein, dass eine neuere Version von Python installiert werden muss, damit auch alle Pakete in den benötigten Versionen laufen können.
+
+Nach der Installation von Python legen wir (1) einen Projektordner und (2) eine virtuelle Python-Umgebung an, in die dann (3) alle benötigten Pakete installiert werden. Es ist nicht unbedingt notwendig, eine virtuelle Umgebung anzulegen. Allerdings empfehlen wir diesen Schritt, um Konflikte mit unterschiedlichen Software-Versionen zu vermeiden. Schließlich (4) öffnen wir die Jupyter Notebook-Umgebung, in der wir die Beispiele aus diesem Artikel ausprobieren können.
+
+:::{.callout-caution collapse="true"}
+### Voraussetzungen
+Auf Hugging Face zur Verfügung gestellte Modelle können über die Programmiersprache Python in wenigen Zeilen Code geladen und auf Texte angewendet werden. Voraussetzung für die in dieser Anleitung vorgestellten Modelle ist, dass mindestens 10GB freier Festplattenspeicher sowie ausreichend Arbeitsspeicher (mindestens 8GB, besser mehr) zur Verfügung stehen. Achtung: Abseits der hier vorgestellten Modelle gibt es auch sehr große Modelle, die deutlich mehr Speicherplatz benötigen und auf handelsüblicher Hardware (Laptop oder PC) nicht ausgeführt werden können. Diese sind für die meisten Anwendungsfälle in der Inhaltsanalyse jedoch nicht notwendig. Prüfen Sie vor der Nutzung anderer Modelle auf Hugging Face immer die jeweiligen Anforderungen an die Hardware, diese lässt sich grob anhand der Modellgröße abschätzen.
+:::
+
+:::{.callout-note collapse="true"}
+## Fragen zum Code?
+Kein Problem! Erklärungen zu den einzelnen Schritten des Codes verbergen sich hinter den Nummern an der rechten Seite. Einfach mit der Maus über die Nummer fahren, um die Erklärung zu sehen. Wo der jeweilige Code ausgeführt wird (in Python, R, oder dem Terminal), steht in der Kopfzeile des Codeblocks.
+
+```{python filename="Python"}
+print("Hallo! 👋") # <1>
+```
+
+1. Das ist ein einfacher Python-Befehl, der den Text "Hallo" in der Konsole ausgibt. Der Output erscheint unter dem Codeblock.
+
+:::
 
 ## 1 Projektordner anlegen
 
@@ -24,11 +45,13 @@ Shift + Rechtsklick auf Projektordner im Explorer und “PowerShell-Fenster hier
 
 ## 2 Virtuelle Python-Umgebung anlegen
 
-Dort führen wir den folgenden Befehl aus, der die virtuelle Python-Umgebung anlegt:
+In der Kommandozeile führen wir den folgenden Befehl aus, der die virtuelle Python-Umgebung anlegt:
 
 ```{.bash filename="Terminal"}
-python3.12 -m venv env
+python3.12 -m venv env #<1>
 ```
+
+1. Wir legen eine virtuelle Python-Umgebung mit dem Namen `env` an. Der Name der virtuellen Umgebung kann beliebig gewählt werden, sollte aber idealerweise keine Leer- oder Sonderzeichen enthalten.
 
 Mit dem nachfolgenden Befehl aktivieren wir die virtuelle Umgebung. Diesen zweiten Befehl müssen wir jedes Mal ausführen, wenn wir in der virtuelle Python-Umgebung arbeiten wollen:
 
@@ -37,14 +60,18 @@ Mit dem nachfolgenden Befehl aktivieren wir die virtuelle Umgebung. Diesen zweit
 ## Linux/Mac
 
 ```{.bash filename="Terminal"}
-source env/bin/activate
+source env/bin/activate #<1>
 ```
+
+1. Wir aktivieren die virtuelle Python-Umgebung mit dem Namen `env`. Der Name der virtuellen Umgebung muss mit dem Namen übereinstimmen, den wir im vorherigen Schritt gewählt haben.
 
 ## Windows
 
 ```{.bash filename="Terminal"}
-.\env\Scripts\activate
+.\env\Scripts\activate #<1>
 ```
+
+1. Wir aktivieren die virtuelle Python-Umgebung mit dem Namen `env`. Der Name der virtuellen Umgebung muss mit dem Namen übereinstimmen, den wir im vorherigen Schritt gewählt haben.
 
 :::
 
@@ -52,18 +79,48 @@ source env/bin/activate
 
 Anschließend können wir die benötigten Pakete installieren, konkret die `transformers`-Bibliothek von HuggingFace [@wolfHuggingFacesTransformersStateoftheart2020], die `pandas`-Bibliothek zur Datenverarbeitung [@mckinneyDataStructuresStatistical2010] sowie einige Machine Learning-Bibliotheken, die von `transformers` im Hintergrund benötigt werden. Abhängig vom verwendeten Transformer-Modell benötigen wir eventuell weitere Pakete, worauf entsprechende Fehlermeldungen im weiteren Prozess hinweisen. Diese können wir dann ebenfalls über `pip install [paketname]` installieren. Für die Beispiele aus diesem Artikel benötigen wir die im folgenden Code installierten Pakete:
 
-```bash
-pip install jupyter pandas transformers torch tensorflow flax tf-keras
+```{.bash filename="Terminal"}
+pip install jupyter pandas transformers torch tensorflow flax tf-keras #<1>
 ```
+
+1. Wir installieren die benötigten Pakete in der virtuellen Python-Umgebung. Dies kann einige Minuten dauern. 
+
+:::callout-tip
+## Paket-Versionen für die vorgestellten Beispiele
+
+Die in dieser Anleitung vorgestellten Beispiele wurden mit den folgenden Paket-Versionen getestet. Es kann sein, dass in der Zukunft neuere Versionen der Pakete veröffentlicht werden, die eventuell nicht mehr mit dem Beispielcode kompatibel sind. In diesem Fall können Sie die untenstehenden Versionen der Pakete gezielt installieren, indem Sie den jeweiligen Paketnamen mit `==` und der Versionsnummer angeben. Zum Beispiel: `pip install transformers==4.5.1`.
+
+```md
+flax==0.11.1
+jupyter==1.1.1
+jupyter-console==6.6.3
+jupyter-events==0.12.0
+jupyter-lsp==2.2.6
+jupyter_client==8.6.3
+jupyter_core==5.8.1
+jupyter_server==2.16.0
+jupyter_server_terminals==0.5.3
+jupyterlab==4.4.5
+jupyterlab_pygments==0.3.0
+jupyterlab_server==2.27.3
+jupyterlab_widgets==3.0.15
+pandas==2.3.1
+tensorflow==2.19.0
+torch==2.8.0
+transformers==4.55.1
+```
+:::
 
 ## 4 Jupyter Notebook öffnen
 
-Mit dem folgenden Befehl können wir schließlich die Jupyter Notebook-Umgebung öffnen, in der wir die Beispiele aus diesem Artikel ausprobieren können. In der Jupyter Notebook-Umgebung können wir dann die Python-Skripte ausführen, die in den folgenden Kapiteln beschrieben werden. Zunächst öfnnen wir hierzu eines der Beispiel `.ipynb`-Notebooks, die im Projektordner liegen. 
+Mit dem folgenden Befehl können wir schließlich die Jupyter Notebook-Umgebung öffnen, in der wir die Beispiele aus diesem Artikel ausprobieren können. In der Jupyter Notebook-Umgebung können wir dann die Python-Skripte ausführen, die in den folgenden Kapiteln beschrieben werden. Diese Beispiel-Notebooks (`.ipynb`) können auf der jeweiligen Anleitungsseite (oder aus dem OSF) heruntergeladen und anschließend im Projektordner abgelegt werden. Alternativ können wir auch ein neues Notebook erstellen (siehe unten).
 
 ```{.bash filename="Terminal"}
-jupyter notebook
+jupyter notebook #<1>
 ```
 
-Alternativ können wir auch ein neues Notebook erstellen, indem wir im Jupyter-Dashboard auf "File", dann "New" klicken und dann "Notebook" auswählen. Dadurch wird eine neue Notebook-Datei erstellt, in der wir unseren Python-Code schreiben und ausführen können. Wenn wir das Notebook öffnen, werden wir zunächst gefragt, wie wir den Code ausführen wollen. Wir wählen hierzu "Python 3 (ipykernel)" aus, um sicherzustellen, dass wir die Python-Version verwenden, die wir zuvor installiert haben.
+1. Wir öffnen die Jupyter Notebook-Umgebung. Dadurch wird ein neues Fenster in unserem Webbrowser geöffnet, in dem wir die Jupyter Notebook-Umgebung sehen können.
+
+Anstelle eines der Beispiel-Notebooks zu nutzen, können wir auch ein neues Notebook erstellen, indem wir im Jupyter-Dashboard auf "File", dann "New" klicken und dann "Notebook" auswählen. Dadurch wird eine neue Notebook-Datei erstellt, in der wir unseren Python-Code schreiben und ausführen können. Wenn wir das Notebook öffnen, werden wir zunächst gefragt, wie wir den Code ausführen wollen. Wir wählen hierzu "Python 3 (ipykernel)" aus, um sicherzustellen, dass wir die Python-Version verwenden, die wir zuvor installiert haben.
 
 Im Jupyter Notebook können wir dann die einzelnen Zellen ausführen, indem wir auf die Schaltfläche "Run" klicken oder die Tastenkombination `Shift + Enter` verwenden. Die Ergebnisse der Ausführung werden direkt unter der jeweiligen Zelle angezeigt.

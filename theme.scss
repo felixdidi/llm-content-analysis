@@ -4,6 +4,11 @@ $link-color: #3c3836;
 $primary: #ffffff;
 $body-color: #3c3836;
 $font-family-sans-serif: "Aleo", sans-serif !default;
+$callout-color-note: #fabd2f;
+$callout-color-warning: #fe8019;
+$callout-color-tip: #8ec07c;
+$callout-color-important: #fb4934;
+$callout-color-caution: #fe8019;
 
 /*add hyphenation*/
 p, .abstract {
@@ -85,4 +90,18 @@ a.btn.btn-primary {
 
 .breadcrumb a {
   text-decoration: none !important;
+}
+
+/*header for notebook embeds*/
+#quarto-embed-header h6 {
+  display: none;
+}
+
+#quarto-embed-header .btn {
+  width: auto;
+}
+
+#quarto-embed-header {
+  border: none;
+  justify-content: center;
 }

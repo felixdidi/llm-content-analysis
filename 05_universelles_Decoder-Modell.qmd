@@ -1,0 +1,108 @@
+---
+title: Universelles Decoder-Modell
+engine: knitr
+code-annotations: hover
+bibliography: "bib/refs.bib"
+csl: https://www.zotero.org/styles/apa
+---
+
+Um den Beispielcode selbst auszuführen oder zu modifizieren, können Sie das dieser Seite zugrundeliegende Jupyter Notebook über die Seitenleiste öffnen und herunterladen.
+
+:::{.callout-note collapse="true"}
+## Fragen zum Code?
+Kein Problem! Erklärungen zu den einzelnen Schritten des Codes verbergen sich hinter den Nummern an der rechten Seite. Einfach mit der Maus über die Nummer fahren, um die Erklärung zu sehen. Wo der jeweilige Code ausgeführt wird (in Python, R, oder dem Terminal), steht in der Kopfzeile des Codeblocks.
+
+```{python filename="Python"}
+print("Hallo! 👋") # <1>
+```
+
+1. Das ist ein einfacher Python-Befehl, der den Text "Hallo" in der Konsole ausgibt. Der Output erscheint unter dem Codeblock.
+
+:::
+
+## Daten laden
+
+Unabhängig vom verwendeten Modell laden wir zunächst die bereits installierten Pakete sowie unsere Textdaten und speichern diese in einem Listenobjekt: 
+
+```{python filename="Python"}
+#| eval: false
+
+import pandas as pd                              #<1>
+from transformers import pipeline                #<1>
+import json                                      #<1>
+
+daten = pd.read_csv("data/example_dataset.csv")  #<2>
+datenliste = list(daten["text"])                 #<2>
+
+```
+
+1. Importieren der benötigten Bibliotheken
+2. Laden der Textdaten aus einer CSV-Datei und Speichern in einer Liste
+
+## Modell laden
+
+Im Gegensatz zu kategoriespezifischen Modellen können wir mit universellen Decoder-Modellen jede beliebige Kategorie codieren. Als Beispiel verwenden wir hier das LLaMA 3.1 Modell von Meta [@grattafioriLlama3Herd2024].
+
+:::{.callout-tip}
+## Gut zu wissen
+
+Anstelle des hier verwendeten Modells `meta-llama/Meta-Llama-3.1-8B-Instruct` können Sie auch andere universelle Decoder-Modelle (üblicherweise gekennzeichnet für "Text Generation") für verschiedene Sprachen und Anwendungsfälle verwenden. Eine Übersicht über verfügbare Modelle finden Sie auf [Hugging Face](https://huggingface.co/models). Achten Sie darauf, dass das gewählte Modell für Ihre spezifische Aufgabe geeignet ist (z. B. Sentiment-Analyse, Themenklassifikation etc.) und die Sprache Ihrer Texte unterstützt.
+:::
+
+```{python filename="Python"}
+#| eval: false
+
+generate = pipeline("text-generation", model="meta-llama/Meta-Llama-3.1-8B-Instruct")  #<3>
+```
+
+3. Laden des universellen Decoder-Modells für Textgenerierung
+
+## Klassifikation
+
+Anders als bei den vorigen Ansätzen müssen wir bei einem universellen Decoder-Modell einen Prompt entwickeln, auf dessen Basis das Modell Text generiert (d. h. die Antwort auf die Codieranfrage), idealerweise in einem maschinenlesbaren Format. Der Prompt könnte bspw. folgendermaßen lauten: *“Du bist ein trainierter Assistent für Inhaltsanalyse, der die allgemeine Stimmung beziehungsweise Tonalität von Texten analysiert. Antworte immer präzise im JSON-Format mit sentiment (positiv, neutral, negativ) und reasoning (eine Begründung auf Deutsch). Gib ausschließlich den JSON-Response, beginnend mit '{' und endend mit '}', mit diesen zwei Parametern zurück.”* Diesen Prompt wenden wir nun iterativ auf jeden Text in unserem Datensatz an. Dies geht am einfachsten über eine *for*-Schleife.
+
+Über den Parameter `max_new_tokens` können wir die Länge des generierten Outputs beschränken, `do_sample` sollten wir i. d. R. auf “False” setzen, um deterministische und somit replizierbare Antworten zu erhalten. Zu beachten ist außerdem, dass große Sprachmodelle wie das hier verwendete LLama-Modell 3.1 (`model="meta-llama/Meta-Llama-3.1-8B-Instruct"`) über Hunggingface zwar prinzipiell frei verfügbar sind, oftmals jedoch eine Authentifizierung erfordern. 
+
+:::callout-important
+## Achtung
+Das hier verwendete Modell `meta-llama/Meta-Llama-3.1-8B-Instruct` ist ein sehr großes Sprachmodell (also im wahrsten Sinne des Wortes ein Large Language Model, LLM), das erhebliche Rechenressourcen benötigt. Für die Ausführung dieses Modells ist eine GPU mit mindestens 16 GB VRAM erforderlich. Auf einem Laptop oder Desktop-PC ohne entsprechende Hardware wird das Modell nicht ausgeführt werden können. Alternativ können Sie kleinere Modelle ausprobieren, die weniger Ressourcen benötigen, oder auf Cloud-Dienste zurückgreifen, die leistungsfähige Hardware bereitstellen. Selbst wenn das Modell auf Ihrer Hardware ausgeführt werden kann, kann die Verarbeitung je nach Textlänge und Modellgröße einige Zeit in Anspruch nehmen. Es bietet sich daher an, nicht alle Texte auf einmal zu verarbeiten, sondern die Liste der Texte in kleinere Chargen (Batches) aufzuteilen und diese nacheinander zu verarbeiten. Eine beispielhafte Batch-Verarbeitung finden Sie in der Umsetzung unserer [Beispielstudie](beispielstudie/03_universelles_Decoder-Modell.qmd)
+:::
+
+```{python filename="Python"}
+#| eval: false
+
+ergebnis = []                   #<4>
+for text in datenliste:         #<5>
+    instructions = [            #<6>
+        {"role": "system",      #<6>
+         "content": "Du bist ein trainierter Assistent für Inhaltsanalyse, der die allgemeine Stimmung beziehungsweise Tonalität von Texten analysiert. Antworte immer präzise im JSON-Format mit sentiment (positiv, neutral, negativ) und reasoning (eine Begründung auf Deutsch). Gib ausschließlich den JSON-Response, beginnend mit '{' und endend mit '}', mit diesen zwei Parametern zurück"}, #<6>
+        {"role": "user", "content": text}] #<6>
+    outputs = generate(instructions, max_new_tokens=256, do_sample=False) #<7>
+    ergebnis.append({"text": text, "response": outputs[0]["generated_text"][-1]['content']}) #<8>
+```
+
+4. Initialisieren einer leeren Liste für die Ergebnisse
+5. Iterieren über jeden Text in der Datenliste
+6. Definieren der Anweisungen (Prompt) für das Modell
+7. Generieren der Antwort des Modells mit den definierten Anweisungen
+8. Speichern des Originaltexts und der generierten Antwort in der Ergebnisliste
+
+Nachdem alle Responses generiert wurden, können wir die Ergebnisse aus dem JSON-Response extrahieren. Wenn wir möchten, können wir die zusätzliche ausgegebene Begründung ebenfalls abspeichern, um uns diese anzusehen.
+
+
+```{python}
+#| eval: false
+
+def parse_response(response):                                                              #<9>
+    parsed = json.loads(response)                                                          #<9>
+    return parsed['sentiment'], parsed['reasoning']                                        #<9>
+
+parsed_data = [(entry['text'], *parse_response(entry['response'])) for entry in ergebnis]  #<10>
+parsed_data = pd.DataFrame(parsed_data, columns=['text', 'sentiment', 'reasoning'])        #<10>
+print(parsed_data)                                                                         #<10>
+```
+
+9. Definieren einer Funktion zum Parsen des JSON-Responses
+10. Anwenden der Parsing-Funktion auf die Ergebnisliste und Speichern in einem DataFrame
+
+{{< embed notebooks/05_universelles_Decoder-Modell.ipynb#classify >}}
