@@ -64,6 +64,14 @@ source env/bin/activate #<1>
 
 1. Wir aktivieren die virtuelle Python-Umgebung mit dem Namen `env`. Der Name der virtuellen Umgebung kann beliebig gewählt werden, sollte aber idealerweise keine Leer- oder Sonderzeichen enthalten. Er muss außerdem mit dem Namen übereinstimmen, der bei der Anlage der virtuellen Umgebung verwendet wurde.
 
+Falls die PowerShell die Ausführung von Skripten blockiert, kann dies mit dem folgenden Befehl geändert werden:
+
+```{.bash filename="Terminal"}
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass #<2>
+```
+
+2. Wir erlauben die Ausführung von Skripten in der aktuellen PowerShell-Sitzung. Dies ist notwendig, um die virtuelle Python-Umgebung zu aktivieren. Diese Einstellung gilt nur für die aktuelle Sitzung und wird zurückgesetzt, wenn die PowerShell geschlossen wird.
+
 :::
 
 ## 4 Jupyter Notebook öffnen
