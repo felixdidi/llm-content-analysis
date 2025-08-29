@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="de-DE" xml:lang="de-DE"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.33">
+<meta name="generator" content="quarto-1.7.34">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -72,10 +72,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-541d1840fe0299ec4c9bf9ceaf6b9fb6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-cb67631684576f55e8bc5ac67c9267c9.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-7abf1c683b15f91743e6ad3fed8656fb.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-f81af0f702876722cefec539fab53cd3.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -267,6 +267,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#einlesen-der-daten" id="toc-einlesen-der-daten" class="nav-link active" data-scroll-target="#einlesen-der-daten">Einlesen der Daten</a></li>
   <li><a href="#validierung-der-codierergebnisse" id="toc-validierung-der-codierergebnisse" class="nav-link" data-scroll-target="#validierung-der-codierergebnisse">Validierung der Codierergebnisse</a></li>
   <li><a href="#plot" id="toc-plot" class="nav-link" data-scroll-target="#plot">Plot</a></li>
+  
   </ul>
 </nav>
     </div>
@@ -294,7 +295,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <p>Um die Validität der verschiedenen Verfahren zu vergleichen, wurden die Codierergebnisse aller Verfahren mit der Codierung des Goldstandards verglichen.</p>
-<p><a href="../beispielstudie/07_validierung_kategoriespezifisches_Encoder-Modell.html">Hier</a> gibt es außerdem die Validierung der Klassifikationen des kategoriespezifischen Encoder-Modells mit Kürzung langer Texte (also quasi “off the shelf” wie hier berichtet) im Vergleich mit Preprocessing bzw. mit Aufteilung langer Texte (siehe unterschiedliche Verfahren <a href="../beispielstudie/01_kategoriespezifisches_Encoder-Modell.html">hier</a>).</p>
 <section id="einlesen-der-daten" class="level2">
 <h2 class="anchored" data-anchor-id="einlesen-der-daten">Einlesen der Daten</h2>
 <p>Zunächst werden die Daten eingelesen und in ein einheitliches Format gebracht.</p>
@@ -704,27 +704,27 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="annotated-cell-3-14"><a href="#annotated-cell-3-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
 <span id="annotated-cell-3-15"><a href="#annotated-cell-3-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">Methode =</span> <span class="fu">case_when</span>(</span>
 <span id="annotated-cell-3-16"><a href="#annotated-cell-3-16" aria-hidden="true" tabindex="-1"></a>      name <span class="sc">==</span> <span class="st">"sentiment_kategoriespezifisches_encoder_modell"</span> <span class="sc">~</span></span>
-<span id="annotated-cell-3-17"><a href="#annotated-cell-3-17" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Kategoriespezifisches Encoder-Modell"</span>,</span>
+<span id="annotated-cell-3-17"><a href="#annotated-cell-3-17" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Kategoriespezifisches</span><span class="sc">\n</span><span class="st">Encoder-Modell"</span>,</span>
 <span id="annotated-cell-3-18"><a href="#annotated-cell-3-18" aria-hidden="true" tabindex="-1"></a>      name <span class="sc">==</span> <span class="st">"sentiment_aufgabenspezifisches_encoder_modell"</span> <span class="sc">~</span></span>
-<span id="annotated-cell-3-19"><a href="#annotated-cell-3-19" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Aufgabenspezifisches Encoder-Modell"</span>,</span>
+<span id="annotated-cell-3-19"><a href="#annotated-cell-3-19" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Aufgabenspezifisches</span><span class="sc">\n</span><span class="st">Encoder-Modell"</span>,</span>
 <span id="annotated-cell-3-20"><a href="#annotated-cell-3-20" aria-hidden="true" tabindex="-1"></a>      name <span class="sc">==</span> <span class="st">"sentiment_universelles_decoder_modell"</span> <span class="sc">~</span></span>
-<span id="annotated-cell-3-21"><a href="#annotated-cell-3-21" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Universelles Decoder-Modell"</span>,</span>
-<span id="annotated-cell-3-22"><a href="#annotated-cell-3-22" aria-hidden="true" tabindex="-1"></a>      name <span class="sc">==</span> <span class="st">"sentiment_manuelle_codierung"</span> <span class="sc">~</span> <span class="st">"Manuelle Codierung"</span>,</span>
+<span id="annotated-cell-3-21"><a href="#annotated-cell-3-21" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Universelles</span><span class="sc">\n</span><span class="st">Decoder-Modell"</span>,</span>
+<span id="annotated-cell-3-22"><a href="#annotated-cell-3-22" aria-hidden="true" tabindex="-1"></a>      name <span class="sc">==</span> <span class="st">"sentiment_manuelle_codierung"</span> <span class="sc">~</span> <span class="st">"Manuelle</span><span class="sc">\n</span><span class="st">Codierung"</span>,</span>
 <span id="annotated-cell-3-23"><a href="#annotated-cell-3-23" aria-hidden="true" tabindex="-1"></a>      name <span class="sc">==</span> <span class="st">"sentiment_diktionaerbasierte_codierung"</span> <span class="sc">~</span></span>
-<span id="annotated-cell-3-24"><a href="#annotated-cell-3-24" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Diktionärbasierte Codierung"</span>,</span>
-<span id="annotated-cell-3-25"><a href="#annotated-cell-3-25" aria-hidden="true" tabindex="-1"></a>      name <span class="sc">==</span> <span class="st">"sentiment_nb"</span> <span class="sc">~</span> <span class="st">"Naive Bayes"</span>,</span>
-<span id="annotated-cell-3-26"><a href="#annotated-cell-3-26" aria-hidden="true" tabindex="-1"></a>      name <span class="sc">==</span> <span class="st">"sentiment_svm"</span> <span class="sc">~</span> <span class="st">"Support Vector Machine"</span></span>
+<span id="annotated-cell-3-24"><a href="#annotated-cell-3-24" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Diktionärsbasierte</span><span class="sc">\n</span><span class="st">Codierung"</span>,</span>
+<span id="annotated-cell-3-25"><a href="#annotated-cell-3-25" aria-hidden="true" tabindex="-1"></a>      name <span class="sc">==</span> <span class="st">"sentiment_nb"</span> <span class="sc">~</span> <span class="st">"Naive</span><span class="sc">\n</span><span class="st">Bayes"</span>,</span>
+<span id="annotated-cell-3-26"><a href="#annotated-cell-3-26" aria-hidden="true" tabindex="-1"></a>      name <span class="sc">==</span> <span class="st">"sentiment_svm"</span> <span class="sc">~</span> <span class="st">"Support Vector</span><span class="sc">\n</span><span class="st">Machine"</span></span>
 <span id="annotated-cell-3-27"><a href="#annotated-cell-3-27" aria-hidden="true" tabindex="-1"></a>    ),</span>
 <span id="annotated-cell-3-28"><a href="#annotated-cell-3-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">Methode =</span> <span class="fu">factor</span>(</span>
 <span id="annotated-cell-3-29"><a href="#annotated-cell-3-29" aria-hidden="true" tabindex="-1"></a>      Methode,</span>
 <span id="annotated-cell-3-30"><a href="#annotated-cell-3-30" aria-hidden="true" tabindex="-1"></a>      <span class="at">levels =</span> <span class="fu">c</span>(</span>
-<span id="annotated-cell-3-31"><a href="#annotated-cell-3-31" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Kategoriespezifisches Encoder-Modell"</span>,</span>
-<span id="annotated-cell-3-32"><a href="#annotated-cell-3-32" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Aufgabenspezifisches Encoder-Modell"</span>,</span>
-<span id="annotated-cell-3-33"><a href="#annotated-cell-3-33" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Universelles Decoder-Modell"</span>,</span>
-<span id="annotated-cell-3-34"><a href="#annotated-cell-3-34" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Manuelle Codierung"</span>,</span>
-<span id="annotated-cell-3-35"><a href="#annotated-cell-3-35" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Diktionärbasierte Codierung"</span>,</span>
-<span id="annotated-cell-3-36"><a href="#annotated-cell-3-36" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Naive Bayes"</span>,</span>
-<span id="annotated-cell-3-37"><a href="#annotated-cell-3-37" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Support Vector Machine"</span></span>
+<span id="annotated-cell-3-31"><a href="#annotated-cell-3-31" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Kategoriespezifisches</span><span class="sc">\n</span><span class="st">Encoder-Modell"</span>,</span>
+<span id="annotated-cell-3-32"><a href="#annotated-cell-3-32" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Aufgabenspezifisches</span><span class="sc">\n</span><span class="st">Encoder-Modell"</span>,</span>
+<span id="annotated-cell-3-33"><a href="#annotated-cell-3-33" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Universelles</span><span class="sc">\n</span><span class="st">Decoder-Modell"</span>,</span>
+<span id="annotated-cell-3-34"><a href="#annotated-cell-3-34" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Manuelle</span><span class="sc">\n</span><span class="st">Codierung"</span>,</span>
+<span id="annotated-cell-3-35"><a href="#annotated-cell-3-35" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Diktionärsbasierte</span><span class="sc">\n</span><span class="st">Codierung"</span>,</span>
+<span id="annotated-cell-3-36"><a href="#annotated-cell-3-36" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Naive</span><span class="sc">\n</span><span class="st">Bayes"</span>,</span>
+<span id="annotated-cell-3-37"><a href="#annotated-cell-3-37" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Support Vector</span><span class="sc">\n</span><span class="st">Machine"</span></span>
 <span id="annotated-cell-3-38"><a href="#annotated-cell-3-38" aria-hidden="true" tabindex="-1"></a>      )</span>
 <span id="annotated-cell-3-39"><a href="#annotated-cell-3-39" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">|&gt;</span></span>
 <span id="annotated-cell-3-40"><a href="#annotated-cell-3-40" aria-hidden="true" tabindex="-1"></a>      <span class="fu">fct_rev</span>(),</span>
@@ -803,16 +803,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output-display page-columns page-full">
 <div class="page-columns page-full">
 <figure class="figure page-columns page-full">
-<p class="page-columns page-full"><img src="07_validierung_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img column-page" width="1440"></p>
+<p class="page-columns page-full"><img src="07_validierung_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img column-page" width="1344"></p>
 </figure>
 </div>
 </div>
 </div>
-
-
 </section>
 
-</main> <!-- /main -->
+
+<div id="quarto-appendix" class="default"><section id="ergänzende-validierung" class="level2 appendix"><h2 class="anchored quarto-appendix-heading">Ergänzende Validierung</h2><div class="quarto-appendix-contents">
+
+<p><a href="../beispielstudie/07_validierung_kategoriespezifisches_Encoder-Modell.html">Hier</a> finden Sie außerdem eine umfängliche Validierung der Klassifikationen des kategoriespezifischen Encoder-Modells. Wir vergleichen dabei das Verfahren mit Kürzung langer Texte (also quasi “off the shelf”, wie im Paper berichtet) mit der komplexeren Anwendung inkl. Preprocessing bzw. Aufteilung langer Texte (siehe unterschiedliche Verfahren <a href="../beispielstudie/01_kategoriespezifisches_Encoder-Modell.html">hier</a>).</p>
+
+
+</div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";

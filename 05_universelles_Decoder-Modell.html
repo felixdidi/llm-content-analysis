@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="de-DE" xml:lang="de-DE"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.33">
+<meta name="generator" content="quarto-1.7.34">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -92,10 +92,10 @@ div.csl-indent {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-541d1840fe0299ec4c9bf9ceaf6b9fb6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-cb67631684576f55e8bc5ac67c9267c9.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-7abf1c683b15f91743e6ad3fed8656fb.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-f81af0f702876722cefec539fab53cd3.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -424,7 +424,7 @@ Achtung
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Das hier verwendete Modell <code>meta-llama/Meta-Llama-3.1-8B-Instruct</code> ist ein sehr großes Sprachmodell (also im wahrsten Sinne des Wortes ein Large Language Model, LLM), das erhebliche Rechenressourcen benötigt. Für die Ausführung dieses Modells ist eine GPU mit mindestens 16 GB VRAM erforderlich. Auf einem Laptop oder Desktop-PC ohne entsprechende Hardware wird das Modell nicht ausgeführt werden können. Alternativ können Sie kleinere Modelle ausprobieren, die weniger Ressourcen benötigen, oder auf Cloud-Dienste zurückgreifen, die leistungsfähige Hardware bereitstellen. Selbst wenn das Modell auf Ihrer Hardware ausgeführt werden kann, kann die Verarbeitung je nach Textlänge und Modellgröße einige Zeit in Anspruch nehmen. Es bietet sich daher an, nicht alle Texte auf einmal zu verarbeiten, sondern die Liste der Texte in kleinere Chargen (Batches) aufzuteilen und diese nacheinander zu verarbeiten. Eine beispielhafte Batch-Verarbeitung finden Sie in der Umsetzung unserer <a href="./beispielstudie/03_universelles_Decoder-Modell.html">Beispielstudie</a></p>
+<p>Das hier verwendete Modell <code>meta-llama/Meta-Llama-3.1-8B-Instruct</code> ist ein sehr großes Sprachmodell (also im wahrsten Sinne des Wortes ein Large Language Model, LLM), das erhebliche Rechenressourcen benötigt. Für die Ausführung dieses Modells ist eine GPU (Grafikkarte) mit mindestens 16 GB VRAM (Arbeitsspeicher) erforderlich. Auf einem Laptop oder Desktop-PC ohne entsprechende Hardware wird das Modell nicht ausgeführt werden können. Sollten Sie unsicher sein, können Sie die Voraussetzungen Ihrer Hardware i. d.&nbsp;R. über die Systemeinstellungen des Betriebssystems herausfinden. Im Zweifelsfall: Einfach ausprobieren — falls die Hardware nicht ausreicht, werden Sie eine entsprechende Fehlermeldung erhalten. Alternativ können Sie kleinere Modelle ausführen, die weniger Ressourcen benötigen, oder auf Cloud-Dienste zurückgreifen, die leistungsfähige Hardware bereitstellen. Allerdings: Selbst wenn das Modell auf Ihrer Hardware ausgeführt werden kann, wird die Verarbeitung je nach Textlänge und Modellgröße einige Zeit in Anspruch nehmen. Es bietet sich daher an, nicht alle Texte auf einmal zu verarbeiten, sondern die Liste der Texte in kleinere Chargen (Batches) aufzuteilen und diese nacheinander zu verarbeiten. Eine beispielhafte Batch-Verarbeitung finden Sie in der Umsetzung unserer <a href="./beispielstudie/03_universelles_Decoder-Modell.html">Beispielstudie</a>.</p>
 </div>
 </div>
 <div class="cell">
@@ -466,7 +466,20 @@ Achtung
 </dl>
 </div>
 </div>
-<p>Nachdem alle Responses generiert wurden, können wir die Ergebnisse aus dem JSON-Response extrahieren. Wenn wir möchten, können wir die zusätzliche ausgegebene Begründung ebenfalls abspeichern, um uns diese anzusehen.</p>
+<p>Nachdem alle Antworten generiert wurden, können wir die Ergebnisse aus dem JSON-Format extrahieren. Wenn wir möchten, können wir die zusätzliche ausgegebene Begründung ebenfalls abspeichern, um uns diese anzusehen.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Achtung
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Es kann ab und an vorkommen, dass das Modell fehlerhaftes JSON zurückgibt (z.&nbsp;B. indem es Anführungszeichen “vergisst” oder Antworten bei Erreichen von <code>max_new_tokens</code> abgebrochen werden, sodass diese nicht durch eine geschwungene Klammer abschließen). Wie wir damit umgehen können, haben wir beispielhaft in der Umsetzung unserer <a href="./beispielstudie/03_universelles_Decoder-Modell.html">Beispielstudie</a> dokumentiert.</p>
+</div>
+</div>
 <div class="cell">
 <div class="sourceCode cell-code" id="annotated-cell-4"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><button class="code-annotation-anchor" data-target-cell="annotated-cell-4" data-target-annotation="9">9</button><span id="annotated-cell-4-1" class="code-annotation-target"><a href="#annotated-cell-4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> parse_response(response):</span>
 <span id="annotated-cell-4-2"><a href="#annotated-cell-4-2" aria-hidden="true" tabindex="-1"></a>    parsed <span class="op">=</span> json.loads(response)</span>

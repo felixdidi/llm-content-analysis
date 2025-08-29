@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="de-DE" xml:lang="de-DE"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.33">
+<meta name="generator" content="quarto-1.7.34">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -93,10 +93,10 @@ div.csl-indent {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-541d1840fe0299ec4c9bf9ceaf6b9fb6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-cb67631684576f55e8bc5ac67c9267c9.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-7abf1c683b15f91743e6ad3fed8656fb.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-f81af0f702876722cefec539fab53cd3.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -314,8 +314,8 @@ div.csl-indent {
 </header>
 
 
-<p>Bevor wir beginnen, müssen wir Python zunächst auf dem eigenen Computer installieren. Aktuelle Versionen von Python zum Herunterladen sowie weitere Informationen zur Installation auf unterschiedlichen Betriebssystemen finden Sie unter <a href="https://python.org" class="uri">https://python.org</a>. Für den Beispielcode in diesem Artikel empfehlen wir die Python-Version 3.12.8. Für neuere Modelle kann es jedoch in der Zukunft sein, dass eine neuere Version von Python installiert werden muss, damit auch alle Pakete in den benötigten Versionen laufen können.</p>
-<p>Nach der Installation von Python legen wir (1) einen Projektordner und (2) eine virtuelle Python-Umgebung an, in die dann (3) alle benötigten Pakete installiert werden. Es ist nicht unbedingt notwendig, eine virtuelle Umgebung anzulegen. Allerdings empfehlen wir diesen Schritt, um Konflikte mit unterschiedlichen Software-Versionen zu vermeiden. Schließlich (4) öffnen wir die Jupyter Notebook-Umgebung, in der wir die Beispiele aus diesem Artikel ausprobieren können.</p>
+<p>Bevor wir beginnen, müssen wir Python zunächst auf dem eigenen Computer installieren. Aktuelle Versionen von Python zum Herunterladen sowie weitere Informationen zur Installation auf unterschiedlichen Betriebssystemen finden Sie unter <a href="https://python.org" class="uri">https://python.org</a>. Für den Beispielcode in diesem Artikel empfehlen wir die Python-Version <code>3.12.8</code>. Für andere Modelle besteht in der Zukunft jedoch die Möglichkeit, dass eine neuere Version von Python installiert werden muss, damit alle Pakete in den benötigten Versionen laufen.</p>
+<p>Nach der Installation von Python legen wir (1) einen Projektordner und (2) eine virtuelle Python-Umgebung an, in die dann (3) alle benötigten Pakete installiert werden. Es ist nicht unbedingt notwendig, eine virtuelle Umgebung anzulegen. Allerdings empfehlen wir diesen Schritt, um Konflikte mit unterschiedlichen Software-Versionen zu vermeiden. Schließlich öffnen wir (4) die Jupyter Notebook-Umgebung, in der wir die Beispiele aus diesem Artikel ausprobieren können.</p>
 <div class="callout callout-style-default callout-caution callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -328,7 +328,7 @@ Voraussetzungen
 </div>
 <div id="callout-1" class="callout-1-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>Auf Hugging Face zur Verfügung gestellte Modelle können über die Programmiersprache Python in wenigen Zeilen Code geladen und auf Texte angewendet werden. Voraussetzung für die in dieser Anleitung vorgestellten Modelle ist, dass mindestens 10GB freier Festplattenspeicher sowie ausreichend Arbeitsspeicher (mindestens 8GB, besser mehr) zur Verfügung stehen. Achtung: Abseits der hier vorgestellten Modelle gibt es auch sehr große Modelle, die deutlich mehr Speicherplatz benötigen und auf handelsüblicher Hardware (Laptop oder PC) nicht ausgeführt werden können. Diese sind für die meisten Anwendungsfälle in der Inhaltsanalyse jedoch nicht notwendig. Prüfen Sie vor der Nutzung anderer Modelle auf Hugging Face immer die jeweiligen Anforderungen an die Hardware, diese lässt sich grob anhand der Modellgröße abschätzen.</p>
+<p>Auf Hugging Face zur Verfügung gestellte Modelle können über die Programmiersprache Python in wenigen Zeilen Code geladen und auf Texte angewendet werden. Voraussetzung für die in dieser Anleitung vorgestellten Modelle ist, dass mindestens 10GB freier Festplattenspeicher sowie ausreichend Arbeitsspeicher (RAM bzw. VRAM; mindestens 8GB, besser mehr) zur Verfügung stehen. Achtung: Abseits der hier vorgestellten Modelle gibt es auch sehr große Modelle, die deutlich mehr Speicherplatz benötigen und auf handelsüblicher Hardware (Laptop oder PC) nicht ausgeführt werden können. Diese sind für die meisten Anwendungsfälle in der Inhaltsanalyse jedoch nicht notwendig. Prüfen Sie vor der Nutzung anderer Modelle auf Hugging Face immer die jeweiligen Anforderungen an die Hardware, diese lässt sich grob anhand der Modellgröße abschätzen.</p>
 </div>
 </div>
 </div>
@@ -374,10 +374,10 @@ Fragen zum Code?
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" aria-current="page">Linux/Mac</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">Windows</a></li></ul>
 <div class="tab-content" data-group="os">
 <div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
-<p>Rechtsklick auf Projektordner im Finder und “Neues Terminal beim Ordner” auswählen</p>
+<p>Rechtsklick auf Projektordner im Finder und “Neues Terminal beim Ordner” auswählen.</p>
 </div>
 <div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
-<p>Shift + Rechtsklick auf Projektordner im Explorer und “PowerShell-Fenster hier öffnen” auswählen</p>
+<p>Shift + Rechtsklick auf Projektordner im Explorer und “PowerShell-Fenster hier öffnen” auswählen.</p>
 </div>
 </div>
 </div>
@@ -397,7 +397,7 @@ Fragen zum Code?
 <span data-code-cell="annotated-cell-1" data-code-lines="1" data-code-annotation="1">Wir legen eine virtuelle Python-Umgebung mit dem Namen <code>env</code> an. Der Name der virtuellen Umgebung kann beliebig gewählt werden, sollte aber idealerweise keine Leer- oder Sonderzeichen enthalten.</span>
 </dd>
 </dl>
-<p>Mit dem nachfolgenden Befehl aktivieren wir die virtuelle Umgebung. Diesen zweiten Befehl müssen wir jedes Mal ausführen, wenn wir in der virtuelle Python-Umgebung arbeiten wollen:</p>
+<p>Mit dem nachfolgenden Befehl aktivieren wir die virtuelle Umgebung. Diesen zweiten Befehl müssen wir jedes Mal ausführen, wenn wir in der virtuellen Python-Umgebung arbeiten wollen:</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset" data-group="os">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true">Linux/Mac</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false">Windows</a></li></ul>
 <div class="tab-content" data-group="os">
@@ -434,7 +434,7 @@ Fragen zum Code?
 </section>
 <section id="pakete-installieren" class="level2">
 <h2 class="anchored" data-anchor-id="pakete-installieren">3 Pakete installieren</h2>
-<p>Anschließend können wir die benötigten Pakete installieren, konkret die <code>transformers</code>-Bibliothek von HuggingFace <span class="citation" data-cites="wolfHuggingFacesTransformersStateoftheart2020">(<a href="#ref-wolfHuggingFacesTransformersStateoftheart2020" role="doc-biblioref">Wolf et al., 2020</a>)</span>, die <code>pandas</code>-Bibliothek zur Datenverarbeitung <span class="citation" data-cites="mckinneyDataStructuresStatistical2010">(<a href="#ref-mckinneyDataStructuresStatistical2010" role="doc-biblioref">McKinney, 2010</a>)</span> sowie einige Machine Learning-Bibliotheken, die von <code>transformers</code> im Hintergrund benötigt werden. Abhängig vom verwendeten Transformer-Modell benötigen wir eventuell weitere Pakete, worauf entsprechende Fehlermeldungen im weiteren Prozess hinweisen. Diese können wir dann ebenfalls über <code>pip install [paketname]</code> installieren. Für die Beispiele aus diesem Artikel benötigen wir die im folgenden Code installierten Pakete:</p>
+<p>Anschließend können wir die benötigten Pakete installieren, konkret die <code>transformers</code>-Bibliothek von Hugging Face <span class="citation" data-cites="wolfHuggingFacesTransformersStateoftheart2020">(<a href="#ref-wolfHuggingFacesTransformersStateoftheart2020" role="doc-biblioref">Wolf et al., 2020</a>)</span>, die <code>pandas</code>-Bibliothek zur Datenverarbeitung <span class="citation" data-cites="mckinneyDataStructuresStatistical2010">(<a href="#ref-mckinneyDataStructuresStatistical2010" role="doc-biblioref">McKinney, 2010</a>)</span> sowie einige Machine Learning-Bibliotheken, die von <code>transformers</code> im Hintergrund benötigt werden. Abhängig vom verwendeten Transformer-Modell benötigen wir eventuell weitere Pakete, worauf entsprechende Fehlermeldungen im weiteren Prozess hinweisen. Diese können wir dann ebenfalls über <code>pip install [paketname]</code> installieren. Für die Beispiele aus diesem Artikel benötigen wir die im folgenden Code installierten Pakete:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>Terminal</strong></pre>
@@ -457,7 +457,7 @@ Paket-Versionen für die vorgestellten Beispiele
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Die in dieser Anleitung vorgestellten Beispiele wurden mit den folgenden Paket-Versionen getestet. Es kann sein, dass in der Zukunft neuere Versionen der Pakete veröffentlicht werden, die eventuell nicht mehr mit dem Beispielcode kompatibel sind. In diesem Fall können Sie die untenstehenden Versionen der Pakete gezielt installieren, indem Sie den jeweiligen Paketnamen mit <code>==</code> und der Versionsnummer angeben. Zum Beispiel: <code>pip install transformers==4.5.1</code>.</p>
+<p>Die in dieser Anleitung vorgestellten Beispiele wurden mit den folgenden Paket-Versionen getestet. Es kann sein, dass in der Zukunft neuere Versionen der Pakete veröffentlicht werden, die eventuell nicht mehr mit dem Beispielcode kompatibel sind. In diesem Fall können Sie die untenstehenden Versionen der Pakete gezielt installieren, indem Sie den jeweiligen Paketnamen mit <code>==</code> und der Versionsnummer angeben. Zum Beispiel: <code>pip install transformers==4.55.1</code>.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode md code-with-copy"><code class="sourceCode markdown"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>flax==0.11.1</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>jupyter==1.1.1</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>jupyter-console==6.6.3</span>
@@ -493,7 +493,7 @@ Paket-Versionen für die vorgestellten Beispiele
 <span data-code-cell="annotated-cell-3" data-code-lines="1" data-code-annotation="1">Wir öffnen die Jupyter Notebook-Umgebung. Dadurch wird ein neues Fenster in unserem Webbrowser geöffnet, in dem wir die Jupyter Notebook-Umgebung sehen können.</span>
 </dd>
 </dl>
-<p>Anstelle eines der Beispiel-Notebooks zu nutzen, können wir auch ein neues Notebook erstellen, indem wir im Jupyter-Dashboard auf “File”, dann “New” klicken und dann “Notebook” auswählen. Dadurch wird eine neue Notebook-Datei erstellt, in der wir unseren Python-Code schreiben und ausführen können. Wenn wir das Notebook öffnen, werden wir zunächst gefragt, wie wir den Code ausführen wollen. Wir wählen hierzu “Python 3 (ipykernel)” aus, um sicherzustellen, dass wir die Python-Version verwenden, die wir zuvor installiert haben.</p>
+<p>Anstelle der Beispiel-Notebooks können wir auch ein neues Notebook erstellen, indem wir im Jupyter-Dashboard auf “File”, dann “New” klicken und dann “Notebook” auswählen. Dadurch wird eine neue Notebook-Datei erstellt, in der wir unseren Python-Code schreiben und ausführen können. Wenn wir das Notebook öffnen, werden wir zunächst gefragt, wie wir den Code ausführen wollen. Wir wählen hierzu “Python 3 (ipykernel)” aus, um sicherzustellen, dass wir die Python-Version verwenden, die wir zuvor installiert haben.</p>
 <p>Im Jupyter Notebook können wir dann die einzelnen Zellen ausführen, indem wir auf die Schaltfläche “Run” klicken oder die Tastenkombination <code>Shift + Enter</code> verwenden. Die Ergebnisse der Ausführung werden direkt unter der jeweiligen Zelle angezeigt.</p>
 
 
