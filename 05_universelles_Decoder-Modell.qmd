@@ -1,9 +1,6 @@
 ---
 title: Universelles Decoder-Modell
 engine: knitr
-code-annotations: hover
-bibliography: "bib/refs.bib"
-csl: https://www.zotero.org/styles/apa
 ---
 
 Um den Beispielcode selbst auszuführen oder zu modifizieren, können Sie das dieser Seite zugrundeliegende Jupyter Notebook über die Seitenleiste öffnen und herunterladen.
@@ -65,7 +62,7 @@ Anders als bei den vorigen Ansätzen müssen wir bei einem universellen Decoder-
 
 :::callout-important
 ## Achtung
-Das hier verwendete Modell `meta-llama/Meta-Llama-3.1-8B-Instruct` ist ein sehr großes Sprachmodell (also im wahrsten Sinne des Wortes ein Large Language Model, LLM), das erhebliche Rechenressourcen benötigt. Für die Ausführung dieses Modells ist eine GPU mit mindestens 16 GB VRAM erforderlich. Auf einem Laptop oder Desktop-PC ohne entsprechende Hardware wird das Modell nicht ausgeführt werden können. Alternativ können Sie kleinere Modelle ausprobieren, die weniger Ressourcen benötigen, oder auf Cloud-Dienste zurückgreifen, die leistungsfähige Hardware bereitstellen. Selbst wenn das Modell auf Ihrer Hardware ausgeführt werden kann, kann die Verarbeitung je nach Textlänge und Modellgröße einige Zeit in Anspruch nehmen. Es bietet sich daher an, nicht alle Texte auf einmal zu verarbeiten, sondern die Liste der Texte in kleinere Chargen (Batches) aufzuteilen und diese nacheinander zu verarbeiten. Eine beispielhafte Batch-Verarbeitung finden Sie in der Umsetzung unserer [Beispielstudie](beispielstudie/03_universelles_Decoder-Modell.qmd)
+Das hier verwendete Modell `meta-llama/Meta-Llama-3.1-8B-Instruct` ist ein sehr großes Sprachmodell (also im wahrsten Sinne des Wortes ein Large Language Model, LLM), das erhebliche Rechenressourcen benötigt. Für die Ausführung dieses Modells ist eine GPU (Grafikkarte) mit mindestens 16 GB VRAM (Arbeitsspeicher) erforderlich. Auf einem Laptop oder Desktop-PC ohne entsprechende Hardware wird das Modell nicht ausgeführt werden können. Sollten Sie unsicher sein, können Sie die Voraussetzungen Ihrer Hardware i. d. R. über die Systemeinstellungen des Betriebssystems herausfinden. Im Zweifelsfall: Einfach ausprobieren — falls die Hardware nicht ausreicht, werden Sie eine entsprechende Fehlermeldung erhalten. Alternativ können Sie kleinere Modelle ausführen, die weniger Ressourcen benötigen, oder auf Cloud-Dienste zurückgreifen, die leistungsfähige Hardware bereitstellen. Allerdings: Selbst wenn das Modell auf Ihrer Hardware ausgeführt werden kann, wird die Verarbeitung je nach Textlänge und Modellgröße einige Zeit in Anspruch nehmen. Es bietet sich daher an, nicht alle Texte auf einmal zu verarbeiten, sondern die Liste der Texte in kleinere Chargen (Batches) aufzuteilen und diese nacheinander zu verarbeiten. Eine beispielhafte Batch-Verarbeitung finden Sie in der Umsetzung unserer [Beispielstudie](beispielstudie/03_universelles_Decoder-Modell.qmd).
 :::
 
 ```{python filename="Python"}
@@ -87,7 +84,12 @@ for text in datenliste:         #<5>
 7. Generieren der Antwort des Modells mit den definierten Anweisungen
 8. Speichern des Originaltexts und der generierten Antwort in der Ergebnisliste
 
-Nachdem alle Responses generiert wurden, können wir die Ergebnisse aus dem JSON-Response extrahieren. Wenn wir möchten, können wir die zusätzliche ausgegebene Begründung ebenfalls abspeichern, um uns diese anzusehen.
+Nachdem alle Antworten generiert wurden, können wir die Ergebnisse aus dem JSON-Format extrahieren. Wenn wir möchten, können wir die zusätzliche ausgegebene Begründung ebenfalls abspeichern, um uns diese anzusehen.
+
+:::callout-important
+## Achtung
+Es kann ab und an vorkommen, dass das Modell fehlerhaftes JSON zurückgibt (z. B. indem es Anführungszeichen "vergisst" oder Antworten bei Erreichen von `max_new_tokens` abgebrochen werden, sodass diese nicht durch eine geschwungene Klammer abschließen). Wie wir damit umgehen können, haben wir beispielhaft in der Umsetzung unserer [Beispielstudie](beispielstudie/03_universelles_Decoder-Modell.qmd) dokumentiert.
+:::
 
 
 ```{python}

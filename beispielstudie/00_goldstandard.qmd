@@ -2,17 +2,15 @@
 title: "Goldstandard"
 subtitle: "Beispielstudie"
 code-fold: true
-bibliography: "../bib/refs.bib"
-csl: https://www.zotero.org/styles/apa
 ---
 
 ## Erstellung des Goldstandards 
 
-Um die Leistungsfähigkeit der verschiedenen Verfahren ermitteln zu können, bietet sich der Vergleich mit einem Goldstandard an [vlg. @vanatteveldtValiditySentimentAnalysis2021] – ein von Expert:innen manuell codierter Datensatz, der ein möglichst hohes Maß an Validität und Reliabilität aufweist. Zur Erstellung eines Goldstandards wurde eine Zufallsstichprobe von 197 Beiträgen des gesamten Datenmaterials (*N* = 3.054) gezogen [d. h. mehr als 5%, vgl. Empfehlung von @songValidationsWeTrust2020]. Um eine ausgewogene Stichprobe zu generieren, erfolgte die Stichprobenziehung proportional geschichtet hinsichtlich der Textsorte (*n* = 60 Zeitungsartikel, *n* = 71 Facebook-Post, *n* = 66 Tweets) und disproportional geschichtet hinsichtlich der Tonalität [⅓ jeweils positiv, negativ und neutral, Einstufung auf Basis der manuellen Codierung von @spatzeneggerSocialMediaAls2020]. Die Tonalität aller 197 Texte wurde unabhängig voneinander von drei Codierer:innen (Mehrfachcodierung) auf Basis eines ausführlichen Codebuchs und nach mehreren Codierschulungen erfasst. Die Codierer:innen erreichten eine akzeptable Reliabilität von Krippendorff’s α = .77. Im Falle von Abweichungen wurde für die weitere Analyse die Mehrheitsmeinung gebildet [vgl. @songValidationsWeTrust2020, S. 568].
+Um die Leistungsfähigkeit der verschiedenen Verfahren ermitteln zu können, bietet sich der Vergleich mit einem Goldstandard an [vgl. @vanatteveldtValiditySentimentAnalysis2021] – ein von Expert:innen manuell codierter Datensatz, der ein möglichst hohes Maß an Validität und Reliabilität aufweist. Zur Erstellung eines Goldstandards wurde eine Zufallsstichprobe von 197 Beiträgen des gesamten Datenmaterials (*N* = 3.054) gezogen [d. h., mehr als 5%, vgl. Empfehlung von @songValidationsWeTrust2020]. Um eine ausgewogene Stichprobe zu generieren, erfolgte die Stichprobenziehung proportional geschichtet hinsichtlich der Textsorte (*n* = 60 Zeitungsartikel, *n* = 71 Facebook-Post, *n* = 66 Tweets) und disproportional geschichtet hinsichtlich der Tonalität [⅓ jeweils positiv, negativ und neutral, Einstufung auf Basis der manuellen Codierung von @spatzeneggerSocialMediaAls2020]. Die Tonalität aller 197 Texte wurde unabhängig voneinander von drei Codierer:innen (Mehrfachcodierung) auf Basis eines ausführlichen Codebuchs und nach mehreren Codierschulungen erfasst. Die Codierer:innen erreichten eine akzeptable Reliabilität von Krippendorff’s α = .77. Im Falle von Abweichungen wurde für die weitere Analyse die Mehrheitsmeinung gebildet [vgl. @songValidationsWeTrust2020, S. 568].
 
 ## Goldstandard ansehen
 
-Schauen wir uns zunächst eine kleine Auswahl des Goldstandards an, um ein Gefühl für die Texte zu bekommen. Wir setzen einen Seed, um die Auswahl reproduzierbar zu machen. Somit können wir die gleichen Texte in der Evaluationsstudie für jedes Modell ansehen, um die Ergebnisse zu vergleichen.
+Schauen wir uns zunächst eine kleine Auswahl des Goldstandards an, um ein Gefühl für die Texte zu bekommen. Wir setzen einen Seed, um die Auswahl reproduzierbar zu machen. Durch die Verwendung dieses Seeds können wir auf den folgenden Seiten die gleichen Texte für jedes Modell ansehen, um die Ergebnisse zu vergleichen.
 
 ```{r filename="R"}
 #| label: goldstandard

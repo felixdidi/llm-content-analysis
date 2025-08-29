@@ -2,9 +2,6 @@
 title: "Universelles Decoder-Modell"
 subtitle: "Beispielstudie"
 engine: knitr
-code-annotations: hover
-bibliography: "../bib/refs.bib"
-csl: https://www.zotero.org/styles/apa
 ---
 
 ## Die Methode

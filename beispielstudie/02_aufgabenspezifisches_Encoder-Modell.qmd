@@ -2,9 +2,6 @@
 title: "Aufgabenspezifisches Encoder-Modell"
 subtitle: "Beispielstudie"
 engine: knitr
-bibliography: "../bib/refs.bib"
-csl: https://www.zotero.org/styles/apa
-code-annotations: hover
 ---
 
 ## Die Methode

@@ -1,9 +1,6 @@
 ---
 title: Kategoriespezifisches Encoder-Modell
 engine: knitr
-code-annotations: hover
-bibliography: "bib/refs.bib"
-csl: https://www.zotero.org/styles/apa
 ---
 
 Um den Beispielcode selbst auszuführen oder zu modifizieren, können Sie das dieser Seite zugrundeliegende Jupyter Notebook über die Seitenleiste öffnen und herunterladen.

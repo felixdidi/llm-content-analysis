@@ -1,12 +1,9 @@
 ---
 title: "Vorbereitung"
-bibliography: "bib/refs.bib"
-csl: https://www.zotero.org/styles/apa
 engine: knitr
-code-annotations: hover
 ---
 
-Nachdem wir im vorherigen Abschnitt bereits alle Voraussetzungen geschaffen haben (Python installiert, Projektordner und virtuelle Umgebung angelegt, benötigte Pakete installiert), wollen wir hier noch einmal Schritt für Schritt durchgehen, wie wir die Arbeitsumgebung für die Beispiele aus diesem Artikel einrichten können. Die folgenden Schritte müssen nämlich, im Gegensatz zur Installation, jedes Mal durchgeführt werden, wenn wir eine neue Textcodierung beginnen wollen.
+Nachdem wir im vorherigen Abschnitt bereits alle Voraussetzungen geschaffen haben (Python installiert, Projektordner und virtuelle Umgebung angelegt, benötigte Pakete installiert), gehen wir hier Schritt für Schritt durch, wie wir die Arbeitsumgebung für die Beispiele aus diesem Artikel einrichten können. Die folgenden Schritte müssen nämlich, im Gegensatz zur Installation, jedes Mal durchgeführt werden, wenn wir eine neue Textcodierung beginnen.
 
 ## 1 Projektordner öffnen
 
@@ -16,17 +13,17 @@ Den bereits angelegten Projektordner können wir über den Dateimanager (Windows
 
 ## Linux/Mac
 
-Rechtsklick auf Projektordner im Finder und “Neues Terminal beim Ordner” auswählen
+Rechtsklick auf Projektordner im Finder und “Neues Terminal beim Ordner” auswählen.
 
 ## Windows
 
-Shift + Rechtsklick auf Projektordner im Explorer und “PowerShell-Fenster hier öffnen” auswählen
+Shift + Rechtsklick auf Projektordner im Explorer und “PowerShell-Fenster hier öffnen” auswählen.
 
 :::
 
 ## 2 Texte vorbereiten
 
-Die Texte, die wir codieren wollen, müssen in einer CSV-Datei im Projektordner vorliegen. Die CSV-Datei muss dabei mindestens eine Spalte mit den zu codierenden Texten enthalten. Optional können weitere Spalten mit Metadaten (z.B. ID, Quelle, Datum) enthalten sein. In den Beispielen aus diesem Artikel liegen die Text in der Spalte `text`. Sollten die Texte in einer anderen Spalte liegen, muss der entsprechende Spaltenname im Code angepasst werden. In den folgenden Beispielen verwenden wir eine Beispieldatei mit dem Namen `example_dataset.csv`, die im Ordner `data` liegt. Diese Beispieldatei enthält zehn Beispieltexte:
+Die Texte, die wir codieren wollen, müssen in einer CSV-Datei im Projektordner vorliegen. Die CSV-Datei muss dabei mindestens eine Spalte mit den zu codierenden Texten enthalten. Optional können weitere Spalten mit Metadaten (z. B. ID, Quelle, Datum) enthalten sein. In den Beispielen aus diesem Artikel liegen die Text in der Spalte `text`. Sollten die Texte in einer anderen Spalte liegen, muss der entsprechende Spaltenname im Code angepasst werden. In den folgenden Beispielen verwenden wir eine Beispieldatei mit dem Namen `example_dataset.csv`, die im Ordner `data` liegt. Diese Beispieldatei enthält zehn Beispieltexte:
 
 :::{.callout-note}
 ## Code einblenden
@@ -46,7 +43,7 @@ Auch wenn wir die virtuelle Python-Umgebung bereits angelegt haben, müssen wir 
 
 :::callout-important
 ## Achtung
-Ist die virtuelle Umgebung bereits aktiviert, darf der folgende Befehl nicht erneut ausgeführt werden, da dies zu Fehlern führen kann. In der Kommandozeile ist die virtuelle Umgebung an einem veränderten Prompt erkennbar, der den Namen der virtuellen Umgebung enthält (z.B. `(env)`). Alternativ können wir in der Konsole den Befehl `echo $VIRTUAL_ENV` (Linux/Mac) bzw. `echo %VIRTUAL_ENV%` (Windows) ausführen. Wenn der Pfad zur virtuellen Umgebung angezeigt wird, ist die virtuelle Umgebung aktiviert. Andernfalls wird eine leere Zeile angezeigt.
+Ist die virtuelle Umgebung bereits aktiviert, darf der folgende Befehl nicht erneut ausgeführt werden, da dies zu Fehlern führen kann. In der Kommandozeile ist die virtuelle Umgebung an einem veränderten Prompt erkennbar, der den Namen der virtuellen Umgebung enthält (z. B. `(env)`). Alternativ können wir in der Konsole den Befehl `echo $VIRTUAL_ENV` (Linux/Mac) bzw. `echo %VIRTUAL_ENV%` (Windows) ausführen. Wenn der Pfad zur virtuellen Umgebung angezeigt wird, ist die virtuelle Umgebung aktiviert. Andernfalls wird eine leere Zeile angezeigt.
 :::
 
 ::: {.panel-tabset group="os"}
@@ -82,5 +79,5 @@ jupyter notebook #<1>
 :::callout-tip
 ## Gut zu wissen
 
-Während die Jupyter Notebook-Umgebung läuft, sollte die Kommandozeile nicht geschlossen werden. Wir sehen in der Kommandozeile währenddessen verschiedene Informationen, z.B. ob die Jupyter Notebook-Umgebung erfolgreich gestartet wurde und unter welcher URL wir die Jupyter Notebook-Umgebung im Browser erreichen können (in der Regel `http://localhost:8888`). Wenn wir die Jupyter Notebook-Umgebung schließen wollen, können wir dies über die Kommandozeile mit `CTRL + C` tun. Anschließend müssen wir die Eingabe mit `y` bestätigen.
+Während die Jupyter Notebook-Umgebung läuft, sollte die Kommandozeile nicht geschlossen werden. Wir sehen in der Kommandozeile währenddessen verschiedene Informationen, z. B. ob die Jupyter Notebook-Umgebung erfolgreich gestartet wurde und unter welcher URL wir die Jupyter Notebook-Umgebung im Browser erreichen können (in der Regel `http://localhost:8888`). Wenn wir die Jupyter Notebook-Umgebung schließen wollen, können wir dies über die Kommandozeile mit `CTRL + C` tun. Anschließend müssen wir die Eingabe mit `y` bestätigen.
 :::

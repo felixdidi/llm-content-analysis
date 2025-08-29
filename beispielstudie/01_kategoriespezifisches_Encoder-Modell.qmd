@@ -2,14 +2,11 @@
 title: "Kategoriespezifisches Encoder-Modell"
 subtitle: "Beispielstudie"
 engine: knitr
-bibliography: "../bib/refs.bib"
-csl: https://www.zotero.org/styles/apa
-code-annotations: hover
 ---
 
 ## Die Methode
 
-Als kategoriespezifisches Encoder-Modell wurde das off-the-shelf Modell *German Sentiment Bert* von @guhrTrainingBroadcoverageGerman2020 ausgewählt. Dieses Modell basiert auf German BERT [@deepsetGermanBERTState2019], einem mit deutschsprachigen Texten trainierten Encoder-Modell, das anschließend mit Hilfe von 1.834 Millionen gelabelten deutschen Texten verschiedenster Textsorten für die Sentimentanalyse weiter trainiert wurde [vgl. @guhrTrainingBroadcoverageGerman2020, S. 1628–1629]. Obwohl @guhrTrainingBroadcoverageGerman2020 vor der Anwendung eine Textbereinigung vorschlagen (z. B. Entfernen von URLs), wurde das Modell in der vorliegenden Studie – wie auch alle weiteren LLM-basierten Modelle – ohne Preprocessing genutzt, da diese Modelle i. d. R. sehr gut mit unbereinigten Daten umgehen können [vgl. @tornbergHowUseLLMs2023] und wir daran interessiert waren, die off-the-shelf Anwendung der Modelle zu evaluieren (d. h. ohne aufwändige Vorbereitung). Eine Robustheitsanalyse ergab zudem, dass die Leistung durch Preprocessing oder Aufteilung langer Texte nur geringfügig und nicht konsistent verbessert werden konnte.
+Als kategoriespezifisches Encoder-Modell wurde das off-the-shelf Modell *German Sentiment Bert* von @guhrTrainingBroadcoverageGerman2020 ausgewählt. Dieses Modell basiert auf German BERT [@deepsetGermanBERTState2019], einem mit deutschsprachigen Texten trainierten Encoder-Modell, das anschließend mit Hilfe von 1.834 Millionen gelabelten deutschen Texten verschiedenster Textsorten für die Sentimentanalyse weiter trainiert wurde [vgl. @guhrTrainingBroadcoverageGerman2020, S. 1628–1629]. Obwohl @guhrTrainingBroadcoverageGerman2020 vor der Anwendung eine Textbereinigung vorschlagen (z. B. Entfernen von URLs), wurde das Modell in der vorliegenden Studie – wie auch alle weiteren LLM-basierten Modelle – ohne Preprocessing genutzt, da diese Modelle i. d. R. sehr gut mit unbereinigten Daten umgehen können [vgl. @tornbergHowUseLLMs2023] und wir daran interessiert waren, die off-the-shelf Anwendung der Modelle zu evaluieren (d. h., ohne aufwändige Vorbereitung). Eine Robustheitsanalyse ergab zudem, dass die Leistung durch Preprocessing oder Aufteilung langer Texte nur geringfügig und nicht konsistent verbessert werden konnte.
 
 ## Klassifikation mit Kürzung langer Texte
 
@@ -56,7 +53,7 @@ readr::read_csv(here::here("beispielstudie/data/01_kategoriespezifisches_Encoder
 
 ## Klassifikation mit Preprocessing
 
-@guhrTrainingBroadcoverageGerman2020 schlagen zur Anwendung ihres Modells Preprocessing-Schritte vor. Dabei werden URLs, @-Erwähnungen und Zahlen entfernt, sowie die Texte in Kleinbuchstaben umgewandelt und bereinigt. Anschließend wird das Modell auf die bereinigten Texte angewendet. Die Umsetzung dieses Verfahrens inkl. Preprocessing ist deutlich aufwändiger als die off-the-shelf Anwendung, da das Preprocessing i. d. R. manuell implementiert werden muss. Zwar haben @guhrTrainingBroadcoverageGerman2020 zur Anwendung ihres Modells ein Python-Paket entwickelt, welches die Preprocessing-Schritte vereinfacht (<https://github.com/oliverguhr/german-sentiment-lib>). Solche zusätzlichen Bibliotheken stehen jedoch kaum für andere Modelle zur Verfügung und widersprechen somit der allgemeinen Verfügbarkeit und einfachen Anwendbarkeiten von Modellen über die Hugging Face-Pipeline. Der Code zur Anwendung des Modells inkl. Preprocessing kann durch aufklappen des nachfolgenden Codeblocks eingesehen werden.
+@guhrTrainingBroadcoverageGerman2020 schlagen zur Anwendung ihres Modells Preprocessing-Schritte vor. Dabei werden URLs, @-Erwähnungen und Zahlen entfernt, sowie die Texte in Kleinbuchstaben umgewandelt und bereinigt. Anschließend wird das Modell auf die bereinigten Texte angewendet. Die Umsetzung dieses Verfahrens inkl. Preprocessing ist deutlich aufwändiger als die off-the-shelf Anwendung, da das Preprocessing i. d. R. manuell implementiert werden muss. Zwar haben @guhrTrainingBroadcoverageGerman2020 zur Anwendung ihres Modells ein Python-Paket entwickelt, welches die Preprocessing-Schritte vereinfacht (<https://github.com/oliverguhr/german-sentiment-lib>), solche zusätzlichen Bibliotheken stehen jedoch kaum für andere Modelle zur Verfügung und widersprechen somit der allgemeinen Verfügbarkeit und einfachen Anwendbarkeiten von Modellen über die Hugging Face-Pipeline. Der Code zur Anwendung des Modells inkl. Preprocessing kann durch Aufklappen des nachfolgenden Codeblocks eingesehen werden.
 
 ```{python filename="Python"}
 #| eval: false

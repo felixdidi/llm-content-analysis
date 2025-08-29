@@ -1,9 +1,6 @@
 ---
 title: Aufgabenspezifisches Encoder-Modell
 engine: knitr
-code-annotations: hover
-bibliography: "bib/refs.bib"
-csl: https://www.zotero.org/styles/apa
 ---
 
 Um den Beispielcode selbst auszuführen oder zu modifizieren, können Sie das dieser Seite zugrundeliegende Jupyter Notebook über die Seitenleiste öffnen und herunterladen.
@@ -59,7 +56,7 @@ zeroshot_classifier = pipeline("zero-shot-classification",                    #<
 
 ## Klassifikation 
 
-Für die Klassifikation mit dem NLI-Modell spezifizieren wir zusätzlich zum Modell noch die Ausprägungen der Kategorie (`candidate_labels`) und eine "Hypothese", die auf Grundlage des Textes geprüft werden soll (`hypothesis_template`). Bei der Ausführung des `pipeline()`-Befehls werden die zu codierenden Ausprägungen der Kategorie automatisch anstelle der geschwungenen Klammern in die Hypothese eingesetzt. Auf diese Weise wird der Befehl für jede Ausprägung einzeln durchgeführt (hier für "positiv", "negativ" und "neutral"). Wir erhalten also als Ergebnis einen Datensatz, der uns pro Text für jede spezifizierte Ausprägung einen Wahrscheinlichkeitswert ausgibt (in unserem Beispiel die Wahrscheinlichkeit für "positiv", "negativ" und "neutral"). Nun erfolgt die eigentliche Klassifikation, indem wir den zuvor definierten `zeroshot_classifier`-Befehl auf unsere Textdaten anwenden. Anschließend extrahieren wir die vergebenen Labels aus dem Response. Das Ergebnis speichern wir in einem DataFrame-Objekt, um es übersichtlich darstellen zu können. Über den Parameter `multi_label` können wir festlegen, ob prinzipiell mehrere Kategorien gleichzeitig in einem Text vorkommen können.
+Für die Klassifikation mit dem NLI-Modell spezifizieren wir zusätzlich zum Modell noch die Ausprägungen der Kategorie (`candidate_labels`) und eine "Hypothese", die auf Grundlage des Textes geprüft werden soll (`hypothesis_template`). Bei der Ausführung des `pipeline()`-Befehls werden die zu codierenden Ausprägungen der Kategorie automatisch anstelle der geschwungenen Klammern in die Hypothese eingesetzt. Auf diese Weise wird der Befehl für jede Ausprägung einzeln durchgeführt (hier für "positiv", "negativ" und "neutral"). Wir erhalten also als Ergebnis einen Datensatz, der uns pro Text für jede spezifizierte Ausprägung einen Wahrscheinlichkeitswert ausgibt (in unserem Beispiel die Wahrscheinlichkeit für "positiv", "negativ" und "neutral"). Nun erfolgt die eigentliche Klassifikation, indem wir den zuvor definierten `zeroshot_classifier`-Befehl auf unsere Textdaten anwenden. Anschließend extrahieren wir die vergebenen Labels. Das Ergebnis speichern wir in einem DataFrame-Objekt, um es übersichtlich darstellen zu können. Über den Parameter `multi_label` können wir festlegen, ob prinzipiell mehrere Kategorien gleichzeitig in einem Text vorkommen können.
 
 ```{python}
 #| eval: false

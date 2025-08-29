@@ -9,8 +9,6 @@ csl: https://www.zotero.org/styles/apa
 
 Um die Validität der verschiedenen Verfahren zu vergleichen, wurden die Codierergebnisse aller Verfahren mit der Codierung des Goldstandards verglichen.
 
-[Hier](07_validierung_kategoriespezifisches_Encoder-Modell.qmd) gibt es außerdem die Validierung der Klassifikationen des kategoriespezifischen Encoder-Modells mit Kürzung langer Texte (also quasi "off the shelf" wie hier berichtet) im Vergleich mit Preprocessing bzw. mit Aufteilung langer Texte (siehe unterschiedliche Verfahren [hier](01_kategoriespezifisches_Encoder-Modell.qmd)).
-
 ## Einlesen der Daten
 
 Zunächst werden die Daten eingelesen und in ein einheitliches Format gebracht.
@@ -342,7 +340,7 @@ Zuletzt wird ein Plot erstellt, der die Validierungsmetriken für alle Verfahren
 
 ```{r filename="R"}
 #| code-fold: true
-#| fig-width: 15
+#| fig-width: 14
 #| fig-height: 6.5
 #| column: page
 #| message: false
@@ -363,27 +361,27 @@ plot_data <- # <1>
   mutate( # <1>
     Methode = case_when( # <1>
       name == "sentiment_kategoriespezifisches_encoder_modell" ~ # <1>
-        "Kategoriespezifisches Encoder-Modell", # <1>
+        "Kategoriespezifisches\nEncoder-Modell", # <1>
       name == "sentiment_aufgabenspezifisches_encoder_modell" ~ # <1>
-        "Aufgabenspezifisches Encoder-Modell", # <1>
+        "Aufgabenspezifisches\nEncoder-Modell", # <1>
       name == "sentiment_universelles_decoder_modell" ~ # <1>
-        "Universelles Decoder-Modell", # <1>
-      name == "sentiment_manuelle_codierung" ~ "Manuelle Codierung", # <1>
+        "Universelles\nDecoder-Modell", # <1>
+      name == "sentiment_manuelle_codierung" ~ "Manuelle\nCodierung", # <1>
       name == "sentiment_diktionaerbasierte_codierung" ~ # <1>
-        "Diktionärbasierte Codierung", # <1>
-      name == "sentiment_nb" ~ "Naive Bayes", # <1>
-      name == "sentiment_svm" ~ "Support Vector Machine" # <1>
+        "Diktionärsbasierte\nCodierung", # <1>
+      name == "sentiment_nb" ~ "Naive\nBayes", # <1>
+      name == "sentiment_svm" ~ "Support Vector\nMachine" # <1>
     ), # <1>
     Methode = factor( # <1>
       Methode, # <1>
       levels = c( # <1>
-        "Kategoriespezifisches Encoder-Modell", # <1>
-        "Aufgabenspezifisches Encoder-Modell", # <1>
-        "Universelles Decoder-Modell", # <1>
-        "Manuelle Codierung", # <1>
-        "Diktionärbasierte Codierung", # <1>
-        "Naive Bayes", # <1>
-        "Support Vector Machine" # <1>
+        "Kategoriespezifisches\nEncoder-Modell", # <1>
+        "Aufgabenspezifisches\nEncoder-Modell", # <1>
+        "Universelles\nDecoder-Modell", # <1>
+        "Manuelle\nCodierung", # <1>
+        "Diktionärsbasierte\nCodierung", # <1>
+        "Naive\nBayes", # <1>
+        "Support Vector\nMachine" # <1>
       ) # <1>
     ) |> # <1>
       fct_rev(), # <1>
@@ -455,9 +453,13 @@ plot_data |> # <2>
 #| echo: false
 ggsave(
   here::here("beispielstudie/figures/vali_metrics.png"),
-  width = 15,
+  width = 14,
   height = 6.5,
   dpi = 300,
   bg = "white"
 )
 ```
+
+## Ergänzende Validierung {.appendix}
+
+[Hier](07_validierung_kategoriespezifisches_Encoder-Modell.qmd) finden Sie außerdem eine umfängliche Validierung der Klassifikationen des kategoriespezifischen Encoder-Modells. Wir vergleichen dabei das Verfahren mit Kürzung langer Texte (also quasi "off the shelf", wie im Paper berichtet) mit der komplexeren Anwendung inkl. Preprocessing bzw. Aufteilung langer Texte (siehe unterschiedliche Verfahren [hier](01_kategoriespezifisches_Encoder-Modell.qmd)).

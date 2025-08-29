@@ -2,14 +2,11 @@
 title: "Überwachtes maschinelles Lernen"
 subtitle: "Beispielstudie"
 engine: knitr
-code-annotations: hover
-bibliography: "../bib/refs.bib"
-csl: https://www.zotero.org/styles/apa
 ---
 
 ## Die Methode
 
-Die Sentiment-Analyse mittels überwachter maschineller Lernalgorithmen erfolgte anhand des Naïve-Bayes-Klassifikators *Multinomial Naïve Bayes* [*MNB*, @abbasMultinomialNaiveBayes2019] sowie des SVM-basierten *LinearSVC* Klassifikators [@pedregosaScikitlearnMachineLearning2011]. Das manuell codierte Datenmaterial von @spatzeneggerSocialMediaAls2020, exklusive der im Goldstandard enthaltenen Texte, diente für beide Verfahren als Trainingsmaterial (*N* = 2.812), der eigens codierte Goldstandard als Testmaterial (*N* = 197). Aufgrund der unterschiedlichen Textlängen und -formate wurden die Analysen getrennt für die drei Textsorten (Facebook-Posts, Tweets, Zeitungsartikel) durchgeführt.
+Die Sentiment-Analyse mittels überwachter maschineller Lernalgorithmen erfolgte anhand des Naïve-Bayes-Klassifikators *Multinomial Naïve Bayes* [*MNB*, @abbasMultinomialNaiveBayes2019] sowie des SVM-basierten *LinearSVC* Klassifikators [@pedregosaScikitlearnMachineLearning2011]. Das manuell codierte Datenmaterial von @spatzeneggerSocialMediaAls2020, exklusive der im Goldstandard enthaltenen Texte, diente für beide Verfahren als Trainingsmaterial (*N* = 2.812), der eigens codierte Goldstandard als Testmaterial (*N* = 197). Aufgrund der unterschiedlichen Textlängen, -formate und -stile wurden die Analysen getrennt für die drei Textsorten (Facebook-Posts, Tweets, Zeitungsartikel) durchgeführt.
 
 ## Preprocessing der Daten
 
@@ -105,7 +102,7 @@ goldstandard_zeitungsartikel = goldstandard.loc[(goldstandard['textart'] == "Zei
 
 ## Facebook-Posts
 
-Im folgenden wird die Klassifikation exemplarisch für die Facebook-Posts dargestellt.
+Im Folgenden wird die Klassifikation exemplarisch für die Facebook-Posts dargestellt.
 
 ```{python filename="Python"}
 #| eval: false
