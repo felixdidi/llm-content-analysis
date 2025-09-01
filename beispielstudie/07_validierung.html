@@ -758,14 +758,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="annotated-cell-3-68"><a href="#annotated-cell-3-68" aria-hidden="true" tabindex="-1"></a>      <span class="fu">str_to_title</span>() <span class="sc">|&gt;</span></span>
 <span id="annotated-cell-3-69"><a href="#annotated-cell-3-69" aria-hidden="true" tabindex="-1"></a>      <span class="fu">str_replace</span>(<span class="st">"Alpha"</span>, <span class="st">"α"</span>) <span class="sc">|&gt;</span></span>
 <span id="annotated-cell-3-70"><a href="#annotated-cell-3-70" aria-hidden="true" tabindex="-1"></a>      <span class="fu">as_factor</span>() <span class="sc">|&gt;</span></span>
-<span id="annotated-cell-3-71"><a href="#annotated-cell-3-71" aria-hidden="true" tabindex="-1"></a>      <span class="fu">fct_relevel</span>(<span class="st">"Precision"</span>, <span class="st">"Recall"</span>, <span class="st">"Accuracy"</span>, <span class="st">"F1"</span>, <span class="st">"Krippendorff's α"</span>),</span>
+<span id="annotated-cell-3-71"><a href="#annotated-cell-3-71" aria-hidden="true" tabindex="-1"></a>      <span class="fu">fct_relevel</span>(<span class="st">"Krippendorff's α"</span>, <span class="st">"Accuracy"</span>, <span class="st">"Precision"</span>, <span class="st">"Recall"</span>, <span class="st">"F1"</span>,),</span>
 <span id="annotated-cell-3-72"><a href="#annotated-cell-3-72" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
 <span id="annotated-cell-3-73"><a href="#annotated-cell-3-73" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(</span>
 <span id="annotated-cell-3-74"><a href="#annotated-cell-3-74" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> point,</span>
 <span id="annotated-cell-3-75"><a href="#annotated-cell-3-75" aria-hidden="true" tabindex="-1"></a>    <span class="at">xmin =</span> lower,</span>
 <span id="annotated-cell-3-76"><a href="#annotated-cell-3-76" aria-hidden="true" tabindex="-1"></a>    <span class="at">xmax =</span> upper,</span>
 <span id="annotated-cell-3-77"><a href="#annotated-cell-3-77" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> Methode,</span>
-<span id="annotated-cell-3-78"><a href="#annotated-cell-3-78" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> Textart</span>
+<span id="annotated-cell-3-78"><a href="#annotated-cell-3-78" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> Textart,</span>
 <span id="annotated-cell-3-79"><a href="#annotated-cell-3-79" aria-hidden="true" tabindex="-1"></a>  )) <span class="sc">+</span></span>
 <span id="annotated-cell-3-80"><a href="#annotated-cell-3-80" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_pointrange</span>(<span class="at">position =</span> <span class="fu">position_dodge</span>(.<span class="dv">5</span>)) <span class="sc">+</span></span>
 <span id="annotated-cell-3-81"><a href="#annotated-cell-3-81" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(</span>
