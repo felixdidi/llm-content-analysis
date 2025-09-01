@@ -415,14 +415,14 @@ plot_data |> # <2>
       str_to_title() |> # <2>
       str_replace("Alpha", "α") |> # <2>
       as_factor() |> # <2>
-      fct_relevel("Precision", "Recall", "Accuracy", "F1", "Krippendorff's α"), # <2>
+      fct_relevel("Krippendorff's α", "Accuracy", "Precision", "Recall", "F1",), # <2>
   ) |> # <2>
   ggplot(aes( # <2>
     x = point, # <2>
     xmin = lower, # <2>
     xmax = upper, # <2>
     y = Methode, # <2>
-    color = Textart # <2>
+    color = Textart, # <2>
   )) + # <2>
   geom_pointrange(position = position_dodge(.5)) + # <2>
   scale_x_continuous( # <2>
@@ -448,13 +448,68 @@ plot_data |> # <2>
 1. Vorbereitung der Plot-Daten: Laden aller Validierungsmetriken für verschiedene Textarten, Umbenennung der Methoden zu lesbaren Labels, Faktorisierung für richtige Reihenfolge und Kategorisierung in LLM-basierte vs. Vergleichsverfahren.
 2. Erstellung des Validierungs-Plots: Umstrukturierung der Daten für ggplot, Umbenennung der Metriken, Erstellung eines Point-Range-Plots mit Konfidenzintervallen, farbkodiert nach Textarten und facettiert nach Verfahrenstyp und Metriken.
 
-
 ```{r}
-#| echo: false
+#| include: false
+
+# schwarz-weiß für print:
+
+plot_data |> # <2>
+  rename_with(~ str_replace(.x, "f_meas", "f1"), matches("f_meas")) |> # <2>
+  rename_with( # <2>
+    ~ str_replace(.x, "kripp_alpha", "Krippendorff's Alpha"), # <2>
+    matches("kripp_alpha") # <2>
+  ) |> # <2>
+  pivot_longer( # <2>
+    accuracy_point:`Krippendorff's Alpha_upper`, # <2>
+    names_to = c("measure", "point"), # <2>
+    names_sep = "_", # <2>
+    values_to = "value" # <2>
+  ) |> # <2>
+  pivot_wider(names_from = point, values_from = value) |> # <2>
+  mutate( # <2>
+    measure = measure |> # <2>
+      str_to_title() |> # <2>
+      str_replace("Alpha", "α") |> # <2>
+      as_factor() |> # <2>
+      fct_relevel("Krippendorff's α", "Accuracy", "Precision", "Recall", "F1"), # <2>
+  ) |> # <2>
+  ggplot(aes( # <2>
+    x = point, # <2>
+    xmin = lower, # <2>
+    xmax = upper, # <2>
+    y = Methode, # <2>
+    color = Textart, # <2>
+    fill = Textart, # <2>
+    shape = Textart # <2>
+  )) + # <2>
+  geom_pointrange(position = position_dodge(.5)) + # <2>
+  scale_x_continuous( # <2>
+    breaks = c(0, .5, 1), # <2>
+    minor_breaks = c(.25, .75), # <2>
+    limits = c(-.2, 1) # <2>
+  ) + # <2>
+  xlab("") + # <2>
+  ylab("") + # <2>
+  scale_color_manual( # <2>
+    values = c("#000000", "#c1c1c1", "#c1c1c1", "#c1c1c1") # <2>
+  ) + # <2>
+  scale_fill_manual( # <2>
+    values = c("#000000", "#00000000", "#00000000", "#00000000") # <2>
+  ) + # <2>
+  scale_shape_manual(values = c(21, 22, 23, 24)) + # <2>
+  facet_grid( # <2>
+    ~type ~ measure, # <2>
+    scales = "free_y", # <2>
+    space = "free_y" # <2>
+  ) + # <2>
+  theme( # <2>
+    legend.position = "bottom" # <2>
+  ) # <2>
+
 ggsave(
   here::here("beispielstudie/figures/vali_metrics.png"),
   width = 14,
-  height = 6.5,
+  height = 8,
   dpi = 300,
   bg = "white"
 )

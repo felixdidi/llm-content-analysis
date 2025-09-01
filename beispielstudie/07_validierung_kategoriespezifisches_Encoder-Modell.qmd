@@ -327,7 +327,7 @@ plot_data |> # <2>
       str_to_title() |> # <2>
       str_replace("Alpha", "α") |> # <2>
       as_factor() |> # <2>
-      fct_relevel("Precision", "Recall", "Accuracy", "F1", "Krippendorff's α"), # <2>
+      fct_relevel("Krippendorff's α", "Accuracy", "Precision", "Recall", "F1"), # <2>
   ) |> # <2>
   ggplot(aes( # <2>
     x = point, # <2>
@@ -359,15 +359,3 @@ plot_data |> # <2>
 
 1. Vorbereitung der Plot-Daten: Laden aller Validierungsmetriken für verschiedene Textarten, Umbenennung der Methoden zu lesbaren Labels, Faktorisierung für richtige Reihenfolge und Kategorisierung in LLM-basierte vs. Vergleichsverfahren.
 2. Erstellung des Validierungs-Plots: Umstrukturierung der Daten für ggplot, Umbenennung der Metriken, Erstellung eines Point-Range-Plots mit Konfidenzintervallen, farbkodiert nach Textarten und facettiert nach Verfahrenstyp und Metriken.
-
-
-```{r}
-#| echo: false
-ggsave(
-  here::here("beispielstudie/figures/vali_metrics_exploratory.png"),
-  width = 15,
-  height = 6.5,
-  dpi = 300,
-  bg = "white"
-)
-```
