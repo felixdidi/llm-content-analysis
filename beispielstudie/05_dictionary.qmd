@@ -5,7 +5,7 @@ subtitle: "Beispielstudie"
 
 ## Die Methode
 
-Als off-the-shelf Diktionär wurde *SentimentWortschatz* [*SentiWS*, @remusSentiWSPubliclyAvailable2010] genutzt. Das Diktionär enthält in der hier verwendeten Form insgesamt ca. 1.650 positive und 1.800 negative Wörter. Um das Diktionär anwenden zu können, wurden die *N* = 197 Dokumente des Goldstandards in einzelne Wörter (sog. Tokens) zerlegt (*N* = 22.557 Tokens). Im Rahmen der Analyse wurde anschließend jedem Wort auf Basis des SentiWS-Diktionärs ein Wert zugewiesen und daraus für jeden Text eine Gesamttonalität berechnet, wobei Texte als positiv bzw. negativ codiert wurden, wenn ihre durchschnittliche Tonalität mindestens 20% über bzw. unter dem Median lag.
+Als off-the-shelf-Diktionär wurde *SentimentWortschatz* [*SentiWS*, @remusSentiWSPubliclyAvailable2010] genutzt. Wir haben bewusst ein off-the-shelf-Diktionär ausgewählt und dieses zudem nicht weiter für den Untersuchungskontext angepasst (obwohl dies generell ratsam ist, s. Abschn. 2.2 im Paper), da der Fokus auf der off-the-shelf-Anwendung der verschiedenen AIA-Methoden liegen sollte. Das Diktionär enthält insgesamt ca. 1.650 positive und 1.800 negative Wörter. Um das Diktionär anwenden zu können, wurden die *N* = 197 Dokumente des Goldstandards in einzelne Wörter (sog. Tokens) zerlegt (*N* = 22.557 Tokens). Im Rahmen der Analyse wurde anschließend jedem Wort auf Basis des SentiWS-Diktionärs ein Wert zugewiesen und daraus für jeden Text eine Gesamttonalität berechnet, wobei Texte als positiv bzw. negativ codiert wurden, wenn ihre durchschnittliche Tonalität mindestens 20% über bzw. unter dem Median lag.
 
 ## Klassifikation
 

@@ -5,4 +5,4 @@ subtitle: "Beispielstudie"
 
 ## Die Methode
 
-Die Daten der manuellen Inhaltsanalyse stammen aus der Studie von @spatzeneggerSocialMediaAls2020. Es handelt sich hierbei also nicht um die manuelle Codierung des [Goldstandards](00_goldstandard.qmd), sondern um die ursprüngliche Codierung von @spatzeneggerSocialMediaAls2020. Die Daten können als typisches Ergebnis einer publizierten manuellen kommunikationswissenschaftlichen Inhaltsanalyse betrachtet werden.
+Die Daten der manuellen Inhaltsanalyse stammen aus der Studie von @spatzeneggerSocialMediaAls2020. Es handelt sich hierbei also nicht um die manuelle Codierung des [Goldstandards](00_goldstandard.qmd) (s. auch Abschn. 5.1 im Paper), sondern um die ursprüngliche Codierung von @spatzeneggerSocialMediaAls2020. Die Daten können als typisches Ergebnis einer publizierten manuellen kommunikationswissenschaftlichen Inhaltsanalyse betrachtet werden.
