@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="de-DE" xml:lang="de-DE"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.34">
+<meta name="generator" content="quarto-1.8.27">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -89,14 +89,15 @@ div.csl-indent {
 <link href="../beispielstudie/00_goldstandard.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-cb67631684576f55e8bc5ac67c9267c9.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-aa0006ec45185f41362e9cf29e779a84.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-f81af0f702876722cefec539fab53cd3.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-7d293fb6015ec9abddf844d6ec08cabf.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -153,7 +154,8 @@ div.csl-indent {
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
     <div class="pt-lg-2 mt-2 text-center sidebar-header">
       <a href="../index.html" class="sidebar-logo-link">
-      <img src="../img/transformer.png" alt="" class="sidebar-logo py-0 d-lg-inline d-none">
+      <img src="../img/transformer.png" alt="" class="sidebar-logo light-content py-0 d-lg-inline d-none">
+      <img src="../img/transformer.png" alt="" class="sidebar-logo dark-content py-0 d-lg-inline d-none">
       </a>
       </div>
         <div class="mt-2 flex-shrink-0 align-items-center">
@@ -251,12 +253,6 @@ div.csl-indent {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../beispielstudie/04_manuelle_Inhaltsanalyse.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Manuelle Inhaltsanalyse</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
   <a href="../beispielstudie/05_dictionary.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Off-the-shelf Diktionär</span></a>
   </div>
@@ -321,17 +317,17 @@ div.csl-indent {
 <section id="die-methode" class="level2">
 <h2 class="anchored" data-anchor-id="die-methode">Die Methode</h2>
 <p>Als kategoriespezifisches Encoder-Modell wurde das off-the-shelf-Modell <em>German Sentiment Bert</em> von <span class="citation" data-cites="guhrTrainingBroadcoverageGerman2020">Guhr et al. (<a href="#ref-guhrTrainingBroadcoverageGerman2020" role="doc-biblioref">2020</a>)</span> ausgewählt. Dieses Modell basiert auf German BERT <span class="citation" data-cites="deepsetGermanBERTState2019">(<a href="#ref-deepsetGermanBERTState2019" role="doc-biblioref">Deepset, 2019</a>)</span>, einem mit deutschsprachigen Texten trainierten Encoder-Modell, das anschließend mit 1.834 Millionen gelabelten deutschen Texten verschiedenster Textsorten für die Sentimentanalyse weiter trainiert wurde <span class="citation" data-cites="guhrTrainingBroadcoverageGerman2020">(vgl. <a href="#ref-guhrTrainingBroadcoverageGerman2020" role="doc-biblioref">Guhr et al., 2020, S. 1628–1629</a>)</span>. Die Wahl fiel auf German Sentiment BERT, da es zum Zeitpunkt der Studiendurchführung unseres Wissens nach das gängigste kategoriespezifische Encoder-Modell für die Sentimentanalyse deutschsprachiger Texte auf Hugging Face war, dessen Entwicklung in einer wissenschaftlichen Publikation dokumentiert worden war <span class="citation" data-cites="guhrTrainingBroadcoverageGerman2020">(vgl. <a href="#ref-guhrTrainingBroadcoverageGerman2020" role="doc-biblioref">Guhr et al., 2020</a>)</span>.</p>
-<p>Das Modell wurde über das <code>transformers</code>-Paket geladen und auf den Goldstandard angewendet. Obwohl <span class="citation" data-cites="guhrTrainingBroadcoverageGerman2020">Guhr et al. (<a href="#ref-guhrTrainingBroadcoverageGerman2020" role="doc-biblioref">2020</a>)</span> vor der Anwendung eine Textbereinigung vorschlagen (z. B. Entfernen von URLs), wurde das Modell in der vorliegenden Studie – wie auch alle weiteren LLM-basierten Verfahren – ohne Preprocessing genutzt, da die Modelle i. d.&nbsp;R. sehr gut mit unbereinigten Daten umgehen können <span class="citation" data-cites="tornbergHowUseLLMs2023">(vgl. <a href="#ref-tornbergHowUseLLMs2023" role="doc-biblioref">Törnberg, 2023</a>)</span> und wir daran interessiert waren, die off-the-shelf-Anwendung der Modelle zu illustrieren (d.&nbsp;h., ohne aufwändige Vorbereitung). Eine Robustheitsanalyse ergab zudem, dass die Leistung durch Preprocessing nur geringfügig und nicht konsistent verbessert werden konnte (s. weiter unten). Da German Sentiment Bert auf einem eher kleinen LLM basiert, das maximal 512 Input-Wörter (sog. Tokens) verarbeiten kann, mussten die zu codierenden Beiträge entsprechend gekürzt werden. Dies könnte bei längeren Beiträgen mit einem erheblichen Informationsverlust einhergehen. Um diese Einschränkung zu umgehen, sind weitere Schritte notwendig, die im Widerspruch zur beabsichtigten off-the-shelf-Anwendung stehen. Eine Robustheitsanalyse ergab jedoch auch hier, dass die Leistung des Modells durch diese weiteren Schritte nicht nennenswert verbessert werden konnte (s. weiter unten).</p>
+<p>Obwohl <span class="citation" data-cites="guhrTrainingBroadcoverageGerman2020">Guhr et al. (<a href="#ref-guhrTrainingBroadcoverageGerman2020" role="doc-biblioref">2020</a>)</span> vor der Anwendung eine Textbereinigung vorschlagen (z. B. Entfernen von URLs), wurde das Modell in der vorliegenden Studie – wie auch alle weiteren LLM-basierten Verfahren im Beispiel – ohne Preprocessing genutzt, da die Modelle i. d.&nbsp;R. sehr gut mit unbereinigten Daten umgehen können <span class="citation" data-cites="tornbergHowUseLLMs2023">(vgl. <a href="#ref-tornbergHowUseLLMs2023" role="doc-biblioref">Törnberg, 2023</a>)</span> und wir daran interessiert waren, die off-the-shelf-Anwendung der Modelle zu illustrieren (d.&nbsp;h., ohne aufwändige Vorbereitung). Eine Robustheitsanalyse ergab zudem, dass die Leistung durch Preprocessing nur geringfügig und nicht konsistent verbessert werden konnte (s. weiter unten). Da German Sentiment Bert auf einem eher kleinen LLM basiert, das maximal 512 Input-Wörter (sog. Tokens) verarbeiten kann, mussten die zu codierenden Beiträge entsprechend gekürzt werden. Dies könnte bei längeren Beiträgen mit einem erheblichen Informationsverlust einhergehen. Um diese Einschränkung zu umgehen, sind weitere Schritte notwendig, die im Widerspruch zur beabsichtigten off-the-shelf-Anwendung stehen. Eine Robustheitsanalyse ergab jedoch auch hier, dass die Leistung des Modells durch diese weiteren Schritte nicht nennenswert verbessert werden konnte (s. weiter unten).</p>
 </section>
 <section id="klassifikation-mit-kürzung-langer-texte" class="level2">
 <h2 class="anchored" data-anchor-id="klassifikation-mit-kürzung-langer-texte">Klassifikation mit Kürzung langer Texte</h2>
-<p>Um die off-the-shelf-Anwendung des Modells (über die Hugging Face-Pipeline) zu evaluieren, wurde zunächst eine einfache Klassifikation der Texte durchgeführt. Hierbei wurden die Texte auf 512 Tokens gekürzt, da dies die maximale Länge ist, die das Modell verarbeiten kann.</p>
+<p>Um die Off-the-Shelf-Anwendung des Modells (über die Hugging Face-Pipeline) zu evaluieren, wurde zunächst eine einfache Klassifikation der Texte durchgeführt. Hierbei wurden die Texte auf 512 Tokens gekürzt, da dies die maximale Länge ist, die das Modell verarbeiten kann.</p>
 <div class="cell">
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>Python</strong></pre>
 </div>
-<div class="sourceCode cell-code" id="annotated-cell-1"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><button class="code-annotation-anchor" data-target-cell="annotated-cell-1" data-target-annotation="1">1</button><span id="annotated-cell-1-1" class="code-annotation-target"><a href="#annotated-cell-1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-1"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><button class="code-annotation-anchor" data-target-cell="annotated-cell-1" data-target-annotation="1">1</button><span id="annotated-cell-1-1" class="code-annotation-target"><a href="#annotated-cell-1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="annotated-cell-1-2"><a href="#annotated-cell-1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> transformers <span class="im">import</span> pipeline</span>
 <span id="annotated-cell-1-3"><a href="#annotated-cell-1-3" aria-hidden="true" tabindex="-1"></a></span>
 <button class="code-annotation-anchor" data-target-cell="annotated-cell-1" data-target-annotation="2">2</button><span id="annotated-cell-1-4" class="code-annotation-target"><a href="#annotated-cell-1-4" aria-hidden="true" tabindex="-1"></a>daten <span class="op">=</span> pd.read_csv(<span class="st">"beispielstudie/data/00_goldstandard.csv"</span>)</span>
@@ -344,7 +340,7 @@ div.csl-indent {
 <button class="code-annotation-anchor" data-target-cell="annotated-cell-1" data-target-annotation="4">4</button><span id="annotated-cell-1-11" class="code-annotation-target"><a href="#annotated-cell-1-11" aria-hidden="true" tabindex="-1"></a>ergebnis <span class="op">=</span> sentiment_classifier(datenliste)</span>
 <span id="annotated-cell-1-12"><a href="#annotated-cell-1-12" aria-hidden="true" tabindex="-1"></a></span>
 <button class="code-annotation-anchor" data-target-cell="annotated-cell-1" data-target-annotation="5">5</button><span id="annotated-cell-1-13" class="code-annotation-target"><a href="#annotated-cell-1-13" aria-hidden="true" tabindex="-1"></a>vergleich <span class="op">=</span> pd.DataFrame(ergebnis).join(daten)</span>
-<span id="annotated-cell-1-14"><a href="#annotated-cell-1-14" aria-hidden="true" tabindex="-1"></a>vergleich.to_csv(<span class="st">"beispielstudie/data/01_kategoriespezifisches_Encoder-Modell.csv"</span>, index<span class="op">=</span><span class="va">False</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="annotated-cell-1-14"><a href="#annotated-cell-1-14" aria-hidden="true" tabindex="-1"></a>vergleich.to_csv(<span class="st">"beispielstudie/data/01_kategoriespezifisches_Encoder-Modell.csv"</span>, index<span class="op">=</span><span class="va">False</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell-annotation">
 <dl class="code-annotation-container-hidden code-annotation-container-grid">
@@ -382,11 +378,11 @@ div.csl-indent {
 <div class="code-with-filename-file">
 <pre><strong>R</strong></pre>
 </div>
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>readr<span class="sc">::</span><span class="fu">read_csv</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"beispielstudie/data/01_kategoriespezifisches_Encoder-Modell.csv"</span>), <span class="at">show_col_types =</span> <span class="cn">FALSE</span>) <span class="sc">|&gt;</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">arrange</span>(<span class="fu">desc</span>(id)) <span class="sc">|&gt;</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(label, score, sentiment_gs, textart, text) <span class="sc">|&gt;</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">sample_n</span>(<span class="dv">5</span>)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">sample_n</span>(<span class="dv">5</span>)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <div class="cell-output cell-output-stdout">
@@ -403,7 +399,7 @@ div.csl-indent {
 </section>
 <section id="klassifikation-mit-preprocessing" class="level2">
 <h2 class="anchored" data-anchor-id="klassifikation-mit-preprocessing">Klassifikation mit Preprocessing</h2>
-<p><span class="citation" data-cites="guhrTrainingBroadcoverageGerman2020">Guhr et al. (<a href="#ref-guhrTrainingBroadcoverageGerman2020" role="doc-biblioref">2020</a>)</span> schlagen zur Anwendung ihres Modells Preprocessing-Schritte vor. Dabei werden URLs, @-Erwähnungen und Zahlen entfernt, sowie die Texte in Kleinbuchstaben umgewandelt und bereinigt. Anschließend wird das Modell auf die bereinigten Texte angewendet. Die Umsetzung dieses Verfahrens inkl. Preprocessing ist deutlich aufwändiger als die off-the-shelf-Anwendung, da das Preprocessing i. d.&nbsp;R. manuell implementiert werden muss. Zwar haben <span class="citation" data-cites="guhrTrainingBroadcoverageGerman2020">Guhr et al. (<a href="#ref-guhrTrainingBroadcoverageGerman2020" role="doc-biblioref">2020</a>)</span> zur Anwendung ihres Modells ein Python-Paket entwickelt, welches die Preprocessing-Schritte vereinfacht (<a href="https://github.com/oliverguhr/german-sentiment-lib" class="uri">https://github.com/oliverguhr/german-sentiment-lib</a>), solche zusätzlichen Bibliotheken stehen jedoch kaum für andere Modelle zur Verfügung und widersprechen somit der allgemeinen Verfügbarkeit und einfachen Anwendbarkeiten von Modellen über die Hugging Face-Pipeline. Der Code zur Anwendung des Modells inkl. Preprocessing kann durch Aufklappen des nachfolgenden Codeblocks eingesehen werden.</p>
+<p><span class="citation" data-cites="guhrTrainingBroadcoverageGerman2020">Guhr et al. (<a href="#ref-guhrTrainingBroadcoverageGerman2020" role="doc-biblioref">2020</a>)</span> schlagen zur Anwendung ihres Modells Preprocessing-Schritte vor. Dabei werden URLs, @-Erwähnungen und Zahlen entfernt, sowie die Texte in Kleinbuchstaben umgewandelt und bereinigt. Anschließend wird das Modell auf die bereinigten Texte angewendet. Die Umsetzung dieses Verfahrens inkl. Preprocessing ist deutlich aufwändiger als die Off-the-Shelf-Anwendung, da das Preprocessing i. d.&nbsp;R. manuell implementiert werden muss. Zwar haben <span class="citation" data-cites="guhrTrainingBroadcoverageGerman2020">Guhr et al. (<a href="#ref-guhrTrainingBroadcoverageGerman2020" role="doc-biblioref">2020</a>)</span> zur Anwendung ihres Modells ein Python-Paket entwickelt, welches die Preprocessing-Schritte vereinfacht (<a href="https://github.com/oliverguhr/german-sentiment-lib" class="uri">https://github.com/oliverguhr/german-sentiment-lib</a>), solche zusätzlichen Bibliotheken stehen jedoch kaum für andere Modelle zur Verfügung und widersprechen somit der allgemeinen Verfügbarkeit und einfachen Anwendbarkeiten von Modellen über die Hugging Face-Pipeline. Der Code zur Anwendung des Modells inkl. Preprocessing kann durch Aufklappen des nachfolgenden Codeblocks eingesehen werden.</p>
 <div class="cell">
 <div class="code-with-filename">
 <details class="code-fold">
@@ -411,7 +407,7 @@ div.csl-indent {
 <div class="code-with-filename-file">
 <pre><strong>Python</strong></pre>
 </div>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Basierend auf den Preprocessing-Schritten von @guhrTrainingBroadcoverageGerman2020:</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Basierend auf den Preprocessing-Schritten von @guhrTrainingBroadcoverageGerman2020:</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># https://github.com/oliverguhr/german-sentiment-lib/blob/master/germansentiment/sentimentmodel.py</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -480,7 +476,7 @@ div.csl-indent {
 <span id="cb3-67"><a href="#cb3-67" aria-hidden="true" tabindex="-1"></a>ergebnis <span class="op">=</span> model.predict_sentiment(datenliste, output_probabilities<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb3-68"><a href="#cb3-68" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-69"><a href="#cb3-69" aria-hidden="true" tabindex="-1"></a>vergleich <span class="op">=</span> pd.DataFrame({<span class="st">"label"</span>: ergebnis[<span class="dv">0</span>], <span class="st">"scores"</span>: ergebnis[<span class="dv">1</span>]}).join(daten)</span>
-<span id="cb3-70"><a href="#cb3-70" aria-hidden="true" tabindex="-1"></a>vergleich.to_csv(<span class="st">"beispielstudie/data/01_kategoriespezifisches_Encoder-Modell_preprocessed.csv"</span>, index<span class="op">=</span><span class="va">False</span>)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-70"><a href="#cb3-70" aria-hidden="true" tabindex="-1"></a>vergleich.to_csv(<span class="st">"beispielstudie/data/01_kategoriespezifisches_Encoder-Modell_preprocessed.csv"</span>, index<span class="op">=</span><span class="va">False</span>)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 </div>
@@ -495,11 +491,11 @@ div.csl-indent {
 <div class="code-with-filename-file">
 <pre><strong>R</strong></pre>
 </div>
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>readr<span class="sc">::</span><span class="fu">read_csv</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"beispielstudie/data/01_kategoriespezifisches_Encoder-Modell_preprocessed.csv"</span>), <span class="at">show_col_types =</span> <span class="cn">FALSE</span>) <span class="sc">|&gt;</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">arrange</span>(<span class="fu">desc</span>(id)) <span class="sc">|&gt;</span></span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(label, scores, sentiment_gs, textart, text) <span class="sc">|&gt;</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">sample_n</span>(<span class="dv">5</span>)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">sample_n</span>(<span class="dv">5</span>)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <div class="cell-output cell-output-stdout">
@@ -516,7 +512,7 @@ div.csl-indent {
 </section>
 <section id="klassifikation-mit-aufteilung-langer-texte" class="level2">
 <h2 class="anchored" data-anchor-id="klassifikation-mit-aufteilung-langer-texte">Klassifikation mit Aufteilung langer Texte</h2>
-<p>Da die Ergebnisse möglicherweise auch durch die Kürzung langer Texte beeinflusst werden, wurde eine weitere Klassifikation durchgeführt, bei der lange Texte in kleinere Abschnitte aufgeteilt werden. Dies kann helfen, die Leistung des Modells zu verbessern, da es so besser mit langen Texten umgehen kann. Auch hierzu ist der Code wieder deutlich aufwendiger als bei der off-the-shelf-Anwendung. Die Umsetzung können wir uns durch Aufklappen des nachfolgenden Codeblocks ansehen. Hierbei wird der Text in Abschnitte von maximal 500 Tokens unterteilt. Anschließend wird jeder Abschnitt einzeln klassifiziert und die Ergebnisse werden aggregiert, um ein finales Ergebnis zu erhalten.</p>
+<p>Da die Ergebnisse möglicherweise auch durch die Kürzung langer Texte beeinflusst werden, wurde eine weitere Klassifikation durchgeführt, bei der lange Texte in kleinere Abschnitte aufgeteilt werden. Dies kann helfen, die Leistung des Modells zu verbessern, da es so besser mit langen Texten umgehen kann. Auch hierzu ist der Code wieder deutlich aufwendiger als bei der Off-the-Shelf-Anwendung. Die Umsetzung können wir uns durch Aufklappen des nachfolgenden Codeblocks ansehen. Hierbei wird der Text in Abschnitte von maximal 500 Tokens unterteilt. Anschließend wird jeder Abschnitt einzeln klassifiziert und die Ergebnisse werden aggregiert, um ein finales Ergebnis zu erhalten.</p>
 <div class="cell">
 <div class="code-with-filename">
 <details class="code-fold">
@@ -524,7 +520,7 @@ div.csl-indent {
 <div class="code-with-filename-file">
 <pre><strong>Python</strong></pre>
 </div>
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> transformers <span class="im">import</span> pipeline, AutoTokenizer</span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> typing <span class="im">import</span> List, Dict, Any</span>
@@ -652,7 +648,7 @@ div.csl-indent {
 <span id="cb6-126"><a href="#cb6-126" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-127"><a href="#cb6-127" aria-hidden="true" tabindex="-1"></a>ergebnis_df <span class="op">=</span> pd.DataFrame(ergebnisse)</span>
 <span id="cb6-128"><a href="#cb6-128" aria-hidden="true" tabindex="-1"></a>vergleich <span class="op">=</span> ergebnis_df.join(daten)</span>
-<span id="cb6-129"><a href="#cb6-129" aria-hidden="true" tabindex="-1"></a>vergleich.to_csv(<span class="st">"beispielstudie/data/01_kategoriespezifisches_Encoder-Modell_chunked.csv"</span>, index<span class="op">=</span><span class="va">False</span>)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-129"><a href="#cb6-129" aria-hidden="true" tabindex="-1"></a>vergleich.to_csv(<span class="st">"beispielstudie/data/01_kategoriespezifisches_Encoder-Modell_chunked.csv"</span>, index<span class="op">=</span><span class="va">False</span>)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 </div>
@@ -667,11 +663,11 @@ div.csl-indent {
 <div class="code-with-filename-file">
 <pre><strong>R</strong></pre>
 </div>
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>readr<span class="sc">::</span><span class="fu">read_csv</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"beispielstudie/data/01_kategoriespezifisches_Encoder-Modell_chunked.csv"</span>), <span class="at">show_col_types =</span> <span class="cn">FALSE</span>) <span class="sc">|&gt;</span></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">arrange</span>(<span class="fu">desc</span>(id)) <span class="sc">|&gt;</span></span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(aggregated_label, aggregated_score, chunk_count, sentiment_gs, textart, text) <span class="sc">|&gt;</span> </span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">sample_n</span>(<span class="dv">5</span>)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">sample_n</span>(<span class="dv">5</span>)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <div class="cell-output cell-output-stdout">
@@ -752,13 +748,14 @@ Törnberg, P. (2023, Juli 24). <em>How to Use <span>LLMs</span> for Text Analysi
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

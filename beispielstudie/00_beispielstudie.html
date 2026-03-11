@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="de-DE" xml:lang="de-DE"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.34">
+<meta name="generator" content="quarto-1.8.27">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -53,14 +53,15 @@ div.csl-indent {
 <link href="../beispielstudie/00_goldstandard.html" rel="next">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-cb67631684576f55e8bc5ac67c9267c9.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-aa0006ec45185f41362e9cf29e779a84.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-f81af0f702876722cefec539fab53cd3.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-7d293fb6015ec9abddf844d6ec08cabf.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -117,7 +118,8 @@ div.csl-indent {
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
     <div class="pt-lg-2 mt-2 text-center sidebar-header">
       <a href="../index.html" class="sidebar-logo-link">
-      <img src="../img/transformer.png" alt="" class="sidebar-logo py-0 d-lg-inline d-none">
+      <img src="../img/transformer.png" alt="" class="sidebar-logo light-content py-0 d-lg-inline d-none">
+      <img src="../img/transformer.png" alt="" class="sidebar-logo dark-content py-0 d-lg-inline d-none">
       </a>
       </div>
         <div class="mt-2 flex-shrink-0 align-items-center">
@@ -215,12 +217,6 @@ div.csl-indent {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../beispielstudie/04_manuelle_Inhaltsanalyse.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Manuelle Inhaltsanalyse</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
   <a href="../beispielstudie/05_dictionary.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Off-the-shelf Diktionär</span></a>
   </div>
@@ -270,22 +266,16 @@ div.csl-indent {
 </header>
 
 
-<p>Als Ergänzung zum schematischen Überblick (s. <a href="../index.html">Anleitung</a> und Abschn. 4 im Paper) demonstrieren wir nun den Einsatz LLM-basierter Verfahren via Hugging Face für die AIA anhand einer empirischen Beispielstudie. Als Anwendungsfall dient die Sentiment-Analyse (d.&nbsp;h., die Codierung der Tonalität von Texten), eine zentrale Variante kommunikationswissenschaftlicher Inhaltsanalysen, besonders im automatisierten Bereich <span class="citation" data-cites="kesslerManuelleStandardisierteInhaltsanalyse2023">(vgl. <a href="#ref-kesslerManuelleStandardisierteInhaltsanalyse2023" role="doc-biblioref">Kessler et al., 2023, S. 18</a>)</span>. Im Vergleich zu komplexeren Konstrukten wie Inzivilität <span class="citation" data-cites="esauContentAnalysisResearch2023">(vgl. <a href="#ref-esauContentAnalysisResearch2023" role="doc-biblioref">Esau, 2023, S. 455–457</a>)</span> ist Tonalität zudem leicht verständlich und eignet sich daher gut als Demonstrationsfall.</p>
-<p>Die Beispielstudie soll drei Beiträge leisten: Erstens stellt der praxisnahe und ausführlich kommentierte Code zur Beispielstudie auf dieser Begleitwebsite eine gute Grundlage für die Übertragung der Verfahren auf eigene Zwecke dar. Zweitens erfordert der Einsatz von off-the-shelf Ressourcen für die AIA stets eine Validierung <span class="citation" data-cites="grimmerTextDataPromise2013">(vgl. <a href="#ref-grimmerTextDataPromise2013" role="doc-biblioref">Grimmer &amp; Stewart, 2013, S. 271</a>)</span>, das trifft auch auf LLM-basierte Verfahren zu <span class="citation" data-cites="weberEvaluationAllYou2023">(vgl. <a href="#ref-weberEvaluationAllYou2023" role="doc-biblioref">Weber &amp; Reichardt, 2023</a>)</span>. Die Beispielstudie demonstriert eine solche Validierung durch den Vergleich der Codierung von drei LLM-basierten Verfahren – einem kategorie- und einem aufgabenspezifischen Encoder-Modell sowie einem universellen Decoder-Modell – mit einem Goldstandard, d.&nbsp;h., einem von Expert*innen manuell codierten Datensatz mit hoher Validität und Reliabilität. Drittens vergleichen wir die Leistung der drei LLM-basierten Verfahren mit einer typischen manuellen Inhaltsanalyse sowie den populärsten AIA-Verfahren im Fach: der Analyse mittels Diktionär und klassischer überwachter Lernalgorithmen <span class="citation" data-cites="haseComputationalTurnInterdisciplinary2023 omniaScopingReviewComputational2023">(vgl. <a href="#ref-haseComputationalTurnInterdisciplinary2023" role="doc-biblioref">Hase et al., 2023</a>; <a href="#ref-omniaScopingReviewComputational2023" role="doc-biblioref">Omnia &amp; Tan, 2023</a>)</span>. Die Beispielstudie liefert damit Hinweise zur Leistungsfähigkeit gebrauchsfertiger LLMs im Vergleich zu etablierten Verfahren, ohne jedoch den Anspruch einer großangelegten Evaluation zu erheben <span class="citation" data-cites="laurerLessAnnotatingMore2024 rathjeGPTEffectiveTool2024 viehmannInvestigatingOpinionsPublic2023 widmannCreatingComparingDictionary2023">(vgl. für solche Evaluationsstudien <a href="#ref-laurerLessAnnotatingMore2024" role="doc-biblioref">Laurer et al., 2024</a>; <a href="#ref-rathjeGPTEffectiveTool2024" role="doc-biblioref">Rathje et al., 2024</a>; <a href="#ref-viehmannInvestigatingOpinionsPublic2023" role="doc-biblioref">Viehmann et al., 2023</a>; <a href="#ref-widmannCreatingComparingDictionary2023" role="doc-biblioref">Widmann &amp; Wich, 2023</a>)</span>.</p>
+<p>Als Ergänzung zum schematischen Überblick (s. <a href="../index.html">Anleitung</a> und Abschn. 4 im Paper) demonstrieren wir nun den Einsatz LLM-basierter Verfahren via Hugging Face für die AIA anhand einer Beispielstudie. Als Anwendungsfall dient die Sentimentanalyse (d.&nbsp;h., die Codierung der Tonalität von Texten), eine zentrale Variante kommunikationswissenschaftlicher Inhaltsanalysen, besonders im automatisierten Bereich <span class="citation" data-cites="kesslerManuelleStandardisierteInhaltsanalyse2023">(vgl. <a href="#ref-kesslerManuelleStandardisierteInhaltsanalyse2023" role="doc-biblioref">Kessler et al., 2023, S. 18</a>)</span>. Verglichen mit komplexeren Konstrukten wie Inzivilität <span class="citation" data-cites="stollClassificationBiasLLMs2025">(vgl. <a href="#ref-stollClassificationBiasLLMs2025" role="doc-biblioref">Stoll et al., 2025, S. 351–352</a>)</span> ist Tonalität leicht verständlich und eignet sich daher gut als Beispiel.</p>
+<p>Die Beispielstudie soll drei Beiträge leisten: Erstens soll der praxisnahe und ausführlich kommentierte Code zur Beispielstudie Leser*innen eine weitere Grundlage für die eigene Anwendung der Verfahren bieten. Zweitens erfordert der Einsatz von Off-the-Shelf-Ressourcen für die AIA stets eine Validierung <span class="citation" data-cites="grimmerTextDataPromise2013">(vgl. <a href="#ref-grimmerTextDataPromise2013" role="doc-biblioref">Grimmer &amp; Stewart, 2013, S. 271</a>)</span>, das gilt auch für LLM-basierte Verfahren <span class="citation" data-cites="weberEvaluationAllYou2023">(vgl. <a href="#ref-weberEvaluationAllYou2023" role="doc-biblioref">Weber &amp; Reichardt, 2023</a>)</span>. Die Beispielstudie demonstriert eine solche Validierung durch den Vergleich der Codierung von LLM-basierten Verfahren mit einem Goldstandard, d.&nbsp;h., einem von Expert*innen manuell codierten Datensatz mit hoher Validität und Reliabilität. Drittens stehen Forscher*innen oft vor der Herausforderung, dass sich verschiedene AIA-Verfahren für die Codierung einer Kategorie anbieten. In diesem Fall empfiehlt es sich, die Leistungsfähigkeit LLM-basierter Verfahren für den untersuchten Kontext mit anderen AIA-Methoden zu vergleichen. Ein solcher Vergleich erfüllt meist nicht die Ansprüche an eine Methodenevaluationsstudie (vgl. für solche Studien bspw. <span class="citation" data-cites="laurerLessAnnotatingMore2024">Laurer et al. (<a href="#ref-laurerLessAnnotatingMore2024" role="doc-biblioref">2024</a>)</span>; <span class="citation" data-cites="tornbergLargeLanguageModels2025">Törnberg (<a href="#ref-tornbergLargeLanguageModels2025" role="doc-biblioref">2025</a>)</span>; <span class="citation" data-cites="viehmannInvestigatingOpinionsPublic2023">Viehmann et al. (<a href="#ref-viehmannInvestigatingOpinionsPublic2023" role="doc-biblioref">2023</a>)</span>; <span class="citation" data-cites="widmannCreatingComparingDictionary2023">Widmann &amp; Wich (<a href="#ref-widmannCreatingComparingDictionary2023" role="doc-biblioref">2023</a>)</span>), sondern dient dazu, das beste Verfahren für den jeweiligen Kontext zu identifizieren. Die Beispielstudie illustriert das Vorgehen.</p>
 <p>Als Datengrundlage für die Beispielstudie diente das Untersuchungsmaterial einer Inhaltsanalyse von <span class="citation" data-cites="spatzeneggerSocialMediaAls2020">Spatzenegger (<a href="#ref-spatzeneggerSocialMediaAls2020" role="doc-biblioref">2020</a>)</span>, das insgesamt 3.054 deutschsprachige Beiträge in drei verschiedenen Textsorten umfasst: Tageszeitungsartikel (<em>n</em> = 862), Facebook-Posts (<em>n</em> = 1.156) und Tweets (<em>n</em> = 1.036). Die Beiträge wurden in Deutschland, Österreich und der Schweiz zwischen dem 09.03.2019 und 31.05.2019 veröffentlicht. Die Online- als auch Offline-Zeitungsartikel stammen von jeweils einer Qualitäts- und Boulevardzeitung pro Land; die Social-Media-Beiträge von drei Politiker*innen pro Land. <span class="citation" data-cites="spatzeneggerSocialMediaAls2020">Spatzenegger (<a href="#ref-spatzeneggerSocialMediaAls2020" role="doc-biblioref">2020</a>)</span> hat in ihrer Studie das gesamte Material manuell codiert, unter anderem hinsichtlich der Tonalität der Beiträge. Die Weiterverwendung dieser Daten war forschungsökonomisch sinnvoll und ermöglichte es uns zudem, auf die manuelle Codierung von <span class="citation" data-cites="spatzeneggerSocialMediaAls2020">Spatzenegger (<a href="#ref-spatzeneggerSocialMediaAls2020" role="doc-biblioref">2020</a>)</span> zurückzugreifen (z. B. für das Training der maschinellen Lernverfahren).</p>
 
 
 
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">Literatur</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list">
-<div id="ref-esauContentAnalysisResearch2023" class="csl-entry" role="listitem">
-Esau, K. (2023). Content analysis in the research field of incivility and hate speech in online communication. In F. Oehmer-Pedrazzi, S. H. Kessler, E. Humprecht, K. Sommer, &amp; L. Castro (Hrsg.), <em>Standardisierte Inhaltsanalyse in der Kommunikationswissenschaft – Standardized Content Analysis in Communication Research</em> (S. 451–461). Springer Fachmedien Wiesbaden. <a href="https://doi.org/10.1007/978-3-658-36179-2_38">https://doi.org/10.1007/978-3-658-36179-2_38</a>
-</div>
 <div id="ref-grimmerTextDataPromise2013" class="csl-entry" role="listitem">
 Grimmer, J., &amp; Stewart, B. M. (2013). Text as Data: The Promise and Pitfalls of Automatic Content Analysis Methods for Political Texts. <em>Political Analysis</em>, <em>21</em>(3), 267–297. <a href="https://doi.org/10/f458q9">https://doi.org/10/f458q9</a>
-</div>
-<div id="ref-haseComputationalTurnInterdisciplinary2023" class="csl-entry" role="listitem">
-Hase, V., Mahl, D., &amp; Schäfer, M. S. (2023). The <span>„Computational Turn“</span>: An <span>„Interdisciplinary Turn“</span>? <span>A</span> Systematic Review of Text as Data Approaches in Journalism Studies. <em>Online Media and Global Communication</em>, <em>2</em>(1), 122–143. <a href="https://doi.org/10/gt2kx9">https://doi.org/10/gt2kx9</a>
 </div>
 <div id="ref-kesslerManuelleStandardisierteInhaltsanalyse2023" class="csl-entry" role="listitem">
 Kessler, S. H., Sommer, K., Humprecht, E., &amp; Oehmer-Pedrazzi, F. (2023). Manuelle standardisierte Inhaltsanalyse. In F. Oehmer-Pedrazzi, S. H. Kessler, E. Humprecht, K. Sommer, &amp; L. Castro (Hrsg.), <em>Standardisierte Inhaltsanalyse in der Kommunikationswissenschaft – Standardized Content Analysis in Communication Research: Ein Handbuch - A Handbook</em> (S. 9–21). Springer Fachmedien. <a href="https://doi.org/10.1007/978-3-658-36179-2_2">https://doi.org/10.1007/978-3-658-36179-2_2</a>
@@ -293,14 +283,14 @@ Kessler, S. H., Sommer, K., Humprecht, E., &amp; Oehmer-Pedrazzi, F. (2023). Man
 <div id="ref-laurerLessAnnotatingMore2024" class="csl-entry" role="listitem">
 Laurer, M., Atteveldt, W. van, Casas, A., &amp; Welbers, K. (2024). Less Annotating, More Classifying: Addressing the Data Scarcity Issue of Supervised Machine Learning with Deep Transfer Learning and <span>BERT-NLI</span>. <em>Political Analysis</em>, <em>32</em>(1), 84–100. <a href="https://doi.org/10/gsgptm">https://doi.org/10/gsgptm</a>
 </div>
-<div id="ref-omniaScopingReviewComputational2023" class="csl-entry" role="listitem">
-Omnia, K., &amp; Tan, Y. (2023, Oktober 4). <em>A Scoping Review of Computational Methods and Tools Used in Communication Science</em> (SSRN Scholarly Paper 4592255). <a href="https://doi.org/10.2139/ssrn.4592255">https://doi.org/10.2139/ssrn.4592255</a> (Prepublished)
-</div>
-<div id="ref-rathjeGPTEffectiveTool2024" class="csl-entry" role="listitem">
-Rathje, S., Mirea, D.-M., Sucholutsky, I., Marjieh, R., Robertson, C. E., &amp; Van Bavel, J. J. (2024). <span>GPT</span> Is an Effective Tool for Multilingual Psychological Text Analysis. <em>Proceedings of the National Academy of Sciences</em>, <em>121</em>(34), e2308950121. <a href="https://doi.org/10/gt7hrw">https://doi.org/10/gt7hrw</a>
-</div>
 <div id="ref-spatzeneggerSocialMediaAls2020" class="csl-entry" role="listitem">
 Spatzenegger, A. (2020). Social Media als Quelle journalistischer Arbeit. <em>Journalistik</em>, <em>3</em>(3), 197–215. <a href="https://doi.org/10/g8336z">https://doi.org/10/g8336z</a>
+</div>
+<div id="ref-stollClassificationBiasLLMs2025" class="csl-entry" role="listitem">
+Stoll, A., Yu, J., Andrich, A., &amp; Domahidi, E. (2025). Classification Bias of <span>LLMs</span> in Detecting Incivility towards Female and Male Politicians in <span>German</span> Social Media Discourse. <em>Communication Methods and Measures</em>, <em>19</em>(4), 350–368. <a href="https://doi.org/10.1080/19312458.2025.2551693">https://doi.org/10.1080/19312458.2025.2551693</a>
+</div>
+<div id="ref-tornbergLargeLanguageModels2025" class="csl-entry" role="listitem">
+Törnberg, P. (2025). Large Language Models Outperform Expert Coders and Supervised Classifiers at Annotating Political Social Media Messages. <em>Social Science Computer Review</em>, <em>43</em>(6), 1181–1195. <a href="https://doi.org/10.1177/08944393241286471">https://doi.org/10.1177/08944393241286471</a>
 </div>
 <div id="ref-viehmannInvestigatingOpinionsPublic2023" class="csl-entry" role="listitem">
 Viehmann, C., Beck, T., Maurer, M., Quiring, O., &amp; Gurevych, I. (2023). Investigating Opinions on Public Policies in Digital Media: Setting up a Supervised Machine Learning Tool for Stance Classification. <em>Communication Methods and Measures</em>, <em>17</em>(2), 150–184. <a href="https://doi.org/10/gsr7sv">https://doi.org/10/gsr7sv</a>
@@ -363,13 +353,14 @@ Widmann, T., &amp; Wich, M. (2023). Creating and Comparing Dictionary, Word Embe
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
