@@ -7,7 +7,7 @@ bibliography: "../bib/refs.bib"
 csl: https://www.zotero.org/styles/apa
 ---
 
-Um die Leistungsfähigkeit der drei LLM-basierten Verfahren zu beurteilen (*Prüfung der Validität*) und mit den anderen Verfahren zu kontrastieren (*Vergleich*), wurden die Codierergebnisse aller Methoden mit der Codierung des Goldstandards verglichen. Hierzu wurden Accuracy, Krippendorff’s α sowie Precision, Recall und F1 berechnet. *Accuracy* gibt die Wahrscheinlichkeit einer korrekten Codierung an [vgl. @scharkowAutomatischeInhaltsanalyseUnd2012, S. 136], also den Prozentsatz der Übereinstimmung zwischen dem Goldstandard und der jeweiligen Codierung. *Krippendorff’s α* berechnet zusätzlich mit ein, wie viele Übereinstimmungen durch Zufall zustande gekommen wären [vgl. @krippendorffReliabilityContentAnalysis2004, S. 414–415]. Precision, Recall und F1 beziehen sich jeweils auf die einzelnen Ausprägungen (d. h., "positiv", "negativ" oder "neutral") und wurden hier makro-gemittelt, d. h., Precision, Recall und F1 wurden jeweils über alle drei Ausprägungen hinweg gemittelt, ohne Berücksichtigung der Häufigkeit der Ausprägungen. *Precision* gibt an, welcher Anteil der Texte, die vom Verfahren einer bestimmten Ausprägung zugeordnet wurden, diese Ausprägung tatsächlich laut Goldstandard aufweisen [d. h., wie ‘sauber’ die Codierungen sind, @scharkowAutomatischeInhaltsanalyseUnd2012, S. 136]. *Recall* gibt an, welcher Anteil der Texte, die laut Goldstandard eine spezifische Ausprägung aufweisen, erkannt wurde [d. h., wie ‘vollständig’ die Codierungen sind, @scharkowAutomatischeInhaltsanalyseUnd2012]. *F1* ist das harmonische Mittel aus Precision und Recall [@scharkowAutomatischeInhaltsanalyseUnd2012].
+Zur Beurteilung der Leistungsfähigkeit (*Prüfung der Validität*) oder zur Kontrastierung mit anderen Verfahren (*Vergleich*) müssen die Codierergebnisse mit dem Goldstandard verglichen werden. Verschiedene Validitätsmaße können hierfür herangezogen werden: *Accuracy* gibt den Prozentsatz der Übereinstimmung zwischen dem Goldstandard und der jeweiligen Codierung an [vgl. @scharkowAutomatischeInhaltsanalyseUnd2012, S. 136]. *Krippendorff’s α* berücksichtigt zusätzlich, wie viele Übereinstimmungen durch Zufall zustande gekommen wären [vgl. @krippendorffReliabilityContentAnalysis2004, S. 414–415]. Precision, Recall und F1 beziehen sich jeweils auf die einzelnen Ausprägungen (d. h., "positiv", "negativ" oder "neutral") und wurden hier makro-gemittelt, d. h., Precision, Recall und F1 wurden jeweils über alle drei Ausprägungen hinweg gemittelt, ohne Berücksichtigung der Häufigkeit der Ausprägungen. *Precision* gibt an, welcher Anteil der Texte, die vom Verfahren einer bestimmten Ausprägung zugeordnet wurden, diese Ausprägung tatsächlich laut Goldstandard aufweisen [d. h., wie ‘sauber’ die Codierungen sind, @scharkowAutomatischeInhaltsanalyseUnd2012, S. 136]. *Recall* gibt an, welcher Anteil der Texte, die laut Goldstandard eine spezifische Ausprägung aufweisen, erkannt wurde [d. h., wie ‘vollständig’ die Codierungen sind, @scharkowAutomatischeInhaltsanalyseUnd2012]. *F1* ist das harmonische Mittel aus Precision und Recall [@scharkowAutomatischeInhaltsanalyseUnd2012].
 
 
 ## Einlesen der Daten
@@ -92,12 +92,12 @@ universelles_decoder_modell <- # <5>
     .keep = "none" # <5>
   ) # <5>
 
-manuelle_codierung <- # <6>
-  read_csv(here::here("beispielstudie/data/04_manuell.csv")) |> # <6>
+diktionaerbasierte_codierung <- # <6>
+  read_csv(here::here("beispielstudie/data/05_diktionaer.csv")) |> # <6>
   mutate(
     # <6>
-    id = ID, # <6>
-    sentiment_manuelle_codierung = case_when(
+    id = id, # <6>
+    sentiment_diktionaerbasierte_codierung = case_when(
       # <6>
       sentiment == -1 ~ "negativ", # <6>
       sentiment == 0 ~ "neutral", # <6>
@@ -106,63 +106,48 @@ manuelle_codierung <- # <6>
     .keep = "none" # <6>
   ) # <6>
 
-diktionaerbasierte_codierung <- # <7>
-  read_csv(here::here("beispielstudie/data/05_diktionaer.csv")) |> # <7>
+ml_codierung <- # <7>
+  bind_rows(
+    # <7>
+    read_csv(here::here(
+      # <7>
+      "beispielstudie/data/06_ueberwachtes_maschinelles_Lernen_Facebook.csv" # <7>
+    )), # <7>
+    read_csv(here::here(
+      # <7>
+      "beispielstudie/data/06_ueberwachtes_maschinelles_Lernen_Twitter.csv" # <7>
+    )), # <7>
+    read_csv(here::here(
+      # <7>
+      "beispielstudie/data/06_ueberwachtes_maschinelles_Lernen_Zeitungsartikel.csv" # <7>
+    )) # <7>
+  ) |> # <7>
   mutate(
     # <7>
     id = id, # <7>
-    sentiment_diktionaerbasierte_codierung = case_when(
+    sentiment_nb = case_when(
       # <7>
-      sentiment == -1 ~ "negativ", # <7>
-      sentiment == 0 ~ "neutral", # <7>
-      sentiment == 1 ~ "positiv" # <7>
+      sentiment_nb == -1 ~ "negativ", # <7>
+      sentiment_nb == 0 ~ "neutral", # <7>
+      sentiment_nb == 1 ~ "positiv" # <7>
+    ), # <7>
+    sentiment_svm = case_when(
+      # <7>
+      sentiment_svm == -1 ~ "negativ", # <7>
+      sentiment_svm == 0 ~ "neutral", # <7>
+      sentiment_svm == 1 ~ "positiv" # <7>
     ), # <7>
     .keep = "none" # <7>
   ) # <7>
 
-ml_codierung <- # <8>
-  bind_rows(
-    # <8>
-    read_csv(here::here(
-      # <8>
-      "beispielstudie/data/06_ueberwachtes_maschinelles_Lernen_Facebook.csv" # <8>
-    )), # <8>
-    read_csv(here::here(
-      # <8>
-      "beispielstudie/data/06_ueberwachtes_maschinelles_Lernen_Twitter.csv" # <8>
-    )), # <8>
-    read_csv(here::here(
-      # <8>
-      "beispielstudie/data/06_ueberwachtes_maschinelles_Lernen_Zeitungsartikel.csv" # <8>
-    )) # <8>
-  ) |> # <8>
-  mutate(
-    # <8>
-    id = id, # <8>
-    sentiment_nb = case_when(
-      # <8>
-      sentiment_nb == -1 ~ "negativ", # <8>
-      sentiment_nb == 0 ~ "neutral", # <8>
-      sentiment_nb == 1 ~ "positiv" # <8>
-    ), # <8>
-    sentiment_svm = case_when(
-      # <8>
-      sentiment_svm == -1 ~ "negativ", # <8>
-      sentiment_svm == 0 ~ "neutral", # <8>
-      sentiment_svm == 1 ~ "positiv" # <8>
-    ), # <8>
-    .keep = "none" # <8>
-  ) # <8>
-
-validierung <- # <9>
-  gold |> # <9>
-  left_join(kategoriespezifisches_encoder_modell, by = "id") |> # <9>
-  left_join(aufgabenspezifisches_encoder_modell, by = "id") |> # <9>
-  left_join(universelles_decoder_modell, by = "id") |> # <9>
-  left_join(manuelle_codierung, by = "id") |> # <9>
-  left_join(diktionaerbasierte_codierung, by = "id") |> # <9>
-  left_join(ml_codierung, by = "id") |> # <9>
-  mutate(across(everything(), as.factor)) # <9>
+validierung <- # <8>
+  gold |> # <8>
+  left_join(kategoriespezifisches_encoder_modell, by = "id") |> # <8>
+  left_join(aufgabenspezifisches_encoder_modell, by = "id") |> # <8>
+  left_join(universelles_decoder_modell, by = "id") |> # <8>
+  left_join(diktionaerbasierte_codierung, by = "id") |> # <8>
+  left_join(ml_codierung, by = "id") |> # <8>
+  mutate(across(everything(), as.factor)) # <8>
 
 ```
 
@@ -171,10 +156,9 @@ validierung <- # <9>
 3. Laden der kategoriespezifischen Encoder-Modell Ergebnisse und Konvertierung der Label-Namen zu einheitlichen deutschen Kategorien.
 4. Laden der aufgabenspezifischen Encoder-Modell Ergebnisse und Bestimmung der vorhergesagten Kategorie basierend auf den höchsten Wahrscheinlichkeitswerten.
 5. Laden der universellen Decoder-Modell Ergebnisse (bereits in korrektem Format).
-6. Laden der manuellen Codierung und Konvertierung der numerischen Werte zu kategorialen Labels.
-7. Laden der diktionärbasierten Codierung und Konvertierung der numerischen Werte zu kategorialen Labels.
-8. Laden aller maschinellen Lernergebnisse (Facebook, Twitter, Zeitungsartikel), Zusammenführung und Konvertierung der numerischen Werte zu kategorialen Labels für beide ML-Methoden.
-9. Zusammenführung aller Datensätze zu einem Validierungsdatensatz und Konvertierung aller Variablen zu Faktoren.
+6. Laden der diktionärbasierten Codierung und Konvertierung der numerischen Werte zu kategorialen Labels.
+7. Laden aller maschinellen Lernergebnisse (Facebook, Twitter, Zeitungsartikel), Zusammenführung und Konvertierung der numerischen Werte zu kategorialen Labels für beide ML-Methoden.
+8. Zusammenführung aller Datensätze zu einem Validierungsdatensatz und Konvertierung aller Variablen zu Faktoren.
 
 ## Validierung der Codierergebnisse
 
@@ -238,10 +222,6 @@ bootstrap_vali_metrics <- function(data, times) { # <2>
               sentiment_universelles_decoder_modell = list(calculate_vali_metrics( # <2>
                 data = ., # <2>
                 var = "sentiment_universelles_decoder_modell" # <2>
-              )), # <2>
-              sentiment_manuelle_codierung = list(calculate_vali_metrics( # <2>
-                data = ., # <2>
-                var = "sentiment_manuelle_codierung" # <2>
               )), # <2>
               sentiment_diktionaerbasierte_codierung = list(calculate_vali_metrics( # <2>
                 data = ., # <2>
@@ -367,7 +347,6 @@ plot_data <- # <1>
         "Aufgabenspezifisches\nEncoder-Modell", # <1>
       name == "sentiment_universelles_decoder_modell" ~ # <1>
         "Universelles\nDecoder-Modell", # <1>
-      name == "sentiment_manuelle_codierung" ~ "Manuelle\nCodierung", # <1>
       name == "sentiment_diktionaerbasierte_codierung" ~ # <1>
         "Diktionärsbasierte\nCodierung", # <1>
       name == "sentiment_nb" ~ "Naive\nBayes", # <1>
@@ -379,7 +358,6 @@ plot_data <- # <1>
         "Kategoriespezifisches\nEncoder-Modell", # <1>
         "Aufgabenspezifisches\nEncoder-Modell", # <1>
         "Universelles\nDecoder-Modell", # <1>
-        "Manuelle\nCodierung", # <1>
         "Diktionärsbasierte\nCodierung", # <1>
         "Naive\nBayes", # <1>
         "Support Vector\nMachine" # <1>
@@ -516,9 +494,7 @@ ggsave(
 )
 ```
 
-Die Abbildung dokumentiert die Befunde. Im Hinblick auf die **Validität** der drei LLM-basierten Verfahren lässt sich eine gemischte Bilanz ziehen: Die Übereinstimmungen der Modell-Codierungen mit dem Goldstandard lag auf moderatem Niveau, unterschritt aber in einigen Fällen den kritischen Grenzwert von Krippendorff’s α = .667 [vgl. @krippendorffContentAnalysisIntroduction2004, S. 242]. Die per Bootstrapping berechneten 95%-Konfidenzintervalle (2.000 Bootstrap-Resamples) legen nahe, dass sich die Kennwerte größtenteils nicht signifikant zwischen den Modellen unterschieden, vermutlich aufgrund der geringen Stichprobengröße. Allerdings erreichte das kategoriespezifische Encoder-Modell eine signifikant schlechtere Leistung als die anderen beiden LLM-basierten Verfahren – insbesondere bei den Zeitungsartikeln. Dabei lagen Precision und Recall signifikant unterhalb der Werte der anderen Modelle. Das kategoriespezifische Encoder-Modell weist also sowohl mehr falsch-negative als auch mehr falsch-positive Ergebnisse auf als die anderen beiden LLM-basierten Verfahren.
-
-Im Rahmen des **Vergleichs** der LLM-basierten Verfahren mit den anderen Verfahren lassen sich ebenfalls kaum signifikante Unterschiede ausmachen. Zumindest deskriptiv lagen das aufgabenspezifische Encoder-Modell und das universelle Decoder-Modell aber oberhalb der anderen AIA-Verfahren und auf ähnlichem Niveau wie die manuelle Codierung. Diese Ergebnisse sollten aufgrund der fehlenden Signifikanz nicht überbewertet werden. Insgesamt kann aber festgehalten werden, dass zumindest das aufgabenspezifische Encoder-Modell und das universelle Decoder-Modell nicht signifikant schlechter abschnitten als die Codierungen der publizierten manuellen Inhaltsanalyse von @spatzeneggerSocialMediaAls2020. 
+Die Abbildung illustriert die Prüfung der Validität sowie den Methodenvergleich hinsichtlich der beispielhaft gewählten AIA-Verfahren. Im Hinblick auf die *Validität* der drei LLM-basierten Verfahren ließe sich in diesem Beispiel eine gemischte Bilanz ziehen: Die Übereinstimmungen der Modell-Codierungen mit dem Goldstandard lagen auf moderatem Niveau, unterschritten aber in einigen Fällen den kritischen Grenzwert von Krippendorff’s α = .667 [vgl. @krippendorffContentAnalysisIntroduction2004, S. 242]. Die per Bootstrapping berechneten 95-%-Konfidenzintervalle (2.000 Bootstrap-Resamples) legen nahe, dass sich die Kennwerte größtenteils nicht signifikant zwischen den Modellen unterscheiden, vermutlich aufgrund der geringen Stichprobengröße. Allerdings erreichte das kategoriespezifische Encoder-Modell eine signifikant schlechtere Leistung als die anderen beiden LLM-basierten Verfahren. Im Rahmen des *Methodenvergleichs* lassen sich ebenfalls kaum signifikante Unterschiede ausmachen. Zumindest deskriptiv lagen das aufgabenspezifische Encoder-Modell und das universelle Decoder-Modell aber oberhalb der anderen AIA-Verfahren.
 
 
 ## Ergänzende Validierung {.appendix}
