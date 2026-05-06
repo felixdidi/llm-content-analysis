@@ -1,79 +1,79 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://felixdidi.github.io/open-source-llm/02_setup.html</loc>
-    <lastmod>2026-03-11T19:07:26.723Z</lastmod>
+    <loc>https://llm-content-analysis.com/beispielstudie/05_dictionary.html</loc>
+    <lastmod>2026-05-06T13:37:37.162Z</lastmod>
   </url>
   <url>
-    <loc>https://felixdidi.github.io/open-source-llm/notebooks/03_kategoriespezifisches_Encoder-Modell.html</loc>
-    <lastmod>2026-03-11T19:07:26.837Z</lastmod>
+    <loc>https://llm-content-analysis.com/beispielstudie/07_validierung_kategoriespezifisches_Encoder-Modell.html</loc>
+    <lastmod>2026-05-06T13:37:37.162Z</lastmod>
   </url>
   <url>
-    <loc>https://felixdidi.github.io/open-source-llm/01_installation.html</loc>
-    <lastmod>2026-03-11T19:07:26.723Z</lastmod>
+    <loc>https://llm-content-analysis.com/beispielstudie/03_universelles_Decoder-Modell.html</loc>
+    <lastmod>2026-05-06T13:37:37.162Z</lastmod>
   </url>
   <url>
-    <loc>https://felixdidi.github.io/open-source-llm/beispielstudie/07_validierung_kategoriespezifisches_Encoder-Modell.html</loc>
-    <lastmod>2026-03-11T19:07:26.731Z</lastmod>
+    <loc>https://llm-content-analysis.com/beispielstudie/01_kategoriespezifisches_Encoder-Modell.html</loc>
+    <lastmod>2026-05-06T13:37:37.162Z</lastmod>
   </url>
   <url>
-    <loc>https://felixdidi.github.io/open-source-llm/beispielstudie/03_universelles_Decoder-Modell.html</loc>
-    <lastmod>2026-03-11T19:07:26.731Z</lastmod>
+    <loc>https://llm-content-analysis.com/beispielstudie/00_beispielstudie.html</loc>
+    <lastmod>2026-05-06T13:37:37.161Z</lastmod>
   </url>
   <url>
-    <loc>https://felixdidi.github.io/open-source-llm/beispielstudie/02_aufgabenspezifisches_Encoder-Modell.html</loc>
-    <lastmod>2026-03-11T19:07:26.731Z</lastmod>
+    <loc>https://llm-content-analysis.com/notebooks/03_kategoriespezifisches_Encoder-Modell.html</loc>
+    <lastmod>2026-05-06T13:37:37.276Z</lastmod>
   </url>
   <url>
-    <loc>https://felixdidi.github.io/open-source-llm/beispielstudie/05_dictionary.html</loc>
-    <lastmod>2026-03-11T19:07:26.731Z</lastmod>
+    <loc>https://llm-content-analysis.com/notebooks/04_aufgabenspezifisches_Encoder-Modell.html</loc>
+    <lastmod>2026-05-06T13:37:37.278Z</lastmod>
   </url>
   <url>
-    <loc>https://felixdidi.github.io/open-source-llm/beispielstudie/01_kategoriespezifisches_Encoder-Modell.html</loc>
-    <lastmod>2026-03-11T19:07:26.731Z</lastmod>
+    <loc>https://llm-content-analysis.com/index.html</loc>
+    <lastmod>2026-05-06T13:37:37.276Z</lastmod>
   </url>
   <url>
-    <loc>https://felixdidi.github.io/open-source-llm/03_kategoriespezifisches_Encoder-Modell.html</loc>
-    <lastmod>2026-03-11T19:07:26.723Z</lastmod>
+    <loc>https://llm-content-analysis.com/05_universelles_Decoder-Modell.html</loc>
+    <lastmod>2026-05-06T13:37:37.150Z</lastmod>
   </url>
   <url>
-    <loc>https://felixdidi.github.io/open-source-llm/index.html</loc>
-    <lastmod>2026-03-11T19:07:26.837Z</lastmod>
+    <loc>https://llm-content-analysis.com/01_installation.html</loc>
+    <lastmod>2026-05-06T13:37:37.150Z</lastmod>
   </url>
   <url>
-    <loc>https://felixdidi.github.io/open-source-llm/04_aufgabenspezifisches_Encoder-Modell.html</loc>
-    <lastmod>2026-03-11T19:07:26.723Z</lastmod>
+    <loc>https://llm-content-analysis.com/03_kategoriespezifisches_Encoder-Modell.html</loc>
+    <lastmod>2026-05-06T13:37:37.150Z</lastmod>
   </url>
   <url>
-    <loc>https://felixdidi.github.io/open-source-llm/beispielstudie/00_beispielstudie.html</loc>
-    <lastmod>2026-03-11T19:07:26.731Z</lastmod>
+    <loc>https://llm-content-analysis.com/04_aufgabenspezifisches_Encoder-Modell.html</loc>
+    <lastmod>2026-05-06T13:37:37.150Z</lastmod>
   </url>
   <url>
-    <loc>https://felixdidi.github.io/open-source-llm/beispielstudie/06_machine_learning.html</loc>
-    <lastmod>2026-03-11T19:07:26.731Z</lastmod>
+    <loc>https://llm-content-analysis.com/02_setup.html</loc>
+    <lastmod>2026-05-06T13:37:37.150Z</lastmod>
   </url>
   <url>
-    <loc>https://felixdidi.github.io/open-source-llm/beispielstudie/07_validierung.html</loc>
-    <lastmod>2026-03-11T19:07:26.731Z</lastmod>
+    <loc>https://llm-content-analysis.com/notebooks/05_universelles_Decoder-Modell.html</loc>
+    <lastmod>2026-05-06T13:37:37.278Z</lastmod>
   </url>
   <url>
-    <loc>https://felixdidi.github.io/open-source-llm/beispielstudie/00_goldstandard.html</loc>
-    <lastmod>2026-03-11T19:07:26.731Z</lastmod>
+    <loc>https://llm-content-analysis.com/beispielstudie/04_manuelle_Inhaltsanalyse.html</loc>
+    <lastmod>2026-05-06T13:37:37.162Z</lastmod>
   </url>
   <url>
-    <loc>https://felixdidi.github.io/open-source-llm/beispielstudie/04_manuelle_Inhaltsanalyse.html</loc>
-    <lastmod>2026-03-11T19:07:26.731Z</lastmod>
+    <loc>https://llm-content-analysis.com/beispielstudie/07_validierung.html</loc>
+    <lastmod>2026-05-06T13:37:37.162Z</lastmod>
   </url>
   <url>
-    <loc>https://felixdidi.github.io/open-source-llm/05_universelles_Decoder-Modell.html</loc>
-    <lastmod>2026-03-11T19:07:26.723Z</lastmod>
+    <loc>https://llm-content-analysis.com/beispielstudie/06_machine_learning.html</loc>
+    <lastmod>2026-05-06T13:37:37.162Z</lastmod>
   </url>
   <url>
-    <loc>https://felixdidi.github.io/open-source-llm/notebooks/04_aufgabenspezifisches_Encoder-Modell.html</loc>
-    <lastmod>2026-03-11T19:07:26.838Z</lastmod>
+    <loc>https://llm-content-analysis.com/beispielstudie/00_goldstandard.html</loc>
+    <lastmod>2026-05-06T13:37:37.162Z</lastmod>
   </url>
   <url>
-    <loc>https://felixdidi.github.io/open-source-llm/notebooks/05_universelles_Decoder-Modell.html</loc>
-    <lastmod>2026-03-11T19:07:26.838Z</lastmod>
+    <loc>https://llm-content-analysis.com/beispielstudie/02_aufgabenspezifisches_Encoder-Modell.html</loc>
+    <lastmod>2026-05-06T13:37:37.162Z</lastmod>
   </url>
 </urlset>
