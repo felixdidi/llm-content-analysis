@@ -10,6 +10,14 @@ $callout-color-tip: #8ec07c;
 $callout-color-important: #fb4934;
 $callout-color-caution: #fe8019;
 
+/* temporarily fix annotation overlap, see: https://github.com/quarto-dev/quarto-cli/issues/13444 */
+
+.code-copy-outer-scaffold:has(.code-annotated)>.code-copy-button {
+  right: 1.5em;
+  margin-top: 1px;
+  margin-right: 0;
+}
+
 /*add hyphenation*/
 p, .abstract {
   -moz-hyphens: auto;
