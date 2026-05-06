@@ -2,12 +2,22 @@
 title: "Gebrauchsfertige, Open Source Large Language Models auf Hugging Face"
 subtitle: "als Forschungsinfrastruktur für die standardisierte Inhaltsanalyse von Texten"
 author:
-  - name: "Anonym"
-    affiliation: "Anonym"
+  - name: "Daniel Possler"
+    affiliation: "HMTM Hannover"
+  - name: "Felix Dietrich"
+    affiliation: "JGU Mainz"
+  - name: "Jule Scheper"
+    affiliation: "HMTM Hannover"
+  - name: "Anica Lammers"
+    affiliation: "HMTM Hannover"
+  - name: "Anna Spatzenegger"
+    affiliation: "PLU Salzburg"
 citation:
+  title: "Gebrauchsfertige, Open Source Large Language Models auf Hugging Face als Forschungsinfrastruktur für die standardisierte Inhaltsanalyse von Texten"
+  issued: "2026"
   type: article-journal
   container-title: "Publizistik"
-  doi: "12345"
+  doi: "TBD"
 appendix-cite-as: display
 ---
 
