@@ -3,16 +3,12 @@ project:
   lib-dir: site_libs
   
 lang: de
-language:
-  title-block-author-single: "Autor:in"
-  title-block-affiliation-single: "Universität"
-  title-block-published: ""
 
 bibliography: "bib/refs.bib"
 csl: "bib/apa.csl"
 
 website:
-  # site-url:
+  site-url: https://llm-content-analysis.com
   sidebar:
     style: "floating"
     align: "center"
