@@ -492,6 +492,14 @@ ggsave(
   dpi = 300,
   bg = "white"
 )
+
+ggsave(
+  here::here("beispielstudie/figures/vali_metrics_hd.png"),
+  width = 14,
+  height = 8,
+  dpi = 600,
+  bg = "white"
+)
 ```
 
 Die Abbildung illustriert die Prüfung der Validität sowie den Methodenvergleich hinsichtlich der beispielhaft gewählten AIA-Verfahren. Im Hinblick auf die *Validität* der drei LLM-basierten Verfahren ließe sich in diesem Beispiel eine gemischte Bilanz ziehen: Die Übereinstimmungen der Modell-Codierungen mit dem Goldstandard lagen auf moderatem Niveau, unterschritten aber in einigen Fällen den kritischen Grenzwert von Krippendorff’s α = .667 [vgl. @krippendorffContentAnalysisIntroduction2004, S. 242]. Die per Bootstrapping berechneten 95-%-Konfidenzintervalle (2.000 Bootstrap-Resamples) legen nahe, dass sich die Kennwerte größtenteils nicht signifikant zwischen den Modellen unterscheiden, vermutlich aufgrund der geringen Stichprobengröße. Allerdings erreichte das kategoriespezifische Encoder-Modell eine signifikant schlechtere Leistung als die anderen beiden LLM-basierten Verfahren. Im Rahmen des *Methodenvergleichs* lassen sich ebenfalls kaum signifikante Unterschiede ausmachen. Zumindest deskriptiv lagen das aufgabenspezifische Encoder-Modell und das universelle Decoder-Modell aber oberhalb der anderen AIA-Verfahren.
