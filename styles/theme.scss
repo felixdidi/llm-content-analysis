@@ -413,6 +413,15 @@ a.btn.btn-primary, a.btn.btn-primary:hover {
   justify-content: center;
 }
 
+/* cap the height of very long embedded notebook output (e.g. the raw model
+output dumps in the workshop notebooks, which run to hundreds of lines):
+wrap the embed in a ::: {.scroll-output} div in the .qmd and its output
+scrolls instead of taking over the page. */
+.scroll-output pre {
+  max-height: 20rem;
+  overflow: auto;
+}
+
 /* the site's top navbar renders on notebook-embed pages too and sits in the
 same fixed-top spot as the embed header above, painting over it since it
 comes later in the DOM. notebook-embed-offset.html pushes the embed header

@@ -84,6 +84,8 @@ for i, (_, row) in enumerate(sample.iterrows()):  # <3>
 3. `iterrows()` lets you loop over a DataFrame's rows one at a time; since there's only one row here, the loop body runs just once.
 4. Prints the text of that row. The `f"..."` is an f-string: whatever stands inside the curly braces gets replaced by its value, and the `\n` adds a blank line underneath.
 
+{{< embed encoder-classification.ipynb#sample-text >}}
+
 Now reveal the self-reported scores for the same texts. Do any surprise you?
 
 ```python
@@ -92,6 +94,8 @@ for i, (_, row) in enumerate(sample.iterrows()):  # <1>
 ```
 1. Loops over that same single sampled row again.
 2. Prints that person's own self-reported anger, fear, and sadness scores (on the original 1–9 scale), so you can compare them to your own guess.
+
+{{< embed encoder-classification.ipynb#sample-self-report >}}
 
 ### Step 2: A category-specific encoder model
 
@@ -119,6 +123,10 @@ print(roberta_result)  # <7>
 5. `truncation=True` cuts off texts that are too long for the model instead of erroring.
 6. Runs the classifier over all texts at once. `df['text']` is the text column, and `.tolist()` turns it into a plain Python list, which is what the pipeline expects as input.
 7. Prints the raw result, so you can see how it is structured: one entry per text, each holding a `label`/`score` pair for all 28 categories.
+
+::: {.scroll-output}
+{{< embed encoder-classification.ipynb#roberta-classify >}}
+:::
 
 **Basically, that was it.** We now have classifications for all texts in the dataset. We could save this directly — `roberta_result` is just a list of dictionaries (one per text, each holding `label`/`score` pairs for all 28 categories), and that's exactly the structure of a JSON file. So instead of any Python-specific format, you could save it with Python's built-in `json` module:
 
@@ -157,9 +165,11 @@ print(roberta_result_df)  # <6>
 5. The second column: the fear scores we just extracted. This is where you'd add `anger` and `sadness` in the same way to solve the exercise.
 6. Prints the finished table.
 
-**2. Comparing model output to self-report**
+{{< embed encoder-classification.ipynb#fear-scores >}}
 
-Now, to get a first impression of how well the model performs, we can compare the model to the self-report: this code will pick out the row for the same text you looked at in Step 1 (same `random_state`) and print only its classified scores.
+**2. Inspecting model output**
+
+Now, to get a first impression of how well the model performs, this code will pick out the row for the same text you looked at in Step 1 (same `random_state`) and print its classified scores.
 
 ```python
 random_state = 42  # TODO: you can try the same numbers as before if you remember them  # <1>
@@ -171,6 +181,8 @@ print(roberta_result_df.loc[sample.index])  # <3>
 1. Same idea as in Step 1: pick a number to select which text to look at again.
 2. Re-selects the same random row from the original data.
 3. `.loc[sample.index]` looks up that row's index in `roberta_result_df` (the table of extracted scores) and prints the model's fear/anger/sadness scores for it.
+
+{{< embed encoder-classification.ipynb#inspect-scores >}}
 
 **3. Saving the dataframe**
 
@@ -215,6 +227,10 @@ nli_results  # <10>
 9. `multi_label=True` scores each label independently (a text can score high on more than one emotion at once) instead of forcing the three scores to sum to 1.
 10. Writing a variable name on its own at the end of a notebook cell displays its value — a shortcut for `print()` that formats the output a bit more nicely.
 
+::: {.scroll-output}
+{{< embed encoder-classification.ipynb#nli-classify >}}
+:::
+
 Same story here. **That was it!** `nli_results` is a list of dictionaries too — one per text, each with a `sequence`, `labels`, and `scores` entry — so it's JSON-compatible in exactly the same way `roberta_result` was in Step 2:
 
 ```python
@@ -256,6 +272,8 @@ print(nli_result_df)  # <8>
 6. The first column: the original texts.
 7. One column per emotion, each filled with the list of scores we collected in the loop.
 8. Prints the finished table.
+
+{{< embed encoder-classification.ipynb#nli-scores >}}
 
 #### Your turn
 
