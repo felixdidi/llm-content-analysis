@@ -1,0 +1,35 @@
+website:
+  sidebar:
+    - id: tutorials
+      style: "floating"
+      align: "center"
+      logo-href: /sections/tutorials/index.html
+      logo:
+        light:
+          path: /img/transformer_book.png
+          alt: ""
+        dark:
+          path: /img/transformer_book.png
+          alt: ""
+      search: true
+      collapse-level: 1
+      contents:
+        - text: "---"
+        - href: sections/tutorials/index.qmd
+          text: "Overview"
+        - text: "---"
+        - section: "Hugging Face Transformers"
+          href: sections/tutorials/huggingface-transformers/index.qmd
+          contents:
+            - href: sections/tutorials/huggingface-transformers/installation.qmd
+              text: "Installation"
+            - href: sections/tutorials/huggingface-transformers/preparation.qmd
+              text: "Preparation"
+            - section: "Text Classification"
+              contents:
+                - href: sections/tutorials/huggingface-transformers/text-classification/category-specific-encoder.qmd
+                  text: "Category-Specific Encoder Model"
+                - href: sections/tutorials/huggingface-transformers/text-classification/task-specific-encoder.qmd
+                  text: "Task-Specific Encoder Model"
+                - href: sections/tutorials/huggingface-transformers/text-classification/universal-decoder.qmd
+                  text: "Universal Decoder Model"

@@ -1,0 +1,218 @@
+---
+title: "Evaluation & gold standard"
+subtitle: "Text Classification with Open Source Models"
+format: workshop-revealjs
+---
+
+## Welcome!
+
+- Use the arrow keys to navigate
+- Press `M` to open the slide menu
+- Press `?` to see all navigation shortcuts
+- This deck and all other materials are at the course website
+
+# Test Time! <br>Evaluating LLM Codings
+
+![](../../../../img/transformer_writing.png){.divider-img}
+
+## Without Validation, We're Groping in the Dark
+
+::: {.fragment .fade-in-then-semi-out fragment-index=1}
+> "All quantitative models of language are **wrong** — but some are **useful**" <br>
+>
+> [@grimmerTextDataPromise2013, p. 269]
+:::
+
+<br>
+
+::: {.fragment fragment-index=2}
+> "The use of computers in content analysis invokes a shift in **methodological emphasis**, from solving the **human problem** of achieving **reliable coding** for large volumes of text [...] to solving the **computational problem** of **preserving relevant readings** of the texts."
+>
+> [@krippendorffContentAnalysisIntroduction2018, p. 215]
+:::
+
+## Validity and Reliability
+
+::: {.columns}
+
+::: {.column width="52%"}
+<div class="target-grid">
+<div class="target-cell fragment" data-fragment-index="1">
+<svg width="130" height="130" viewBox="0 0 140 140" role="img" aria-label="Low reliability high validity">
+<circle cx="70" cy="70" r="58" fill="none" stroke="var(--fig-ring)" stroke-width="1.6"/><circle cx="70" cy="70" r="38" fill="none" stroke="var(--fig-ring)" stroke-width="1.6"/><circle cx="70" cy="70" r="18" fill="none" stroke="var(--fig-ring)" stroke-width="1.6"/>
+<line x1="63" y1="70" x2="77" y2="70" stroke="var(--fig-crosshair)" stroke-width="1.6"/><line x1="70" y1="63" x2="70" y2="77" stroke="var(--fig-crosshair)" stroke-width="1.6"/>
+<circle cx="92" cy="22" r="5" fill="var(--fig-shot)"/><circle cx="110" cy="45" r="5" fill="var(--fig-shot)"/><circle cx="26" cy="54" r="5" fill="var(--fig-shot)"/><circle cx="36" cy="38" r="5" fill="var(--fig-shot)"/><circle cx="116" cy="74" r="5" fill="var(--fig-shot)"/><circle cx="32" cy="96" r="5" fill="var(--fig-shot)"/><circle cx="52" cy="112" r="5" fill="var(--fig-shot)"/><circle cx="75" cy="120" r="5" fill="var(--fig-shot)"/>
+</svg>
+<div class="target-cell-label">Low reliability<br>high validity</div>
+</div>
+<div class="target-cell fragment" data-fragment-index="2">
+<svg width="130" height="130" viewBox="0 0 140 140" role="img" aria-label="High reliability high validity">
+<circle cx="70" cy="70" r="58" fill="none" stroke="var(--fig-ring)" stroke-width="1.6"/><circle cx="70" cy="70" r="38" fill="none" stroke="var(--fig-ring)" stroke-width="1.6"/><circle cx="70" cy="70" r="18" fill="none" stroke="var(--fig-ring)" stroke-width="1.6"/>
+<line x1="63" y1="70" x2="77" y2="70" stroke="var(--fig-crosshair)" stroke-width="1.6"/><line x1="70" y1="63" x2="70" y2="77" stroke="var(--fig-crosshair)" stroke-width="1.6"/>
+<circle cx="68" cy="66" r="5" fill="var(--fig-shot)"/><circle cx="74" cy="68" r="5" fill="var(--fig-shot)"/><circle cx="70" cy="74" r="5" fill="var(--fig-shot)"/><circle cx="65" cy="71" r="5" fill="var(--fig-shot)"/><circle cx="73" cy="75" r="5" fill="var(--fig-shot)"/>
+</svg>
+<div class="target-cell-label">High reliability<br>high validity</div>
+</div>
+<div class="target-cell fragment" data-fragment-index="3">
+<svg width="130" height="130" viewBox="0 0 140 140" role="img" aria-label="Low reliability low validity">
+<circle cx="70" cy="70" r="58" fill="none" stroke="var(--fig-ring)" stroke-width="1.6"/><circle cx="70" cy="70" r="38" fill="none" stroke="var(--fig-ring)" stroke-width="1.6"/><circle cx="70" cy="70" r="18" fill="none" stroke="var(--fig-ring)" stroke-width="1.6"/>
+<line x1="63" y1="70" x2="77" y2="70" stroke="var(--fig-crosshair)" stroke-width="1.6"/><line x1="70" y1="63" x2="70" y2="77" stroke="var(--fig-crosshair)" stroke-width="1.6"/>
+<circle cx="74" cy="22" r="5" fill="var(--fig-shot)"/><circle cx="86" cy="30" r="5" fill="var(--fig-shot)"/><circle cx="96" cy="42" r="5" fill="var(--fig-shot)"/><circle cx="64" cy="42" r="5" fill="var(--fig-shot)"/><circle cx="106" cy="58" r="5" fill="var(--fig-shot)"/><circle cx="110" cy="68" r="5" fill="var(--fig-shot)"/><circle cx="100" cy="80" r="5" fill="var(--fig-shot)"/><circle cx="80" cy="78" r="5" fill="var(--fig-shot)"/>
+</svg>
+<div class="target-cell-label">Low reliability<br>low validity</div>
+</div>
+<div class="target-cell fragment" data-fragment-index="4">
+<svg width="130" height="130" viewBox="0 0 140 140" role="img" aria-label="High reliability low validity">
+<circle cx="70" cy="70" r="58" fill="none" stroke="var(--fig-ring)" stroke-width="1.6"/><circle cx="70" cy="70" r="38" fill="none" stroke="var(--fig-ring)" stroke-width="1.6"/><circle cx="70" cy="70" r="18" fill="none" stroke="var(--fig-ring)" stroke-width="1.6"/>
+<line x1="63" y1="70" x2="77" y2="70" stroke="var(--fig-crosshair)" stroke-width="1.6"/><line x1="70" y1="63" x2="70" y2="77" stroke="var(--fig-crosshair)" stroke-width="1.6"/>
+<circle cx="100" cy="32" r="5" fill="var(--fig-shot)"/><circle cx="109" cy="35" r="5" fill="var(--fig-shot)"/><circle cx="104" cy="41" r="5" fill="var(--fig-shot)"/><circle cx="97" cy="39" r="5" fill="var(--fig-shot)"/>
+</svg>
+<div class="target-cell-label">High reliability<br>low validity</div>
+</div>
+</div>
+:::
+
+::: {.column width="48%"}
+::: {.fragment .fade-in-then-semi-out fragment-index=5}
+In **manual content analysis**, we care about **reliability**:
+
+::: {.small-text}
+- **Inter-coder reliability**: do coders equally apply the coding rules at t1?
+- **Intra-coder reliability**: does coder A apply the coding rules equally at t1 and t2?
+- **Coder–researcher reliability**: do coders apply coding rules like the researcher?
+:::
+:::
+
+::: {.fragment fragment-index=6}
+In **automated content analysis**, we care mostly about **validity**:
+
+::: {.small-text}
+- **Semantic validity** (model–researcher reliability): does the model apply coding rules like the researcher / preserve meaning? → tested by comparing model outcomes with a *gold standard*
+- **Criterion validity**: does the model outcome correlate with external measures? → tested by correlating model outcomes with *self-reports* or *self-assigned labels*
+:::
+:::
+:::
+
+:::
+
+## Coding a Gold Standard
+
+::: {.incremental}
+- Manually coding a *smaller-ish* amount of text with high reliability
+- Testing semantic validity by comparing model outcomes against this "ground truth"
+- Assumption: "*if trained correctly*, humans will make the most correct and valid classifications of texts" [@songValidationsWeTrust2020, p. 551]
+- Because humans interpret rules differently, establishing a ground truth typically requires:
+  - a **detailed, crystal-clear codebook** (e.g., <https://osf.io/2z3dk/>)
+  - many rounds of **coder training** and **reliability testing**
+  - **multiple independent codings** of the same material, with the final code determined by majority vote
+:::
+
+::: {.fragment}
+::: {.callout-caution}
+## Suggestions by @songValidationsWeTrust2020 for a gold standard
+- Improve inter-coder reliability as much as possible (ideally Krippendorff's α ≥ .70, or even ≥ .90)
+- Use large validation samples (min. 1,300 cases if inter-coder reliability is α ≥ .70)
+- Proper training is required to avoid coder drift (i.e., low intra-coder reliability)
+:::
+:::
+
+::: {.callout-tip}
+## Want to know more about improving reliability in human codings?
+@krippendorffContentAnalysisIntroduction2018; @neuendorfContentAnalysisGuidebook2017; @roesslerInhaltsanalyse2017 [German]
+:::
+
+## Typical Key Metrics {auto-animate="true"}
+
+::: {.incremental}
+- When comparing categories measured on numeric scales [(e.g., a sentiment scale from −3 to +3)]{.small-text}:<br>Pearson or rank correlation
+- When comparing categories measured as dummy variables [(e.g., present vs. not present)]{.small-text}:<br>Recall, Precision, F1, and Accuracy [(or more advanced reliability coefficients, like Kappa or Krippendorff's α)]{.small-text}
+:::
+
+<br>
+
+::: {.columns}
+
+::: {.column .fragment width="42%"}
+
+<br>Confusion Matrix:
+
+<table class="confusion" data-id="confusion">
+<tr>
+<td class="cm-corner"></td><td class="cm-corner"></td>
+<td class="cm-colhead" colspan="2">**Model Classification**</td>
+</tr>
+<tr>
+<td class="cm-corner"></td><td class="cm-corner"></td>
+<td class="cm-colkey">1</td><td class="cm-colkey">0</td>
+</tr>
+<tr>
+<td class="cm-rowhead" rowspan="2">Gold-<br>Standard</td>
+<td class="cm-rowkey">1</td>
+<td class="cm-cell">True Positive<br>(TP)</td>
+<td class="cm-cell">False Negative<br>(FN)</td>
+</tr>
+<tr>
+<td class="cm-rowkey">0</td>
+<td class="cm-cell">False Positive<br>(FP)</td>
+<td class="cm-cell">True Negative<br>(TN)</td>
+</tr>
+</table>
+:::
+
+::: {.column width="58%"}
+<div data-id="metrics-formulas">
+<div class="fragment">$$Precision = \dfrac{TP}{TP + FP}$$</div>
+<div class="fragment">$$Recall = \dfrac{TP}{TP + FN}$$</div>
+<div class="fragment">$$Accuracy = \dfrac{TP + TN}{TP + TN + FP + FN}$$</div>
+<div class="fragment">$$F1 = \dfrac{2 \times Precision \times Recall}{Precision + Recall}$$</div>
+</div>
+:::
+
+:::
+
+## Typical Key Metrics {auto-animate="true"}
+
+Comparing the *fear* coding of two models against a gold standard, for four example statements:
+
+<div class="metrics-figure">
+
+<table class="metrics-table">
+<thead>
+<tr>
+<th class="mt-stub"></th>
+<th class="mt-group">Gold<br>Standard</th>
+<th class="mt-group">Model A</th>
+<th class="mt-group">Model B</th>
+</tr>
+<tr>
+<th class="mt-stub">Statements</th>
+<th>Fear</th><th>Fear</th><th>Fear</th>
+</tr>
+</thead>
+<tbody>
+<tr><td>&ldquo;The current heat wave really scares me.&rdquo;</td><td>1</td><td>1</td><td>1</td></tr>
+<tr><td>&ldquo;It's getting worse every year. COME ON MERZ, DO SOMETHING!!!&rdquo;</td><td>0</td><td>1</td><td>0</td></tr>
+<tr><td>&ldquo;It drives me nuts that we're still running coal-fired power plants.&rdquo;</td><td>0</td><td>1</td><td>0</td></tr>
+<tr><td>&ldquo;I often lose sleep thinking about global warming.&rdquo;</td><td>1</td><td>1</td><td>0</td></tr>
+<tr class="mt-rule-above fragment" data-fragment-index="1"><td class="mt-metric">TP</td><td></td><td>2</td><td>1</td></tr>
+<tr class="fragment" data-fragment-index="1"><td class="mt-metric">TN</td><td></td><td>0</td><td>2</td></tr>
+<tr class="fragment" data-fragment-index="1"><td class="mt-metric">FP</td><td></td><td>2</td><td>0</td></tr>
+<tr class="fragment" data-fragment-index="1"><td class="mt-metric">FN</td><td></td><td>0</td><td>1</td></tr>
+<tr class="mt-gap fragment" data-fragment-index="2"><td class="mt-metric">Accuracy</td><td></td><td><span class="chip chip-neu">50%</span></td><td><span class="chip chip-pos">75%</span></td></tr>
+<tr class="fragment" data-fragment-index="2"><td class="mt-metric">Recall</td><td></td><td><span class="chip chip-pos">100%</span></td><td><span class="chip chip-neu">50%</span></td></tr>
+<tr class="fragment" data-fragment-index="2"><td class="mt-metric">Precision</td><td></td><td><span class="chip chip-neu">50%</span></td><td><span class="chip chip-pos">100%</span></td></tr>
+</tbody>
+</table>
+
+<div class="formula-box" data-id="metrics-formulas">
+$$Precision = \dfrac{TP}{TP + FP}$$
+$$Recall = \dfrac{TP}{TP + FN}$$
+$$Accuracy = \dfrac{TP + TN}{TP + TN + FP + FN}$$
+</div>
+
+</div>
+
+## References {.scrollable .smaller}
+
+::: {#refs}
+:::

@@ -1,0 +1,25 @@
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  var navbar = document.getElementById("quarto-header");
+  var embedHeader = document.getElementById("quarto-embed-header");
+  if (!navbar || !embedHeader) return;
+
+  var navbarHeight = navbar.offsetHeight;
+  embedHeader.style.top = navbarHeight + "px";
+
+  var titleBannerEl = document.querySelector("body > #title-block-header");
+  if (titleBannerEl) {
+    titleBannerEl.style.paddingTop =
+      (parseInt(titleBannerEl.style.paddingTop) || 0) + navbarHeight + "px";
+  }
+
+  var contentEl = document.getElementById("quarto-content");
+  if (contentEl) {
+    for (var i = 0; i < contentEl.children.length; i++) {
+      var child = contentEl.children[i];
+      child.style.paddingTop =
+        (parseInt(child.style.paddingTop) || 0) + navbarHeight + "px";
+    }
+  }
+});
+</script>

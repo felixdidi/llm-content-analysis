@@ -1,0 +1,54 @@
+website:
+  sidebar:
+    - id: paper
+      style: "floating"
+      align: "center"
+      logo-href: /sections/paper/index.html
+      logo:
+        light:
+          path: /img/transformer_writing.png
+          alt: ""
+        dark:
+          path: /img/transformer_writing.png
+          alt: ""
+      search: true
+      collapse-level: 1
+      contents:
+        - text: "---"
+        - text: "Overview"
+          href: sections/paper/index.qmd 
+        - text: "---"
+        - section: "Anleitungen"
+          contents:
+            - href: sections/paper/01_installation.qmd
+              text: "Installation"
+            - href: sections/paper/02_setup.qmd
+              text: "Vorbereitung"
+            - section: "Textklassifikation"
+              contents:
+                - href: sections/paper/03_kategoriespezifisches_Encoder-Modell.qmd
+                  text: "Kategoriespezifisches Encoder-Modell"
+                - href: sections/paper/04_aufgabenspezifisches_Encoder-Modell.qmd
+                  text: "Aufgabenspezifisches Encoder-Modell"
+                - href: sections/paper/05_universelles_Decoder-Modell.qmd
+                  text: "Universelles Decoder-Modell"
+        - text: "---"
+        - section: "Beispielstudie"
+          href: sections/paper/beispielstudie/00_beispielstudie.qmd
+          contents:
+            - href: sections/paper/beispielstudie/00_goldstandard.qmd
+              text: "Goldstandard"
+            - href: sections/paper/beispielstudie/01_kategoriespezifisches_Encoder-Modell.qmd
+              text: "Kategoriespezifisches Encoder-Modell"
+            - href: sections/paper/beispielstudie/02_aufgabenspezifisches_Encoder-Modell.qmd
+              text: "Aufgabenspezifisches Encoder-Modell"
+            - href: sections/paper/beispielstudie/03_universelles_Decoder-Modell.qmd
+              text: "Universelles Decoder-Modell"
+            # - href: sections/paper/beispielstudie/04_manuelle_Inhaltsanalyse.qmd
+            #   text: "Manuelle Inhaltsanalyse"
+            - href: sections/paper/beispielstudie/05_dictionary.qmd
+              text: "Off-the-shelf Diktionär"
+            - href: sections/paper/beispielstudie/06_machine_learning.qmd
+              text: "Überwachtes maschinelles Lernen"
+            - href: sections/paper/beispielstudie/07_validierung.qmd
+              text: "Validierung"

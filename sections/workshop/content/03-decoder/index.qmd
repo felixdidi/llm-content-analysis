@@ -1,0 +1,315 @@
+---
+title: "3. Classification with a generative decoder"
+---
+
+## Exercise
+
+:::{.callout-note}
+## Run this yourself
+This page shows the exercise code for reference; code blocks with real output below were actually run to produce it, but the page itself isn't a live Colab session — open the notebook there to run it yourself.
+
+[Open in Colab →](https://colab.research.google.com/github/felixdidi/llm-content-analysis/blob/main/sections/workshop/content/03-decoder/decoder-classification.ipynb){.btn .btn-primary role="button"}
+:::
+
+:::{.callout-note collapse="true"}
+## Questions about the code?
+No problem! Explanations for the less obvious lines are hidden behind the little numbers on the right of each code block — just hover your mouse over one to see it.
+
+```python
+print("Hello!")  # <1>
+```
+1. This prints "Hello!" to the console. The output would appear directly below the code block.
+:::
+
+This notebook belongs to the [DGPs 2026 workshop *Text Classification with Open Source Models*](../../index.qmd). You'll classify the same open-ended survey text from the [Real World Worry Waves Dataset (RW3D)](https://osf.io/9b85r/) as in the previous notebook — this time with a small, open-source **generative decoder** model. Instead of a fixed set of labels, you write a prompt, the model generates free text, and you parse that text back into a structured answer.
+
+**Code-along vs. exercise:** Steps 1–2 below — loading the data, writing a first zero-shot prompt, and parsing the model's answer — are the code-along, which we build together; there's a small **Your turn** fill-in along the way. The "Exercise: From zero-shot to few-shot prompting" section afterward, plus the bonus at the end, are yours to work through independently.
+
+**How to use this notebook:** run each cell from top to bottom with `Shift+Enter` or by clicking the run button. Most cells are given and fully explained; a few are marked **Your turn** — those are where you edit or write something yourself. Every exercise cell has a safe default, so nothing breaks if you leave it as-is, but you'll get more out of the session if you actually change it.
+
+**Important note for Colab users:** If you are running this notebook in Google Colab, please follow these steps: 1. Make sure you have a Google account and are logged in. 2. To create a copy of this notebook in your own Google Drive (advised), select "Copy to Drive" at the top of the Colab page. 3. Once the notebook copy opens in Colab, click on "Runtime" in the menu bar, then select "Change runtime type" and choose "T4 GPU" as the hardware accelerator. 4. Click "Save" to apply the changes. 5. Now you can run the notebook cells as instructed.
+
+### Setup
+
+First, we install the Python packages we need. This will take some time to complete.
+
+```python
+%pip install -q transformers accelerate pandas  # <1>
+```
+1. `%pip install` runs Python's package manager from inside the notebook; `-q` just keeps its output short. `transformers` and `accelerate` let us load and run the model, and `pandas` gives us a convenient table (`DataFrame`) format for the data.
+
+Next, we can change the logging level of the `transformers` library to avoid cluttering the notebook with warnings and info messages. You do not have to run this cell, but it will make the output easier to read.
+
+```python
+from transformers import logging  # <1>
+logging.set_verbosity_error()     # <2>
+```
+1. Imports `transformers`' logging module, which controls how much it prints to the console.
+2. Raises the logging threshold to "error" so only actual errors get printed — this hides the routine warning/info messages you'd otherwise see while loading models.
+
+### Step 1: Load the data
+
+We'll use the same curated sample of survey responses from RW3D as in the previous notebook.
+
+First, let's load the data. Because generative decoder models are slower than encoder models, we'll only use a small sample of 10 texts for this notebook. You can change the number of rows to load by changing the argument to `head()` in the next cell.
+
+```python
+import pandas as pd  # <1>
+
+DATA_URL = "https://raw.githubusercontent.com/felixdidi/llm-content-analysis/main/sections/workshop/data/rw3d_workshop_sample.csv"  # <2>
+df = pd.read_csv(DATA_URL).head(10)  # <3>
+df  # <4>
+```
+1. Imports `pandas`, Python's standard library for working with tables, under the short name `pd`.
+2. The web address of the same prepared dataset we already used in the previous notebook.
+3. `read_csv()` downloads the file into a `DataFrame`, and `.head(10)` immediately keeps only its first 10 rows — that's the small sample mentioned above. Change this number to work with more (or fewer) texts.
+4. Writing a variable name on its own at the end of a notebook cell displays its value — here, the whole 10-row table.
+
+{{< embed decoder-classification.ipynb#load-data >}}
+
+### Step 2: Load a small open-source decoder model
+
+We'll use [Qwen2.5-1.5B-Instruct](https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct), an instruction-tuned model small enough to run comfortably on Colab's free GPU (and likely also your own laptop, if you intend to run it locally).
+
+Unlike the encoder models from the previous notebook, this one wasn't trained to return scores for a fixed set of labels. Instead, it generates a stream of text, so we'll need to tell it what we want in the prompt itself, and turn its answer back into something structured ourselves.
+
+Generative decoder models are also much larger than encoder models. Loading the model may take some time.
+
+```python
+from transformers import pipeline  # <1>
+
+generate = pipeline(                     # <2>
+    "text-generation",             # <3>
+    model="Qwen/Qwen2.5-1.5B-Instruct",  # <4>
+    device_map="auto",              # <5>
+)
+```
+
+1. Imports the same `pipeline` shortcut we used for the encoder models — it works for decoders too, just with a different task name.
+2. Builds the pipeline and stores it under the name `generate`, so that we can call `generate(...)` on a prompt further down.
+3. `text-generation` is the task name for decoder models — the pipeline expects a prompt and returns generated text, rather than a fixed set of category scores.
+4. "1.5B" refers to the model's 1.5 billion parameters — small by modern LLM standards, which is exactly why it runs comfortably on a free Colab GPU (and likely also your own laptop, if you intend to run it locally).
+5. `device_map="auto"` lets the library decide whether to put the model on a GPU or CPU, whichever is available.
+
+We write a short system prompt that states the task and asks for a strict JSON answer — here, whether the text expresses `fear` (`true`/`false`) plus a short `reasoning`. Because the prompt doesn't show the model any examples, classifications will be based only on the context knowledge of the model. This is called **zero-shot** prompting.
+
+Unlike the encoder pipelines from the previous notebook, a decoder's `generate()` call doesn't batch cleanly over a list of texts out of the box — so we call it once per text, in a `for` loop. `do_sample=False` keeps answers deterministic, so re-running the cell gives the same result. Running it on all texts may take some time.
+
+```python
+import json  # <1>
+
+results = []  # <2>
+for text in df['text']:  # <3>
+    instructions = [  # <4>
+        {"role": "system",  # <5>
+         "content": "You are a trained assistant for content analysis who determines whether a text expresses fear. Always answer precisely in JSON format with fear (true or false) and reasoning (a short justification in English). Return only the JSON response, starting with '{' and ending with '}', with these two parameters."},
+        {"role": "user", "content": text}]  # <6>
+    outputs = generate(instructions, max_new_tokens=256, do_sample=False)  # <7>
+    results.append({"text": text, "response": outputs[0]["generated_text"][-1]['content']})  # <8>
+
+results  # <9>
+```
+1. Imports Python's built-in `json` module — we need it a bit further down to turn the model's JSON answer back into Python data.
+2. An empty list in which we collect one result per text.
+3. Loops over the texts one at a time. Unlike the encoder pipelines, a decoder call doesn't batch cleanly over a whole list, so every text gets its own call.
+4. `instructions` is the conversation we hand to the model: a list of messages, each one a dictionary with a `role` and a `content`.
+5. The `system` message states the task and the exact output format we want. This is the actual prompt engineering, and it stays the same for every text.
+6. The `user` message carries the text to be classified — the only part that changes from one text to the next.
+7. Runs the model on that conversation. `max_new_tokens=256` caps how long the answer may become, and `do_sample=False` switches off randomness, so re-running gives identical results.
+8. `outputs[0]["generated_text"]` is the full conversation including the model's reply, so `[-1]['content']` grabs its last message — the answer itself — which we store next to the original text.
+9. Displays the collected results, so you can see the raw responses the model produced.
+
+{{< embed decoder-classification.ipynb#classify >}}
+
+**Basically, that was it.** We now have a response for every text in the sample. `results` is just a list of dictionaries — one per text, each holding the original `text` and the model's raw `response` string — and that's exactly the structure of a JSON file. So, you could simply save it with Python's built-in `json` module:
+
+```python
+with open("results.json", "w") as f:  # <1>
+    json.dump(results, f)              # <2>
+```
+1. Opens (creates) a file called `results.json` in write mode; the `with` block closes the file again automatically once it's done.
+2. Writes `results` into that open file, converted to JSON text.
+
+That file could be picked up in R or any other tool from here. We'll keep working in Python below.
+
+If we want to keep working in Python, we need to parse the model's free-text output back into a structured answer. We use some simple string manipulation to extract the `fear` value and the `reasoning` text. This is a bit fragile because the model's output may not always be perfectly formatted. For example, we can see that, although we told the model to return a strict JSON answer beginning with `{`, the model consistently returns the JSON object wrapped in a markdown code block (` ```json\n{...}\n``` `). We can strip that away with some simple string manipulation, which is already implemented in the `parse_response()` function below.
+
+```python
+def parse_response(response):  # <1>
+    response = response.strip().strip("`").removeprefix("json").strip()  # <2>
+    try:  # <3>
+        parsed = json.loads(response)  # <4>
+        return parsed['fear'], parsed['reasoning']  # <5>
+    except (json.JSONDecodeError, KeyError):  # <6>
+        return None, None  # <7>
+
+parsed_data = [(entry['text'], *parse_response(entry['response'])) for entry in results]  # <8>
+parsed_data = pd.DataFrame(parsed_data, columns=['text', 'fear', 'reasoning'])  # <9>
+parsed_data  # <10>
+```
+1. Defines a reusable function that turns one raw response string into structured values. Everything indented below belongs to it.
+2. Cleans up the string: `strip()` removes surrounding whitespace, `strip("`")` removes the backticks of the markdown code fence, and `removeprefix("json")` drops the language name right after the opening fence.
+3. `try` means "attempt the following lines, but don't crash if something goes wrong" — in that case Python jumps down to `except`.
+4. `json.loads()` parses the cleaned-up string into a real Python dictionary.
+5. Returns the two values we asked the model for in the prompt.
+6. This runs if the string still wasn't valid JSON (`JSONDecodeError`), or if one of the expected keys was missing (`KeyError`).
+7. In that case we return `None` twice, which marks this response as unparseable instead of stopping the whole notebook.
+8. Applies the function to every result, building a list of `(text, fear, reasoning)` tuples — the `*` spreads the function's two return values into the tuple.
+9. Turns that list of tuples into a DataFrame and gives the columns proper names.
+10. Displays the finished table.
+
+{{< embed decoder-classification.ipynb#parse >}}
+
+#### Your turn
+
+The prompt above only asks about `fear`. Edit the system prompt so it asks for `anger`, `fear`, and `sadness` all at once (three booleans plus one `reasoning`, in a single JSON object). If everything works correctly, the code below should pull out all three fields instead of just `fear`. Re-run the cell — how many responses still parse cleanly?
+
+**Feeling bold?** If parsing below fails for some responses, you can try to improve the parsing function to handle more edge cases. Look at the raw output to see what the model is returning, and try to make the parsing more robust. You can also try to improve the prompt itself to get cleaner output from the model or increase the maximum number of tokens in the `generate()` call if the model is truncating its output.
+
+```python
+results_all_three = []                                                    # <1>
+for text in df['text']:                                                    # <2>
+    instructions = [                                                        # <3>
+        {"role": "system",
+         "content": "ADD YOUR UPDATED SYSTEM PROMPT HERE"}, # TODO          # <4>
+        {"role": "user", "content": text}]                                  # <5>
+    outputs = generate(instructions, max_new_tokens=256, do_sample=False)  # <6>
+    results_all_three.append({"text": text, "response": outputs[0]["generated_text"][-1]['content']})  # <7>
+
+results_all_three  # <8>
+```
+1. An empty list to collect one result per text.
+2. Loops over every text in the dataset, one at a time — a decoder's `generate()` call has to be run separately for each text, unlike the encoder pipelines from before.
+3. The conversation we send to the model, exactly as in the code-along: a list of messages, each with a `role` and a `content`.
+4. The `system` message sets the model's overall instructions — this is where your updated prompt (asking for `anger`, `fear`, and `sadness` together) goes.
+5. The `user` message is the actual text to classify.
+6. Runs the model on this conversation; `max_new_tokens=256` caps how long the generated answer can be, and `do_sample=False` keeps the output deterministic.
+7. `outputs[0]["generated_text"][-1]['content']` digs into the pipeline's return value to pull out just the model's reply text — `generated_text` is the whole conversation, so `[-1]` grabs its last message, the assistant's answer — and stores it together with the original text.
+8. Displays all collected responses.
+
+```python
+def parse_response_all_three(response):                                   # <1>
+    response = response.strip().strip("`").removeprefix("json").strip()   # <2>
+    try:                                                                   # <3>
+        parsed = json.loads(response)                                     # <4>
+        return parsed['fear'], parsed['anger'], parsed['sadness'], parsed['reasoning']  # <5>
+    except (json.JSONDecodeError, KeyError):                              # <6>
+        return None, None, None, None                                      # <7>
+
+parsed_data_all_three = [(entry['text'], *parse_response_all_three(entry['response'])) for entry in results_all_three]  # <8>
+parsed_data_all_three = pd.DataFrame(parsed_data_all_three, columns=['text', 'fear', 'anger', 'sadness', 'reasoning'])  # <9>
+parsed_data_all_three  # <10>
+```
+1. Defines a function that turns one raw model response string into structured values — the same idea as `parse_response()` above, just with three emotions instead of one.
+2. Strips whitespace, then strips away backticks and a leading `json` — undoing the markdown code fence (` ```json ... ``` `) the model tends to wrap its answer in.
+3. `try` means "attempt the following lines, but don't crash if something goes wrong" — Python then jumps down to `except`.
+4. `json.loads()` parses the cleaned-up string into an actual Python dictionary.
+5. Pulls out the four fields we asked the model for in the prompt.
+6. This runs if the text still isn't valid JSON (`JSONDecodeError`), or if one of the expected keys is missing (`KeyError`) — which happens easily here, since your new prompt has to produce all three emotion keys.
+7. In that case, four `None`s are returned instead of crashing, so one badly-formatted response doesn't stop the whole loop.
+8. Applies the parsing function to every entry in `results_all_three`, pairing each original text with its four parsed values (the `*` unpacks the function's four return values into the tuple).
+9. Collects everything into a DataFrame with named columns, so you can look at it as a table.
+10. Displays the table. Rows full of `None` are the responses that could not be parsed.
+
+### Exercise: From zero-shot to few-shot prompting
+
+So far, the model has only ever seen the text it needs to classify — no examples of what a "correct" answer looks like. That's **zero-shot** prompting. In **few-shot** prompting, you show the model one or more examples (e.g., an example text, maybe the JSON answer you'd want for it) before asking about the real text. This can nudge the model toward your specific understanding of the category and toward the exact output format you asked for. However, it may also bias the model toward the examples you show it, so you have to be careful about what examples you choose.
+
+Below, write 1–2 short example texts, together with the JSON answer you think is correct for each — base this on your own understanding of what should count as `fear` here. These examples will be inserted into the prompt before the real text every time the model is called.
+
+```python
+# TODO: write 1-2 short examples of your own: a text, and the JSON answer
+# you think is correct for it (based on your own understanding of "fear").
+# These will be shown to the model as worked examples before it classifies
+# the real texts below.
+few_shot_examples = [   # <1>
+    {
+        "text": "EXAMPLE TEXT 1",       # <2>
+        "response": 'EXAMPLE RESPONSE 1',  # <3>
+    },
+    {
+        "text": "EXAMPLE TEXT 2",
+        "response": 'EXAMPLE RESPONSE 2',
+    },
+]
+```
+1. A list of example dictionaries — each one pairs an example text with the JSON answer you'd want the model to give for it.
+2. Replace this with a short example text of your own.
+3. Replace this with the JSON response (as a string) you think is correct for that text, e.g. `'{"fear": true, "reasoning": "..."}'`.
+
+Now we run the same loop as above, but this time we add your examples as extra turns in the conversation before the real text — each example becomes one `user` turn (the example text) followed by one `assistant` turn (the example answer), exactly how it would look if the model had already answered it.
+
+```python
+results_fewshot = []                                                        # <1>
+for text in df['text']:                                                     # <2>
+    instructions = [                                                        # <3>
+        {"role": "system",
+         "content": "You are a trained assistant for content analysis who determines whether a text expresses fear. Always answer precisely in JSON format with fear (true or false) and reasoning (a short justification in English). Return only the JSON response, starting with '{' and ending with '}', with these two parameters."},
+    ]
+    for example in few_shot_examples:                                       # <4>
+        instructions.append({"role": "user", "content": example["text"]})              # <5>
+        instructions.append({"role": "assistant", "content": example["response"]})     # <6>
+    instructions.append({"role": "user", "content": text})                  # <7>
+
+    outputs = generate(instructions, max_new_tokens=256, do_sample=False)   # <8>
+    results_fewshot.append({"text": text, "response": outputs[0]["generated_text"][-1]['content']})  # <9>
+
+results_fewshot  # <10>
+```
+1. An empty list to collect one result per text, just like in the zero-shot loop.
+2. Loops over every text in the dataset, one at a time.
+3. Starts the conversation with the same system instructions as the zero-shot version — this list then grows with each example before the real question gets added.
+4. Loops over each example you wrote above.
+5. Adds the example's text as a `user` turn, exactly as if it had been asked to the model.
+6. Adds the example's answer as an `assistant` turn right after it, as if the model had already answered it correctly.
+7. After all the examples, finally adds the real text you actually want classified.
+8. Runs the model on this longer conversation (system prompt + example turns + real text) — otherwise the same call as before, just with more turns.
+9. Pulls the model's reply out of the output and stores it next to the original text, exactly as in the zero-shot loop.
+10. Displays the collected few-shot responses.
+
+Parse the few-shot responses the same way as before, and compare them to the zero-shot predictions from the code-along side by side.
+
+```python
+parsed_data_fewshot = [(entry['text'], *parse_response(entry['response'])) for entry in results_fewshot]  # <1>
+parsed_data_fewshot = pd.DataFrame(parsed_data_fewshot, columns=['text', 'fear', 'reasoning'])              # <2>
+
+comparison = parsed_data[['text', 'fear']].merge(   # <3>
+    parsed_data_fewshot[['text', 'fear']],           # <4>
+    on='text', suffixes=('_zero_shot', '_few_shot'),  # <5>
+)
+comparison  # <6>
+```
+1. Parses the few-shot responses the same way as the zero-shot ones, reusing the `parse_response` function from the code-along.
+2. Puts them into a DataFrame, same as before.
+3. Takes the zero-shot results from the code-along, narrowed down to just the `text` and `fear` columns, and `merge()`s another table onto them.
+4. The table being merged on: the few-shot results, narrowed down to the same two columns.
+5. `on='text'` says which column to match rows by — each text is looked up in both tables. `suffixes` renames the two resulting `fear` columns so you can tell them apart (`fear_zero_shot` vs. `fear_few_shot`).
+6. Displays the comparison table, with one row per text and both predictions side by side.
+
+Look at where the two columns disagree. Few-shot prompting can make a model's answers more consistent with *your* specific definition of a category, and can improve how reliably it sticks to the requested format — but it isn't free. The examples you write inevitably steer the model's judgment (a form of researcher bias that's easy to underestimate with just 1–2 examples), each call now sends a longer prompt through the model (this loop was already slow; more examples means more tokens, means more time), and there's no guarantee the model is actually applying your examples' *reasoning* to a new, genuinely ambiguous case rather than just imitating their tone or length.
+
+#### Bonus: does a smaller model still hold up?
+
+If you have time left, try the (zero-shot) classification from the code-along again, but with an even smaller model this time: [Qwen2.5-0.5B-Instruct](https://huggingface.co/Qwen/Qwen2.5-0.5B-Instruct), a third of the size of the one we've used so far. Does it still reliably return valid JSON, or do more responses fail to parse than with the 1.5B model? Where it does parse, do the label decisions still look reasonable to you?
+
+```python
+alternative_generator = pipeline(        # <1>
+    "text-generation",                   # <2>
+    model="Qwen/Qwen2.5-0.5B-Instruct",  # <3>
+    device_map="auto",                   # <4>
+)
+```
+1. Builds a second pipeline under a new name, so the `generate` model from before stays available and you can compare the two.
+2. The same task as in Step 2 — we still want a decoder that generates text.
+3. The only real change: the smaller 0.5B model, a third of the size of the 1.5B one used so far.
+4. Again lets the library pick GPU or CPU automatically.
+
+```python
+# TODO: reuse the loop from Step 3 (swap generate for alternative_generator) to
+# classify df['text'] again, then parse the responses with parse_response and
+# check how well the smaller model performs compared to the larger one.
+```
+
+### Next
+
+Head to [block 4](../04-evaluation/index.qmd) for evaluation and gold standards.

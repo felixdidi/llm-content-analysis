@@ -4,3 +4,4 @@
 _site
 etc
 **/*.quarto_ipynb
+/sections/workshop/solutions/

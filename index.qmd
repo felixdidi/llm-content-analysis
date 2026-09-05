@@ -1,28 +1,137 @@
 ---
-title: "Gebrauchsfertige, Open Source Large Language Models auf Hugging Face"
-subtitle: "als Forschungsinfrastruktur für die standardisierte Inhaltsanalyse von Texten"
-author:
-  - name: "Daniel Possler"
-    affiliation: "HMTM Hannover"
-  - name: "Felix Dietrich"
-    affiliation: "JGU Mainz"
-  - name: "Jule Scheper"
-    affiliation: "HMTM Hannover"
-  - name: "Anica Lammers"
-    affiliation: "HMTM Hannover"
-  - name: "Anna Spatzenegger"
-    affiliation: "PLU Salzburg"
+pagetitle: "Open Source LLMs for Content Analysis"
 citation:
-  title: "Gebrauchsfertige, Open Source Large Language Models auf Hugging Face als Forschungsinfrastruktur für die standardisierte Inhaltsanalyse von Texten"
+  title: "Gebrauchsfertige, Open Source Large Language Models auf Hugging Face als Forschungsinfrastruktur für die standardisierte Inhaltsanalyse von Texten [Ready-to-use, open-source Large Language Models on Hugging Face as research infrastructure for standardized content analysis of text]"
+  author:
+    - name: "Daniel Possler"
+    - name: "Felix Dietrich"
+    - name: "Jule Scheper"
+    - name: "Anica Lammers"
+    - name: "Anna Spatzenegger"
   issued: "2026"
   type: article-journal
   container-title: "Publizistik"
   doi: "TBD"
 appendix-cite-as: display
+page-layout: full
+title-block-style: none
+toc: false
 ---
 
-## Herzlich Willkommen! {.unnumbered .unlisted}
+:::::: {.hero .column-screen}
+::::: {.grid}
 
-Der vorliegende Beitrag untersucht das Potenzial gebrauchsfertiger LLMs auf Hugging Face als Forschungsinfrastruktur für die standardisierte Inhaltsanalyse von Texten. Dabei werden drei Modelltypen für die Textcodierung vorgestellt: (1) kategoriespezifische Encoder-Modelle, (2) aufgabenspezifische Encoder-Modelle und (3) universelle Decoder-Modelle. In der hier vorliegenden, detaillierten Anleitung wird die Anwendung der drei Modelltypen über die Hugging Face-Bibliothek für die Textcodierung erläutert. In einer [empirischen Beispielstudie](beispielstudie/00_beispielstudie.qmd) illustrieren wir den Einsatz und die Validierung der drei Modelltypen sowie den Vergleich mit herkömmlichen Methoden der standardisierten Inhaltsanalyse: der diktionärsbasierten Analyse und der Analyse mittels überwachter maschineller Lernalgorithmen. Die Ergebnisse zeigen, dass LLM-basierte Verfahren über Hugging Face vergleichsweise einfach zugänglich, anpassungsfähig, gut skalierbar und kostengünstig sind und eine hohe Leistungsfähigkeit aufweisen, die mit manuellen Inhaltsanalysen konkurrieren kann.
+:::: {.g-col-12 .g-col-lg-7 .hero-text}
+<a href="https://doi.org/" target="_blank"><span class="hero-kicker"><i class="bi bi-stars" aria-hidden="true"></i> Check out our *Publizistik* paper</span></a>
 
-Wir dokumentieren Schritt für Schritt, wie Sie die Beispiele aus diesem Artikel selbst ausprobieren können. Mithilfe der zur Verfügung gestellten Notebooks können Sie die vorgestellten Analyseverfahren ganz einfach auf eigene Texte anwenden und auch andere, über Hugging Face zur Verfügung gestellte Modelle für die Inhaltsanalyse von Texten nutzen. Nach einer einmaligen [Installation von Python und allen benötigten Paketen](01_installation.qmd) sind nur wenige Schritte der [Vorbereitung](02_setup.qmd) notwendig. Danach können wir unsere Texte mit einem [kategoriespezifischen Encoder-Modell](03_kategoriespezifisches_Encoder-Modell.qmd), einem [aufgabenspezifischen Encoder-Modell](04_aufgabenspezifisches_Encoder-Modell.qmd) oder einem [universellen Decoder-Modell](05_universelles_Decoder-Modell.qmd) codieren.
+# Open Source LLMs for Content Analysis
+
+Ready-to-use, open source Large Language Models (LLMs) are an important research infrastructure. They are easy to access, adaptable, scalable, and inexpensive, while achieving a level of performance that can compete with manual content analysis.
+
+This page provides **step-by-step guides** to using these models for content analysis. It is intended as a resource for researchers and practitioners in the social sciences and related fields who are interested in applying LLMs to analyze textual data.
+
+<!-- ::: {.hero-buttons}
+[<i class="bi bi-map" aria-hidden="true"></i> Tutorials](sections/tutorials/index.qmd){.btn .btn-primary .hl-tutorials role="button"}
+[<i class="bi bi-file-earmark-text" aria-hidden="true"></i> Paper](sections/paper/index.qmd){.btn .btn-primary .hl-paper role="button"}
+[<i class="bi bi-people" aria-hidden="true"></i> Workshop](sections/workshop/index.qmd){.btn .btn-primary .hl-workshop role="button"}
+::: -->
+::::
+
+:::: {.g-col-12 .g-col-lg-5 .hero-visual}
+![](img/transformer_thinking.png){.hero-image fig-alt="Illustration of a transformer-style robot working on a laptop, symbolizing large language models."}
+::::
+
+:::::
+::::::
+
+## Get started {.unnumbered .unlisted}
+
+:::: {.grid}
+
+::: {.g-col-12 .g-col-md-4 .feature-card .hl-tutorials}
+<i class="bi bi-map feature-icon" aria-hidden="true"></i>
+
+### [Tutorials](sections/tutorials/index.qmd)
+
+Step-by-step walkthrough of common tasks across different model types — no prior experience required.
+
+[Begin a tutorial &rarr;](sections/tutorials/index.qmd)
+:::
+
+::: {.g-col-12 .g-col-md-4 .feature-card .hl-paper}
+<i class="bi bi-file-earmark-text feature-icon" aria-hidden="true"></i>
+
+### [Paper](sections/paper/index.qmd)
+
+Supplementary website for the *Publizistik* article (in German): a step-by-step guide and empirical example study.
+
+[Read the supplement &rarr;](sections/paper/index.qmd)
+:::
+
+::: {.g-col-12 .g-col-md-4 .feature-card .hl-workshop}
+<i class="bi bi-people feature-icon" aria-hidden="true"></i>
+
+### [Workshop](sections/workshop/index.qmd)
+
+A hands-on, interactive introduction to the workflow of using open-source LLMs for content analysis.
+
+[Explore the workshop &rarr;](sections/workshop/index.qmd)
+:::
+
+::::
+
+<!-- ## See it in action {.unnumbered .unlisted}
+
+Three model types, three ways to get from raw text to a label — here's the shortest possible taste of each. Full, runnable walkthroughs are in the [Tutorials](sections/tutorials/index.qmd) section.
+
+::: {.panel-tabset}
+
+## Category-specific encoder
+
+```python
+from transformers import pipeline
+
+classifier = pipeline(
+    "text-classification",
+    model="SamLowe/roberta-base-go_emotions",
+    top_k=None,
+)
+classifier("I can't stop thinking about what might happen.")
+```
+
+Trained once on one fixed set of labels (here: 28 emotion categories) — fast and cheap, but limited to what it was trained on.
+
+## Task-specific encoder
+
+```python
+from transformers import pipeline
+
+classifier = pipeline(
+    "zero-shot-classification",
+    model="MoritzLaurer/deberta-v3-base-zeroshot-v2.0",
+)
+classifier(
+    "I can't stop thinking about what might happen.",
+    candidate_labels=["fear", "no fear"],
+)
+```
+
+Any labels you define yourself, no fine-tuning required — trades a bit of speed for a lot of flexibility.
+
+## Universal decoder
+
+```python
+from transformers import pipeline
+
+generate = pipeline("text-generation", model="Qwen/Qwen2.5-1.5B-Instruct")
+generate(
+    "Does this text express fear? Answer yes or no: "
+    "'I can't stop thinking about what might happen.'"
+)
+```
+
+Free-text output from a generative model — the most flexible option, but it takes care to prompt well and parse the answer.
+
+:::
+
+Ready to dig in? Pick a starting point above, or head straight to the [Tutorials](sections/tutorials/index.qmd) for the full walkthrough. -->

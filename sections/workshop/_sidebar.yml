@@ -1,0 +1,39 @@
+website:
+  sidebar:
+    - id: workshop
+      style: "floating"
+      align: "center"
+      logo-href: /sections/workshop/index.html
+      logo:
+        light:
+          path: /img/transformer_laptop.png
+          alt: ""
+        dark:
+          path: /img/transformer_laptop.png
+          alt: ""
+      search: true
+      collapse-level: 3
+      contents:
+        - text: "---"
+        - text: "Overview"
+          href: sections/workshop/index.qmd
+        - text: "---"
+        - section: "Workshop"
+          contents:
+            - href: sections/workshop/schedule.qmd
+              text: "Schedule"
+            - href: sections/workshop/content/00-welcome/index.qmd
+              text: "Introduction"
+        - text: "---"
+        - section: "Exercises & Slides"
+          contents:
+            - href: sections/workshop/content/01-intro/index.qmd
+              text: "1. LLMs & Hugging Face"
+            - href: sections/workshop/content/02-encoder/index.qmd
+              text: "2. Encoder models"
+            - href: sections/workshop/content/03-decoder/index.qmd
+              text: "3. Generative decoders"
+            - href: sections/workshop/content/04-evaluation/index.qmd
+              text: "4. Evaluation & gold standard"
+            - href: sections/workshop/content/05-outlook/index.qmd
+              text: "5. Discussion & outlook"

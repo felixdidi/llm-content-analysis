@@ -1,27 +1,28 @@
-# Open Source LLMs für die Inhaltsanalyse
+# Open Source LLMs for Content Analysis
 
-Begleitende Materialien zum Artikel:
+Companion website to the article:
 
 > Possler, D., Dietrich, F., Scheper, J., Lammers, A., & Spatzenegger, A. (2026). Gebrauchsfertige, Open Source Large Language Models auf Hugging Face als Forschungsinfrastruktur für die standardisierte Inhaltsanalyse von Texten. *Publizistik*.
 
-Die Website ist verfügbar unter: [llm-content-analysis.com](https://llm-content-analysis.com)
+The website is available at: [llm-content-analysis.com](https://llm-content-analysis.com)
 
-## Inhalt
+## Content
 
-Schritt-für-Schritt-Anleitungen zur Textklassifikation mit drei LLM-Typen über die Hugging Face-Bibliothek:
+The site has three sections:
 
-1. **Kategoriespezifisches Encoder-Modell** – feinabgestimmte Encoder für spezifische Kategorien
-2. **Aufgabenspezifisches Encoder-Modell** – Encoder für allgemeine NLP-Aufgaben (z. B. Zero-Shot)
-3. **Universelles Decoder-Modell** – generative Decoder-Modelle via Prompt
+1. **Tutorials** (`sections/tutorials/`) — English-language, step-by-step guide to text classification
+2. **Paper** (`sections/paper/`) — the German-language supplementary website for the *Publizistik* article
+3. **Workshop** (`sections/workshop/`) — materials for the hands-on workshop
 
-Ergänzt durch eine empirische **Beispielstudie** mit Vergleich gegenüber diktionärsbasierter Analyse und überwachtem maschinellem Lernen.
+Shared assets (theme, bibliography, images, R environment) live at the repo root and are reused across all three sections.
 
-## Voraussetzungen
+## Requirements
 
-- Python (Anleitung zur Installation in `01_installation.qmd`)
-- [Quarto](https://quarto.org) (zum Rendern der Website)
+- Python (installation guide in `sections/tutorials/huggingface-transformers/installation.qmd`)
+- [Quarto](https://quarto.org) (to render the website)
+- R with [renv](https://rstudio.github.io/renv/) (for the Paper section's data tables; run `renv::restore()` on first use)
 
-## Website lokal rendern
+## Render the website locally
 
 ```bash
 quarto render

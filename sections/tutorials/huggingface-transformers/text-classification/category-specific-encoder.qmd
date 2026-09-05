@@ -1,0 +1,87 @@
+---
+title: Category-Specific Encoder Model
+engine: knitr
+---
+
+To run or modify the example code yourself, you can open and download the Jupyter notebook underlying this page via the sidebar.
+
+:::{.callout-note collapse="true"}
+## Questions about the code?
+No problem! Explanations for the individual steps of the code are hidden behind the numbers on the right. Simply hover your mouse over the number to see the explanation. Where the respective code is executed (in Python, R, or the terminal) is shown in the header of the code block.
+
+```{python filename="Python"}
+print("Hello! 👋") # <1>
+```
+
+1. This is a simple Python command that prints the text "Hello" to the console. The output appears below the code block.
+
+:::
+
+## Load data
+
+Regardless of the model used, we first load the already-installed packages as well as our text data, and store it in a list object:
+
+```{python filename="Python"}
+#| eval: false
+
+import pandas as pd                              #<1>
+from transformers import pipeline                #<1>
+
+data = pd.read_csv("data/example_dataset.csv")  #<2>
+textlist = list(data["text"])                  #<2>
+
+```
+
+1. Importing the required libraries
+2. Loading the text data from a CSV file and storing it in a list
+
+## Load model
+
+Here we use a category-specific encoder model for emotion classification, fine-tuned on the [GoEmotions dataset](https://huggingface.co/datasets/google-research-datasets/go_emotions) [@demszkyGoEmotionsDatasetFinegrained2020]. This model is freely available on Hugging Face and can be loaded directly via the `pipeline()` function. As needed, further parameters can be specified in this function, which can be found in the Hugging Face documentation (e.g., long texts may need to be shortened, depending on the model's maximum input length; `truncation=True`). Also, please note that running the `pipeline()` command can sometimes take a while, especially the first time, since the LLM needs to be downloaded and loaded.
+
+:::{.callout-tip}
+## Good to know
+
+Instead of the model used here, you can also use other category-specific encoder models (usually labeled for "Text Classification") for different languages and use cases. An overview of available models can be found on [Hugging Face](https://huggingface.co/models). Make sure that the chosen model is suitable for your specific task (e.g. sentiment analysis, topic classification, etc.) and supports the language of your texts.
+:::
+
+Since this is a category-specific model, it was trained once on one fixed set of labels — here, the 28 GoEmotions categories. Conveniently, `fear` is already one of those 28 categories. We request scores for all labels (`top_k=None`) so we can pick out the `fear` entry for each text.
+
+```{python filename="Python"}
+#| eval: false
+emotion_classifier = pipeline("text-classification",                        #<3>
+                               model="SamLowe/roberta-base-go_emotions",     #<4>
+                               top_k=None,                                   #<5>
+                               truncation=True)                              #<6>
+```
+
+3. Initializing the pipeline for text classification
+4. Specifying the model, here a category-specific encoder model fine-tuned on GoEmotions
+5. Requesting scores for all 28 labels instead of only the single most likely one, so we can look up `fear` specifically
+6. Enabling truncation of long texts
+
+## Perform classification
+
+Now we apply the model to our list of texts and pick out each text's `fear` score.
+
+```{python filename="Python"}
+#| eval: false
+
+result = emotion_classifier(textlist)                                                #<7>
+fear_scores = [next(item["score"] for item in scores if item["label"] == "fear")      #<8>
+               for scores in result]                                                 #<8>
+
+result_df = pd.DataFrame({                                                            #<9>
+    "text": data["text"],                                                            #<9>
+    "fear_score": fear_scores,                                                        #<9>
+})                                                                                    #<9>
+
+print(result_df)                                                                       #<10>
+```
+
+7. Applying the emotion classifier to the list of texts; for each text, this returns a score for every one of the 28 GoEmotions labels
+8. Picking out just the `fear` score for each text from that list of 28 scores
+9. Assembling the original texts and their `fear` scores into a DataFrame for a clear overview
+10. Printing the result DataFrame
+
+{{< embed ../notebooks/category-specific-encoder.ipynb#classify >}}

@@ -1,0 +1,21 @@
+---
+title: "Workshop"
+subtitle: "Text Classification with Open Source Models: Harnessing Large Language Models for Psychological Research"
+sidebar: workshop
+citation:
+  title: "Text Classification with Open Source Models: Harnessing Large Language Models for Psychological Research"
+  author:
+  - name: "Felix Dietrich"
+    affiliation: "JGU Mainz"
+  - name: "Daniel Possler"
+    affiliation: "HMTM Hannover"
+  issued: "2026"
+  type: event
+appendix-cite-as: display
+---
+
+This site collects the materials for the workshop we're giving at the [DGPs 2026 conference in Luxembourg](https://www.dgps.de). If you're a participant, you shouldn't need much beyond this page. If you're not — welcome anyway. Everything here, including the notebooks, is meant to be followed along at your own pace.
+
+By the end of the workshop, you'll be able to (1) tell apart the three main types of LLM-based text classifiers and know when each one fits your use case, (2) run all three on real, open-ended survey text using Hugging Face and Google Colab, and (3) evaluate whether a classifier's output is good enough to trust for your research question.
+
+All materials, including the notebooks, are also available from the [GitHub repository](https://github.com/felixdidi/llm-content-analysis/tree/main/sections/workshop) if you'd like your own copy or want to work through the exercises again later.

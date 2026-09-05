@@ -1,0 +1,18 @@
+---
+title: "Hugging Face Transformers"
+subtitle: "Easy to use Python library for text classification with LLMs"
+citation:
+  title: "Tutorial: Hugging Face Transformers"
+  author:
+  - name: "Felix Dietrich"
+    affiliation: "JGU Mainz"
+  - name: "Daniel Possler"
+    affiliation: "HMTM Hannover"
+  issued: "2026"
+  type: webpage
+appendix-cite-as: display
+---
+
+This tutorial demonstrates how ready-to-use, open-source LLMs on Hugging Face can be used for standardized text classification via the `transformers` Python library.
+
+Using the provided notebooks, you can easily apply the presented classification methods to your own texts, and also use other models available on Hugging Face for text classification. After a one-time [installation of Python and all required packages](installation.qmd), only a few steps of [preparation](preparation.qmd) are necessary. After that, we can classify our texts with a [category-specific encoder model](text-classification/category-specific-encoder.qmd), a [task-specific encoder model](text-classification/task-specific-encoder.qmd), or a [universal decoder model](text-classification/universal-decoder.qmd).

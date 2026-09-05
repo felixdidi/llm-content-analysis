@@ -1,0 +1,13 @@
+---
+title: "1. LLMs, model types & Hugging Face"
+---
+
+<div>
+```{=html}
+<iframe class="slide-deck" src="slides.html" width="749" height="450"></iframe>
+```
+</div>
+
+Prefer full screen? Open the slides [directly](slides.html){target="_blank"}.
+
+To download them as a PDF, open that link, press `e`, then print to PDF.

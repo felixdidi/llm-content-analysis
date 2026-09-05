@@ -1,0 +1,85 @@
+---
+title: "Discussion & outlook"
+subtitle: "Text Classification with Open Source Models"
+logo: ../../../../img/transformer.png
+bibliography: "../../../../bib/refs.bib"
+csl: ../../../../bib/apa.csl
+format:
+  revealjs:
+    theme: ../../../../styles/slides.scss
+    highlight-style: gruvbox
+    transition: slide
+    menu:
+      side: "left"
+      width: wide
+      preview-links: true
+      controls: auto
+      titleSelector: "h1, h2"
+      use-text-content-for-missing-titles: false
+      hideMissingTitles: true
+    center: true
+    history: false
+callout-icon: false
+---
+
+![](../img/wakeup.gif)
+
+## Five concluding thoughts
+
+:::incremental
+- We know it’s been a lot of theory 🤯, BUT understanding LLMs is helpful amid the AI revolution & for running the models, a basic understanding is enough.
+- We know the code looks super complicated 😓, BUT loading and running the models via Transformers is pretty straightforward – as always, data wrangling is the mess, but Chatbots can help you here
+- We know Python is scary 😱, BUT you can use it only to a minimal extent and quickly return to familiar territory
+- We know commercial models are so tempting (Claude 🤤), BUT only Open-Source models guarantee data security and replicability (i.e., basic standards of our work)
+- We know proper validation takes soooo much time 🫩, BUT just running a model is no ‘easy fix ’; it’s a black box, probably more dirty than quick and definitely not a scientific result you want your name attached to.
+:::
+
+***
+
+:::columns
+
+:::column
+
+:::big-text
+Thank you!<br>🥳
+:::
+
+:::
+
+:::column
+
+![](../img/eval.png)
+
+:::center-text
+**Please evaluate this workshop!**
+:::
+
+:::
+
+:::
+
+## Contact
+
+::: {.columns}
+
+::: {.column}
+
+**Felix Dietrich**<br>
+Johannes Gutenberg Universität Mainz<br><br>
+felix.dietrich@uni-mainz.de <br>
+linkedin.com/in/felixdidi/
+
+
+:::
+
+::: {.column}
+
+**Daniel Possler**<br>
+Hochschule für Musik, Theater und Medien Hannover<br><br>
+daniel.possler@ijk.hmtm-hannover.de<br>
+linkedin.com/in/dpossler/
+
+:::
+
+:::
+

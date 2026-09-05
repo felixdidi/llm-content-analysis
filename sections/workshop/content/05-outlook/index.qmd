@@ -1,0 +1,23 @@
+---
+title: "5. Discussion & outlook"
+---
+
+<div>
+```{=html}
+<iframe class="slide-deck" src="slides.html" width="800" height="450"></iframe>
+```
+</div>
+
+Open the slides [directly](slides.html){target="_blank"} if you'd rather see them full screen.
+
+## Bring your own questions
+
+If you already have a project in mind where you're wondering whether LLM-based classification would fit, bring it — we're happy to think through it together.
+
+## Where to go from here
+
+- The [Tutorials](/sections/tutorials/index.qmd) section on this site has full walkthroughs and local installation instructions.
+- All of today's notebooks and data are on [this workshop's GitHub repository](https://github.com/felixdidi/llm-content-analysis/tree/main/sections/workshop).
+- Hugging Face's own course is a good next step if you want to go deeper: <https://huggingface.co/learn>.
+
+Thank you for spending your morning with us!

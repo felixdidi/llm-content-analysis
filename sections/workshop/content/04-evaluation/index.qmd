@@ -1,0 +1,438 @@
+---
+title: "4. Evaluation & gold standards"
+---
+
+<div>
+```{=html}
+<iframe class="slide-deck" src="slides.html" width="749" height="450"></iframe>
+```
+</div>
+
+Open the slides [directly](slides.html){target="_blank"} if you'd rather see them full screen.
+
+## Exercise
+
+:::{.callout-note}
+## Run this yourself
+This page shows the exercise code for reference; code blocks with real output below were actually run to produce it, but the page itself isn't a live Colab session — open the notebook there to run it yourself.
+
+[Open in Colab →](https://colab.research.google.com/github/felixdidi/llm-content-analysis/blob/main/sections/workshop/content/04-evaluation/evaluation.ipynb){.btn .btn-primary role="button"}
+:::
+
+This notebook belongs to the [DGPs 2026 workshop *Text Classification with Open Source Models*](../../index.qmd). Ideally, you've now got predictions from three different classifiers, for three emotions each (anger, fear, sadness). Here we evaluate those predictions two ways: first against RW3D's self-reported emotion *intensity* ratings, second against a manual gold standard.
+
+We run this exercise entirely in R (though you could use Python or another language if you prefer), using the `tidyverse` and `yardstick` packages.
+
+**How to use this notebook:** run each cell from top to bottom with `Shift+Enter` or by clicking the run button. Most cells are given and fully explained; a few are marked **Your turn** — those are where you edit or write something yourself. Every exercise cell has a safe default, so nothing breaks if you leave it as-is, but you'll get more out of the session if you actually change it.
+
+**Important note for Colab users:** If you are running this notebook in Google Colab, please follow these steps: 1. Make sure you have a Google account and are logged in. 2. To create a copy of this notebook in your own Google Drive (advised), select "Copy to Drive" at the top of the Colab page. 3. **In this notebook, you do not need to change the runtime to GPU because we are not using any GPU-intensive operations.** 4. You can run the notebook cells as instructed.
+
+### Setup
+
+First, we install the R packages we need, if you don't already have them.
+
+```r
+#| eval: false
+# simply run this cell to install the packages
+install.packages(c("tidyverse", "yardstick"))  # <1>
+```
+1. Installs `tidyverse` (a collection of R packages for data wrangling and plotting) and `yardstick` (functions for computing accuracy, precision, recall, etc.) — you only need to do this once per machine.
+
+```r
+#| warning: false
+#| message: false
+library(tidyverse)   # <1>
+library(yardstick)   # <2>
+```
+1. Loads `tidyverse` into this session so its functions (e.g. for reading and reshaping data) become available.
+2. Loads `yardstick`, which we'll use in Step 3 to calculate evaluation metrics.
+
+### Step 1: Get your results
+
+Load a reference results file that we have created (using the same methods that you have used).
+
+(**If you are a pro 🧐 and bored:** You can save your own results from the previous notebooks to CSV files, read in those files here and combine them into one data frame. This way, you get to see how *your* choices (e.g., your prompts) actually scored. Make sure to combine the outputs into a data frame with the same structure as the reference results file so that the rest of the notebook works without changes.)
+
+```r
+RESULTS_URL <- "https://raw.githubusercontent.com/felixdidi/llm-content-analysis/main/sections/workshop/data/classification_results_reference.csv"  # <1>
+GOLD_URL <- "https://raw.githubusercontent.com/felixdidi/llm-content-analysis/main/sections/workshop/data/gold_standard.csv"  # <2>
+
+# read in the reference results
+results <- read_csv(RESULTS_URL, show_col_types = FALSE)  # <3>
+
+# read in the gold standard and rename the columns to avoid name clashes
+gold <- read_csv(GOLD_URL, show_col_types = FALSE) |>  # <4>
+  select(id, gold_anger = anger, gold_fear = fear, gold_sadness = sadness)  # <5>
+
+# join the two data frames on the "id" column
+results <- results |> left_join(gold, by = "id")  # <6>
+
+# look at the first few rows of the results data frame
+head(results)  # <7>
+```
+1. The web address of the reference results, i.e. the classifier predictions we prepared with the same methods you used. `<-` is R's assignment operator — it does the same job as `=` in Python.
+2. The web address of the manual gold standard.
+3. `read_csv()` downloads the file and turns it into a tibble (the tidyverse's version of a table). `show_col_types = FALSE` only suppresses the message reporting which type each column was given.
+4. Reads the gold standard the same way. The `|>` is R's pipe: it takes whatever is on its left and passes it into the function on its right, which lets you chain steps top to bottom.
+5. `select()` keeps only the listed columns — and `gold_anger = anger` renames them while selecting. Without renaming, these would collide with the identically named prediction columns in the next step.
+6. `left_join()` merges the gold standard into the results, matching rows by the `id` column they share. Every result row keeps its data and gains the three `gold_*` columns.
+7. `head()` prints the first few rows, so you can check that the join worked.
+
+{{< embed evaluation.ipynb#load-results >}}
+
+### Step 2: Do the probability scores track intensity?
+
+The category-specific encoder and the NLI encoder each returned a **score** between 0 and 1 per emotion.
+
+A natural first instinct for interpreting these scores is to read a higher score as "the model thinks this text expresses more of that emotion," the same way a higher self-report rating means more intensity. But all a classifier's score technically tells you is how confident the model is in its yes/no call; it seems likely that confidence scales with the underlying emotion's *intensity*, but we do not know that for sure.
+
+Let's check this: how closely do `encoder_anger`/`encoder_fear`/`encoder_sadness` and `nli_anger`/`nli_fear`/`nli_sadness` correlate with the matching `self_report_*` rating?
+
+If you know how to do this in R, you can write your own code.
+
+```r
+# write your own code, e.g., for anger
+results_corr_anger <- results |>  # <1>
+  select(self_report_anger, encoder_anger, nli_anger)  # <2>
+
+cor(results_corr_anger)  # <3>
+```
+1. Starts from the joined `results` table and pipes it into the next step.
+2. Keeps only the three anger columns we want to compare: the participant's own self-report, the category-specific encoder's score, and the NLI model's score.
+3. `cor()` computes the correlations between all columns of a table at once, so you get a small correlation matrix of every column against every other one.
+
+{{< embed evaluation.ipynb#correlation-anger-manual >}}
+
+If your brain is alredy fried from the previous exercises, you can simply run the following convenience code to calculate the correlations:
+
+```r
+LABELS <- c("anger", "fear", "sadness")  # <1>
+
+# A helper function to compute correlations between self-report, encoder, and NLI scores for a given emotion label
+# you do not need to edit this function, just call it with the label you want to analyze
+relevant_correlations <- function(label) {  # <2>
+  cols <- c(  # <3>
+    self_report = paste0("self_report_", label),  # <4>
+    encoder     = paste0("encoder_", label),
+    nli         = paste0("nli_", label)
+  )
+
+  combn(names(cols), 2, simplify = FALSE) |>  # <5>
+    map_dfr(function(pair) {  # <6>
+      test <- cor.test(results[[cols[[pair[1]]]]], results[[cols[[pair[2]]]]])  # <7>
+      tibble(  # <8>
+        pair = paste(pair[1], "vs", pair[2]),  # <9>
+        correlation = round(unname(test$estimate), 2),  # <10>
+        p_value = signif(test$p.value, 3)  # <11>
+      )
+    })
+}
+
+# Compute correlations for each emotion label and store them in a named list
+correlations <- set_names(map(LABELS, relevant_correlations), LABELS)  # <12>
+
+correlations$anger  # <13>
+```
+1. `c()` combines values into a vector — here the three emotions we're analysing, so we can loop over them later on.
+2. Defines a function that takes one emotion label (e.g. `"anger"`) and returns a small table of correlations for it.
+3. Builds a named vector holding the three column names that belong to this emotion.
+4. `paste0()` glues strings together without a separator, so `"self_report_"` plus `"anger"` becomes `"self_report_anger"`. That's how we address the right column for whichever label was passed in.
+5. `combn(..., 2)` forms all possible pairs out of the three sources: self-report vs. encoder, self-report vs. NLI, and encoder vs. NLI.
+6. `map_dfr()` runs the function below once for each pair and stacks the resulting one-row tables into a single data frame.
+7. `cor.test()` computes the correlation between this pair's two columns, including a significance test. `results[[...]]` fetches one column from the table by its name.
+8. `tibble()` creates a one-row table holding this pair's results.
+9. A readable name for the pair, e.g. `"self_report vs encoder"`.
+10. The correlation coefficient, rounded to two decimals.
+11. The p-value, shortened to three significant digits.
+12. Runs the helper for all three emotions (`map`) and labels the three resulting tables with the emotion names (`set_names`), giving one list you can address by name.
+13. Displays the table for anger.
+
+{{< embed evaluation.ipynb#correlation-tables >}}
+
+```r
+correlations$fear  # <1>
+```
+1. `$` fetches one element from the list by name — here the fear table that was computed above.
+
+{{< embed evaluation.ipynb#correlation-fear >}}
+
+```r
+correlations$sadness  # <1>
+```
+1. The same once more for sadness.
+
+{{< embed evaluation.ipynb#correlation-sadness >}}
+
+#### Your turn
+
+Would you call these correlations strong enough to treat the probability scores as a helpful indicator for self-reported *intensity*, e.g., to rank texts by "how much anger" they express?
+
+What do you think: Are self-reported emotions a good benchmark for model evaluation? Why or why not?
+
+### Step 3: Comparison with a manual gold standard
+
+Although the self-report ratings are interesting to compare to, they are not a perfect match for what the classifiers are actually predicting. Whereas they reflect the participant's judgment of how much of that emotion they felt in their current situation, the classifiers are making a yes/no call about whether each emotion is expressed in the text at all (sometimes returned as a probability score, sometimes as a boolean):
+
+- the category-specific encoder and the NLI encoder each returned a **score** between 0 and 1 per emotion (how confident the model is);
+- the decoder returned a **boolean** per emotion directly (its JSON answer already was `true`/`false`).
+
+We should therefore also compare the classifiers' predictions to a manual gold standard (i.e., manual annotations of whether each emotion is expressed in the text).
+
+(*please consider this gold standard as an example for how to evaluate your own models, not as a definitive truth about the RW3D dataset*)
+
+:::{.callout-note}
+## Where this connects to manual coding
+Everything from here on is the same logic used to validate a manual coding scheme against a second human coder — precision, recall, and agreement metrics don't care whether the second "coder" is a person or a model. If you're building a manual codebook of your own, the [Tutorials](/sections/tutorials/index.qmd) section and [the paper's example study](/sections/paper/beispielstudie/04_manuelle_Inhaltsanalyse.qmd) cover that step in depth.
+:::
+
+To demonstrate, we compare the gold standard to the decoder's predictions, which are already in a yes/no format just like the gold standard. The other two classifiers' scores can be converted to yes/no calls by thresholding (e.g., `score > 0.5`; if you know how to do data transformations in R and have some extra time, you can do this as a bonus exercise. Please note: Defining thresholds is a mess and we could do a workshop only on this question).
+
+Take a look at a few rows before diving into metrics:
+
+```r
+results |>  # <1>
+  select(text, gold_anger, decoder_anger) |>  # <2>
+  head(3)  # <3>
+```
+1. Takes the joined table from Step 1.
+2. Keeps just three columns: the text itself, the manual gold judgment for anger, and the decoder's prediction for anger.
+3. Shows the first three rows — enough to see that both columns are simple `TRUE`/`FALSE` values and can be compared directly.
+
+{{< embed evaluation.ipynb#gold-preview >}}
+
+### Step 3a: Accuracy
+
+Accuracy is simply the share of texts the decoder got right, for one emotion at a time. It's the easiest metric to compute, but it hides a lot: the gold standard isn't evenly split between `TRUE` and `FALSE` for every emotion (see the `baseline` accuracy printed below, i.e., the share you'd get by always guessing whichever class is more common). A model can reach a high accuracy just by leaning toward the majority class, without actually discriminating anything.
+
+You can do this with some very simple R code:
+
+```r
+# Transform the values to factors
+results$gold_anger <- as.factor(results$gold_anger)  # <1>
+results$decoder_anger <- as.factor(results$decoder_anger)  # <2>
+
+# Accuracy function is as simple as that
+accuracy(results, gold_anger, decoder_anger)  # <3>
+```
+1. `as.factor()` converts the `TRUE`/`FALSE` column into a *factor*, which is R's type for categorical variables — `yardstick` expects factors rather than plain logical values. The `$` addresses a single column of the table.
+2. The same conversion for the decoder's predictions.
+3. `accuracy()` from `yardstick` compares truth against prediction: you hand it the table, then the gold column, then the prediction column. What comes back is the share of texts the decoder got right.
+
+{{< embed evaluation.ipynb#accuracy-manual >}}
+
+```r
+# Let's take a look at baseline
+prop.table(  # <1>
+  table(results$gold_anger)  # <2>
+  )
+```
+1. `prop.table()` converts those counts into proportions, so you can read off directly what share of the texts is `TRUE` and what share is `FALSE`.
+2. `table()` counts how often each value occurs in the gold anger column. The larger of the two shares is the baseline: the accuracy you'd already reach by always guessing the more common class.
+
+{{< embed evaluation.ipynb#baseline-proportions >}}
+
+You can also use our convenience function below:
+
+```r
+# you can simply run this cell to compute accuracy for each emotion label, or edit it to compute accuracy for your own predictions
+for (label in LABELS) {  # <1>
+  cat(sprintf("=== %s ===\n", label))  # <2>
+
+  gold_col <- results[[paste0("gold_", label)]]  # <3>
+  pred <- results[[paste0("decoder_", label)]]  # <4>
+  acc <- mean(pred == gold_col, na.rm = TRUE)  # <5>
+  cat(sprintf("  decoder : %.1f%% accuracy\n", acc * 100))  # <6>
+
+  baseline <- max(prop.table(table(gold_col)))  # <7>
+  cat(sprintf("  baseline: %.1f%% accuracy (always predict the majority class)\n\n", baseline * 100))  # <8>
+}
+```
+1. Loops over the three emotions in `LABELS`, running everything inside the braces once per emotion.
+2. `cat()` prints text, and `sprintf()` assembles it: `%s` is the placeholder where the label gets inserted, and `\n` starts a new line.
+3. Fetches the gold column for the current emotion, with the column name again assembled by `paste0()`.
+4. The decoder's predictions for the same emotion.
+5. `pred == gold_col` compares both columns row by row, giving one `TRUE`/`FALSE` per text; taking the `mean()` of that yields the share of matches, i.e. the accuracy. `na.rm = TRUE` ignores missing values.
+6. Prints that accuracy as a percentage with one decimal place (`%.1f`); the doubled `%%` prints a literal percent sign.
+7. The baseline: the share of the more frequent class (`max()` of the two proportions).
+8. Prints the baseline underneath for comparison. If the decoder isn't clearly above this number, it isn't really discriminating anything.
+
+{{< embed evaluation.ipynb#accuracy >}}
+
+### Step 3b: Precision, recall, and per-class performance
+
+To get a more complete picture of how well the decoder is doing, we can compute three additional metrics:
+
+- **Precision**: of the texts the decoder called `TRUE` for an emotion, how many actually were?
+- **Recall**: of the texts that actually expressed that emotion, how many did the decoder find?
+- **F1-score**: the harmonic mean of precision and recall.
+
+In R, you can use the `yardstick` package to calculate these metrics (similar output can be obtained in other programming languages). To help you extract all relevant metrics in one call, we provide a helper function below. A few things about its output that aren't obvious on first read:
+
+- It reports a row for **each class** the target can take (here `FALSE` and `TRUE`) with its own precision/recall/F1. The `TRUE` row is usually the one you care about (did the model correctly catch the emotion?), but the `FALSE` row matters too: a model with great `TRUE`-recall but terrible `FALSE`-recall is just saying "yes" to almost everything.
+- **`support`** is the number of texts that belong to that row's class (the count of gold `TRUE`s or gold `FALSE`s), not the number of predictions. It's what lets you judge whether a score is based on 5 cases or 100.
+- **`macro avg`** takes the unweighted mean of the `FALSE` and `TRUE` rows, so a class with only 30 members counts exactly as much as one with 120. **`weighted avg`** instead weights each class by its `support`. Comparing the two is a quick imbalance check: if they're far apart, the model is doing much better on one class than the other.
+
+You can also calculate the metrics manually with some very simple R code:
+
+```r
+# FALSE
+precision(results, gold_anger, decoder_anger)  # <1>
+recall(results, gold_anger, decoder_anger)  # <2>
+f_meas(results, gold_anger, decoder_anger)  # <3>
+```
+1. Precision for the `FALSE` class: of all the texts the decoder called `FALSE`, how many really were? By default, `yardstick` treats the *first* factor level — here `FALSE` — as the event of interest.
+2. Recall for `FALSE`: of all the texts that really were `FALSE`, how many did the decoder actually find?
+3. `f_meas()` is the F1-score, the harmonic mean of the two values above — a single number summarising both.
+
+{{< embed evaluation.ipynb#metrics-false >}}
+
+```r
+# TRUE
+precision(results, gold_anger, decoder_anger, event_level = "second")  # <1>
+recall(results, gold_anger, decoder_anger, event_level = "second")  # <2>
+f_meas(results, gold_anger, decoder_anger, event_level = "second")  # <3>
+```
+1. The same metric, but `event_level = "second"` moves the event of interest to the second factor level, `TRUE`. So this is the precision for "the emotion is expressed" — usually the direction you actually care about.
+2. Recall for `TRUE`: what share of the genuinely emotional texts the decoder caught.
+3. The F1-score for the `TRUE` class.
+
+{{< embed evaluation.ipynb#metrics-true >}}
+
+A convenience function to get everything at once:
+
+```r
+# this is the helper function, you do not need to edit it
+classification_report <- function(data, truth_col, pred_col) {  # <1>
+  d <- data |>
+    transmute(  # <2>
+      truth = factor(.data[[truth_col]], levels = c(FALSE, TRUE)),  # <3>
+      estimate = factor(.data[[pred_col]], levels = c(FALSE, TRUE))  # <4>
+    ) |>
+    drop_na()  # <5>
+
+  cm <- conf_mat(d, truth, estimate)  # <6>
+
+  per_class <- bind_rows(  # <7>
+    summary(cm, event_level = "first")  |> mutate(class = "FALSE"),  # <8>
+    summary(cm, event_level = "second") |> mutate(class = "TRUE")  # <9>
+  ) |>
+    filter(.metric %in% c("precision", "recall", "f_meas")) |>  # <10>
+    select(class, .metric, .estimate) |>  # <11>
+    pivot_wider(names_from = .metric, values_from = .estimate) |>  # <12>
+    left_join(  # <13>
+      count(d, truth, name = "n") |> mutate(class = as.character(truth)) |> select(class, n),
+      by = "class"
+    )
+
+  macro <- per_class |>
+    summarise(class = "macro avg", precision = mean(precision), recall = mean(recall),  # <14>
+              f_meas = mean(f_meas), n = sum(n))
+  weighted <- per_class |>
+    summarise(class = "weighted avg",  # <15>
+              precision = weighted.mean(precision, n), recall = weighted.mean(recall, n),
+              f_meas = weighted.mean(f_meas, n), n = sum(n))
+
+  bind_rows(per_class, macro, weighted) |>  # <16>
+    rename(f1 = f_meas, support = n) |>  # <17>
+    mutate(across(c(precision, recall, f1), \(x) round(x, 2)))  # <18>
+}
+
+# here, we compute the classification report for each emotion label and print it
+for (label in LABELS) {  # <19>
+  cat(sprintf("=== %s ===\n", label))  # <20>
+  print(classification_report(results, paste0("gold_", label), paste0("decoder_", label)))  # <21>
+}
+```
+1. Defines the helper. It receives a table plus the *names* of the gold and the prediction column, which is what makes it reusable for any emotion.
+2. `transmute()` builds a new table containing only the columns created right here.
+3. Takes the gold column and turns it into a factor with a fixed level order (`FALSE` first, `TRUE` second). That fixed order is what makes `event_level` below behave predictably.
+4. The same for the predictions.
+5. `drop_na()` removes rows with missing values, e.g. responses that couldn't be parsed earlier.
+6. `conf_mat()` builds the confusion matrix: how often each combination of truth and prediction occurs.
+7. `bind_rows()` stacks two tables on top of one another.
+8. All metrics computed with `FALSE` as the event of interest, tagged with a `class` column saying so.
+9. The same again, but with `TRUE` as the event of interest.
+10. Keeps only the three metrics we care about, out of the many that `yardstick` returns.
+11. Reduces the table to the three columns we still need.
+12. `pivot_wider()` reshapes from long to wide: the metric names become their own columns, so each class ends up as one row with precision, recall, and F1 next to each other.
+13. Adds the `support` column: `count()` counts how many texts belong to each class, and the join attaches those counts to the matching rows.
+14. `summarise()` collapses the two class rows into a single one — here the unweighted mean of both classes, the "macro avg".
+15. The same, but weighted by each class's `support` ("weighted avg"), so the larger class carries more weight.
+16. Stacks the per-class rows and the two average rows into the final table.
+17. Renames the columns to the more familiar `f1` and `support`.
+18. Rounds the three metric columns to two decimals; `across()` applies the same operation to several columns at once.
+19. Runs the report for each of the three emotions.
+20. Prints a heading with the emotion's name.
+21. Calls the helper with the matching gold and prediction column names, and `print()` writes the returned table to the output.
+
+{{< embed evaluation.ipynb#classification-report >}}
+
+#### Your turn
+
+Where does the decoder actually get it wrong?
+
+A confusion matrix (as a simple table) shows how the decoder's `TRUE`/`FALSE` calls line up against the gold standard. Rows are the true (gold) label, columns are the decoder's prediction.
+
+For which of the three emotions does the decoder have the most **false positives** (calling an emotion `TRUE` that the gold standard says is `FALSE`)? Set `chosen_label` below to check yourself.
+
+```r
+chosen_label <- "fear"    # TODO: try "anger", "fear", "sadness"  # <1>
+
+table(  # <2>
+  gold = results[[paste0("gold_", chosen_label)]],  # <3>
+  predicted = results[[paste0("decoder_", chosen_label)]]  # <4>
+)
+```
+1. Pick the emotion you want to inspect — this is the only line you need to change.
+2. Given two inputs, `table()` produces a cross-tabulation: it counts how often each combination of the two occurs.
+3. The rows of the resulting table: the gold standard's judgment for the chosen emotion.
+4. The columns: the decoder's prediction. The two cells off the diagonal are the errors — false positives in one corner, false negatives in the other.
+
+{{< embed evaluation.ipynb#crosstab >}}
+
+#### Your turn
+
+Aggregate metrics only get you so far — sometimes you want to read the actual texts behind a specific kind of mistake. Say you want to see texts where the decoder called `fear` `TRUE`, but the gold standard says it wasn't: set `chosen_label <- "fear"` and `direction <- "false_positive"` below.
+
+You can change `chosen_label` and `direction` to look at other combinations, e.g. `sadness` false negatives (texts the decoder called `FALSE` on, even though the gold standard says sadness *was* present).
+
+```r
+chosen_label <- "fear"          # TODO: "anger", "fear", "sadness"  # <1>
+direction <- "false_positive"   # TODO: "false_positive" (decoder said TRUE, gold says FALSE)  # <2>
+                                 #    or "false_negative" (decoder said FALSE, gold says TRUE)
+
+# you do not need to edit the code below, just change the two variables above
+pred <- results[[paste0("decoder_", chosen_label)]]  # <3>
+gold_col <- results[[paste0("gold_", chosen_label)]]  # <4>
+
+mask <- if (direction == "false_positive") {  # <5>
+  pred & !gold_col  # <6>
+} else if (direction == "false_negative") {  # <7>
+  !pred & gold_col  # <8>
+} else {
+  stop('direction must be "false_positive" or "false_negative"')  # <9>
+}
+
+results |>
+  filter(mask) |>  # <10>
+  select(text, gold_anger, gold_fear, gold_sadness) |>  # <11>
+  head(3)  # <12>
+```
+1. Which emotion you'd like to look at.
+2. Which kind of mistake: texts the decoder wrongly called `TRUE`, or ones it wrongly called `FALSE`.
+3. The decoder's predictions for the chosen emotion.
+4. The gold standard's judgments for the same emotion.
+5. Depending on the direction you chose above, a different filter gets built below.
+6. False positives: the decoder says `TRUE` (`pred`) **and** the gold standard does not (`!gold_col`). The `&` requires both conditions per row, and `!` negates a value.
+7. Otherwise, check whether you asked for the second option.
+8. False negatives: the decoder said `FALSE` even though the gold standard says `TRUE`.
+9. `stop()` aborts with an error message if you typed something else — a small safeguard against typos.
+10. `filter()` keeps only the rows where the mask is `TRUE`, i.e. exactly the mistakes of the kind you chose.
+11. Shows the text together with all three gold judgments, so you can read the mistake in context.
+12. Limits the output to three examples; increase this number if you'd like to read more.
+
+{{< embed evaluation.ipynb#mismatch-lookup >}}
+
+### Next
+
+Head to the [discussion & outlook](../05-outlook/index.qmd) page.
