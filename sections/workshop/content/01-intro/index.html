@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Open Source LLMs for Content Analysis</title>
+<title>1. LLMs, model types &amp; Hugging Face – Open Source LLMs for Content Analysis</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -29,23 +29,24 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-0bdc59fcf4c41de9ca6aa5cdff7392a7.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-ab4091d42ee47e334a0fc2c25499bdb0.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../../">
+<link href="../../../../sections/workshop/content/02-encoder/index.html" rel="next">
+<script src="../../../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../../site_libs/quarto-html/quarto-syntax-highlighting-0bdc59fcf4c41de9ca6aa5cdff7392a7.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../../site_libs/bootstrap/bootstrap-11c7400715367f59b59db47c60a69c8d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -74,18 +75,38 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 <style>html{ scroll-behavior: smooth; }</style>
+<style>
+
+      .quarto-title-block .quarto-title-banner h1,
+      .quarto-title-block .quarto-title-banner h2,
+      .quarto-title-block .quarto-title-banner h3,
+      .quarto-title-block .quarto-title-banner h4,
+      .quarto-title-block .quarto-title-banner h5,
+      .quarto-title-block .quarto-title-banner h6
+      {
+        color: #282828;
+      }
+
+      .quarto-title-block .quarto-title-banner {
+        color: #282828;
+background: #8ec07c99;
+      }
+</style>
+<style>
+  :root { --hl: var(--hl-workshop); --hl-rgb: var(--hl-workshop-rgb); }
+</style>
 
 
 </head>
 
-<body class="nav-fixed quarto-light">
+<body class="nav-sidebar floating nav-fixed quarto-light">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top">
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="./index.html">
+    <a class="navbar-brand" href="../../../../index.html">
     <span class="navbar-title">Open Source LLMs for Content Analysis</span>
     </a>
   </div>
@@ -96,15 +117,15 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./sections/tutorials/index.html"> 
+    <a class="nav-link" href="../../../../sections/tutorials/index.html"> 
 <span class="menu-text">Tutorials</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./sections/paper/index.html"> 
+    <a class="nav-link" href="../../../../sections/paper/index.html"> 
 <span class="menu-text">Paper</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./sections/workshop/index.html"> 
+    <a class="nav-link active" href="../../../../sections/workshop/index.html" aria-current="page"> 
 <span class="menu-text">Workshop</span></a>
   </li>  
 </ul>
@@ -113,133 +134,150 @@ ul.task-list li input[type="checkbox"] {
 </div>
       </div> <!-- /container-fluid -->
     </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../../../sections/workshop/content/01-intro/index.html">Exercises &amp; Slides</a></li><li class="breadcrumb-item"><a href="../../../../sections/workshop/content/01-intro/index.html">1. LLMs &amp; Hugging Face</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
-<!-- sidebar -->
-<!-- margin-sidebar -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../../../sections/workshop/content/01-intro/index.html">Exercises &amp; Slides</a></li><li class="breadcrumb-item"><a href="../../../../sections/workshop/content/01-intro/index.html">1. LLMs &amp; Hugging Face</a></li></ol></nav>
+      <h1 class="title">1. LLMs, model types &amp; Hugging Face</h1>
+                      </div>
+  </div>
     
+  
+  <div class="quarto-title-meta">
+
+      
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-center sidebar-header">
+      <a href="../../../../sections/workshop/index.html" class="sidebar-logo-link">
+      <img src="../../../../img/transformer_laptop.png" alt="" class="sidebar-logo light-content py-0 d-lg-inline d-none">
+      <img src="../../../../img/transformer_laptop.png" alt="" class="sidebar-logo dark-content py-0 d-lg-inline d-none">
+      </a>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="px-0"><hr class="sidebar-divider hi "></li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../../sections/workshop/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Overview</span></a>
+  </div>
+</li>
+        <li class="px-0"><hr class="sidebar-divider hi "></li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Workshop</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../../sections/workshop/schedule.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Schedule</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../../sections/workshop/content/00-welcome/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="px-0"><hr class="sidebar-divider hi "></li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Exercises &amp; Slides</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../../sections/workshop/content/01-intro/index.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">1. LLMs &amp; Hugging Face</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../../sections/workshop/content/02-encoder/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2. Encoder models</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../../sections/workshop/content/03-decoder/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3. Generative decoders</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../../sections/workshop/content/04-evaluation/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4. Evaluation &amp; gold standard</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../../sections/workshop/content/05-outlook/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5. Discussion &amp; outlook</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+        
+    </div>
 <!-- main -->
-<main class="content page-columns page-full column-body" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
+<main class="content quarto-banner-title-block" id="quarto-document-content">
 
 
 
 
-<div class="hero column-screen">
-<div class="grid">
-<div class="g-col-12 g-col-lg-7 hero-text">
-<p><a href="https://doi.org/" target="_blank"><span class="hero-kicker"><i class="bi bi-stars" aria-hidden="true"></i> Check out our <em>Publizistik</em> paper</span></a></p>
-<section id="open-source-llms-for-content-analysis" class="level1">
-<h1>Open Source LLMs for Content Analysis</h1>
-<p>Ready-to-use, open source Large Language Models (LLMs) are an important research infrastructure. They are easy to access, adaptable, scalable, and inexpensive, while achieving a level of performance that can compete with manual content analysis.</p>
-<p>This page provides <strong>step-by-step guides</strong> to using these models for content analysis. It is intended as a resource for researchers and practitioners in the social sciences and related fields who are interested in applying LLMs to analyze textual data.</p>
-<!-- ::: {.hero-buttons}
-[<i class="bi bi-map" aria-hidden="true"></i> Tutorials](sections/tutorials/index.qmd){.btn .btn-primary .hl-tutorials role="button"}
-[<i class="bi bi-file-earmark-text" aria-hidden="true"></i> Paper](sections/paper/index.qmd){.btn .btn-primary .hl-paper role="button"}
-[<i class="bi bi-people" aria-hidden="true"></i> Workshop](sections/workshop/index.qmd){.btn .btn-primary .hl-workshop role="button"}
-::: -->
-</section>
+
+<div>
+<iframe class="slide-deck" src="slides.html" width="749" height="450"></iframe>
 </div>
-<div class="g-col-12 g-col-lg-5 hero-visual">
-<p><img src="img/transformer_thinking.png" class="hero-image img-fluid" alt="Illustration of a transformer-style robot working on a laptop, symbolizing large language models."></p>
-</div>
-</div>
-</div>
-<section id="get-started" class="level2 unnumbered unlisted">
-<h2 class="unnumbered unlisted anchored" data-anchor-id="get-started">Get started</h2>
-<div class="grid">
-<div class="g-col-12 g-col-md-4 feature-card hl-tutorials">
-<p><i class="bi bi-map feature-icon" aria-hidden="true"></i></p>
-<section id="tutorials" class="level3">
-<h3 class="anchored" data-anchor-id="tutorials"><a href="./sections/tutorials/index.html">Tutorials</a></h3>
-<p>Step-by-step walkthrough of common tasks across different model types — no prior experience required.</p>
-<p><a href="./sections/tutorials/index.html">Begin a tutorial →</a></p>
-</section>
-</div>
-<div class="g-col-12 g-col-md-4 feature-card hl-paper">
-<p><i class="bi bi-file-earmark-text feature-icon" aria-hidden="true"></i></p>
-<section id="paper" class="level3">
-<h3 class="anchored" data-anchor-id="paper"><a href="./sections/paper/index.html">Paper</a></h3>
-<p>Supplementary website for the <em>Publizistik</em> article (in German): a step-by-step guide and empirical example study.</p>
-<p><a href="./sections/paper/index.html">Read the supplement →</a></p>
-</section>
-</div>
-<div class="g-col-12 g-col-md-4 feature-card hl-workshop">
-<p><i class="bi bi-people feature-icon" aria-hidden="true"></i></p>
-<section id="workshop" class="level3">
-<h3 class="anchored" data-anchor-id="workshop"><a href="./sections/workshop/index.html">Workshop</a></h3>
-<p>A hands-on, interactive introduction to the workflow of using open-source LLMs for content analysis.</p>
-<p><a href="./sections/workshop/index.html">Explore the workshop →</a></p>
-</section>
-</div>
-</div>
-<!-- ## See it in action {.unnumbered .unlisted}
-
-Three model types, three ways to get from raw text to a label — here's the shortest possible taste of each. Full, runnable walkthroughs are in the [Tutorials](sections/tutorials/index.qmd) section.
-
-::: {.panel-tabset}
-
-## Category-specific encoder
-
-```python
-from transformers import pipeline
-
-classifier = pipeline(
-    "text-classification",
-    model="SamLowe/roberta-base-go_emotions",
-    top_k=None,
-)
-classifier("I can't stop thinking about what might happen.")
-```
-
-Trained once on one fixed set of labels (here: 28 emotion categories) — fast and cheap, but limited to what it was trained on.
-
-## Task-specific encoder
-
-```python
-from transformers import pipeline
-
-classifier = pipeline(
-    "zero-shot-classification",
-    model="MoritzLaurer/deberta-v3-base-zeroshot-v2.0",
-)
-classifier(
-    "I can't stop thinking about what might happen.",
-    candidate_labels=["fear", "no fear"],
-)
-```
-
-Any labels you define yourself, no fine-tuning required — trades a bit of speed for a lot of flexibility.
-
-## Universal decoder
-
-```python
-from transformers import pipeline
-
-generate = pipeline("text-generation", model="Qwen/Qwen2.5-1.5B-Instruct")
-generate(
-    "Does this text express fear? Answer yes or no: "
-    "'I can't stop thinking about what might happen.'"
-)
-```
-
-Free-text output from a generative model — the most flexible option, but it takes care to prompt well and parse the answer.
-
-:::
-
-Ready to dig in? Pick a starting point above, or head straight to the [Tutorials](sections/tutorials/index.qmd) for the full walkthrough. -->
+<p>Prefer full screen? Open the slides <a href="slides.html" target="_blank">directly</a>.</p>
+<p>To download them as a PDF, open that link, press <code>e</code>, then print to PDF.</p>
 
 
-</section>
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-possler2026" class="csl-entry quarto-appendix-citeas" role="listitem">
-Possler, D., Dietrich, F., Scheper, J., Lammers, A., &amp; Spatzenegger,
-A. (2026). Gebrauchsfertige, Open Source Large Language Models auf
-Hugging Face als Forschungsinfrastruktur für die standardisierte
-Inhaltsanalyse von Texten [Ready-to-use, open-source Large Language
-Models on Hugging Face as research infrastructure for standardized
-content analysis of text]. <em>Publizistik</em>. <a href="https://doi.org/TBD">https://doi.org/TBD</a>
-</div></div></section></div></main> <!-- /main -->
+</main> <!-- /main -->
 <script>
 document.addEventListener("DOMContentLoaded", function () {
   var navbar = document.getElementById("quarto-header");
@@ -709,6 +747,15 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
   </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../../../../sections/workshop/content/02-encoder/index.html" class="pagination-link" aria-label="2. Encoder models">
+        <span class="nav-page-text">2. Encoder models</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
 </div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">
@@ -727,5 +774,5 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-<script src="site_libs/quarto-html/zenscroll-min.js"></script>
+<script src="../../../../site_libs/quarto-html/zenscroll-min.js"></script>
 </body></html>

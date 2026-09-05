@@ -1,0 +1,1311 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.18">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>2. Classification with encoder models – Open Source LLMs for Content Analysis</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="../../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../../">
+<link href="../../../../sections/workshop/content/03-decoder/index.html" rel="next">
+<link href="../../../../sections/workshop/content/01-intro/index.html" rel="prev">
+<script src="../../../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../../site_libs/quarto-html/quarto-syntax-highlighting-0bdc59fcf4c41de9ca6aa5cdff7392a7.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../../site_libs/bootstrap/bootstrap-11c7400715367f59b59db47c60a69c8d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+<style>
+
+      .quarto-title-block .quarto-title-banner h1,
+      .quarto-title-block .quarto-title-banner h2,
+      .quarto-title-block .quarto-title-banner h3,
+      .quarto-title-block .quarto-title-banner h4,
+      .quarto-title-block .quarto-title-banner h5,
+      .quarto-title-block .quarto-title-banner h6
+      {
+        color: #282828;
+      }
+
+      .quarto-title-block .quarto-title-banner {
+        color: #282828;
+background: #8ec07c99;
+      }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+<style>
+  :root { --hl: var(--hl-workshop); --hl-rgb: var(--hl-workshop-rgb); }
+</style>
+
+
+</head>
+
+<body class="nav-sidebar floating nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../../../index.html">
+    <span class="navbar-title">Open Source LLMs for Content Analysis</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../../sections/tutorials/index.html"> 
+<span class="menu-text">Tutorials</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../../sections/paper/index.html"> 
+<span class="menu-text">Paper</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link active" href="../../../../sections/workshop/index.html" aria-current="page"> 
+<span class="menu-text">Workshop</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../../../sections/workshop/content/01-intro/index.html">Exercises &amp; Slides</a></li><li class="breadcrumb-item"><a href="../../../../sections/workshop/content/02-encoder/index.html">2. Encoder models</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../../../sections/workshop/content/01-intro/index.html">Exercises &amp; Slides</a></li><li class="breadcrumb-item"><a href="../../../../sections/workshop/content/02-encoder/index.html">2. Encoder models</a></li></ol></nav>
+      <h1 class="title">2. Classification with encoder models</h1>
+                      </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-center sidebar-header">
+      <a href="../../../../sections/workshop/index.html" class="sidebar-logo-link">
+      <img src="../../../../img/transformer_laptop.png" alt="" class="sidebar-logo light-content py-0 d-lg-inline d-none">
+      <img src="../../../../img/transformer_laptop.png" alt="" class="sidebar-logo dark-content py-0 d-lg-inline d-none">
+      </a>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="px-0"><hr class="sidebar-divider hi "></li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../../sections/workshop/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Overview</span></a>
+  </div>
+</li>
+        <li class="px-0"><hr class="sidebar-divider hi "></li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Workshop</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../../sections/workshop/schedule.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Schedule</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../../sections/workshop/content/00-welcome/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="px-0"><hr class="sidebar-divider hi "></li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Exercises &amp; Slides</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../../sections/workshop/content/01-intro/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1. LLMs &amp; Hugging Face</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../../sections/workshop/content/02-encoder/index.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">2. Encoder models</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../../sections/workshop/content/03-decoder/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3. Generative decoders</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../../sections/workshop/content/04-evaluation/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4. Evaluation &amp; gold standard</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../../sections/workshop/content/05-outlook/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5. Discussion &amp; outlook</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#exercise" id="toc-exercise" class="nav-link active" data-scroll-target="#exercise">Exercise</a>
+  <ul class="collapse">
+  <li><a href="#setup" id="toc-setup" class="nav-link" data-scroll-target="#setup">Setup</a></li>
+  <li><a href="#step-1-load-the-data" id="toc-step-1-load-the-data" class="nav-link" data-scroll-target="#step-1-load-the-data">Step 1: Load the data</a></li>
+  <li><a href="#step-2-a-category-specific-encoder-model" id="toc-step-2-a-category-specific-encoder-model" class="nav-link" data-scroll-target="#step-2-a-category-specific-encoder-model">Step 2: A category-specific encoder model</a></li>
+  <li><a href="#step-3-a-task-specific-nli-encoder-model" id="toc-step-3-a-task-specific-nli-encoder-model" class="nav-link" data-scroll-target="#step-3-a-task-specific-nli-encoder-model">Step 3: A task-specific (NLI) encoder model</a></li>
+  <li><a href="#exercise-compare-to-a-different-model" id="toc-exercise-compare-to-a-different-model" class="nav-link" data-scroll-target="#exercise-compare-to-a-different-model">Exercise: Compare to a different model</a></li>
+  <li><a href="#next" id="toc-next" class="nav-link" data-scroll-target="#next">Next</a></li>
+  </ul></li>
+  </ul>
+<div class="quarto-alternate-notebooks"><h2>Notebooks</h2><ul><li><a href="encoder-classification-preview.html"><i class="bi bi-journal-code"></i>Classification with encoder models</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+<section id="exercise" class="level2">
+<h2 class="anchored" data-anchor-id="exercise">Exercise</h2>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Run this yourself
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This page shows the exercise code for reference; code blocks with real output below were actually run to produce it, but the page itself isn’t a live Colab session — open the notebook there to run it yourself.</p>
+<p><a href="https://colab.research.google.com/github/felixdidi/llm-content-analysis/blob/main/sections/workshop/content/02-encoder/encoder-classification.ipynb" class="btn btn-primary" role="button">Open in Colab →</a></p>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Questions about the code?
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>No problem! Explanations for the less obvious lines are hidden behind the little numbers on the right of each code block — just hover your mouse over one to see it.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="annotated-cell-15"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><button class="code-annotation-anchor" data-target-cell="annotated-cell-15" data-target-annotation="1">1</button><span id="annotated-cell-15-1" class="code-annotation-target"><a href="#annotated-cell-15-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Hello!"</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-15" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-15" data-code-lines="1" data-code-annotation="1">This prints “Hello!” to the console. The output would appear directly below the code block.</span>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<p>This notebook belongs to the <a href="../../../../sections/workshop/index.html">DGPs 2026 workshop <em>Text Classification with Open Source Models</em></a>. You’ll run two different encoder-based classifiers on real, open-ended survey text from the <a href="https://osf.io/9b85r/">Real World Worry Waves Dataset (RW3D)</a> — focused on three emotions, anger, fear, and sadness.</p>
+<p><strong>Code-along vs.&nbsp;exercise:</strong> Steps 1–3 below are the code-along, which we build together — there are a couple of small <strong>Your turn</strong> fill-ins along the way that you can work on after each step. The “Exercise: Compare to a different model” section at the end is yours to work through independently.</p>
+<p><strong>How to use this notebook:</strong> run each cell from top to bottom with <code>Shift+Enter</code> or by clicking the run button. Most cells are given and fully explained; a few are marked <strong>Your turn</strong> — those are where you edit or write something yourself. Every exercise cell has a safe default, so nothing breaks if you leave it as-is, but you’ll get more out of the session if you actually change it.</p>
+<p><strong>Important note for Colab users:</strong> If you are running this notebook in Google Colab, please follow these steps: 1. Make sure you have a Google account and are logged in. 2. To create a copy of this notebook in your own Google Drive (advised), select “Copy to Drive” at the top of the Colab page. 3. Once the notebook copy opens in Colab, click on “Runtime” in the menu bar, then select “Change runtime type” and choose “T4 GPU” as the hardware accelerator. 4. Click “Save” to apply the changes. 5. Now you can run the notebook cells as instructed.</p>
+<section id="setup" class="level3">
+<h3 class="anchored" data-anchor-id="setup">Setup</h3>
+<p>First, we install the Python packages we need. This will take some time to complete.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="annotated-cell-1"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><button class="code-annotation-anchor" data-target-cell="annotated-cell-1" data-target-annotation="1">1</button><span id="annotated-cell-1-1" class="code-annotation-target"><a href="#annotated-cell-1-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>pip install <span class="op">-</span>q transformers accelerate pandas</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-1" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-1" data-code-lines="1" data-code-annotation="1"><code>%pip install</code> runs Python’s package manager from inside the notebook; <code>-q</code> just keeps its output short. <code>transformers</code> and <code>accelerate</code> let us load and run the models, and <code>pandas</code> gives us a convenient table (<code>DataFrame</code>) format for the data.</span>
+</dd>
+</dl>
+<p>Next, we can change the logging level of the <code>transformers</code> library to avoid cluttering the notebook with warnings and info messages. You do not have to run this cell, but it will make the output easier to read.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="annotated-cell-2"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><button class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="1">1</button><span id="annotated-cell-2-1" class="code-annotation-target"><a href="#annotated-cell-2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> transformers <span class="im">import</span> logging</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="2">2</button><span id="annotated-cell-2-2" class="code-annotation-target"><a href="#annotated-cell-2-2" aria-hidden="true" tabindex="-1"></a>logging.set_verbosity_error()</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-2" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-2" data-code-lines="1" data-code-annotation="1">Imports <code>transformers</code>’ logging module, which controls how much it prints to the console.</span>
+</dd>
+<dt data-target-cell="annotated-cell-2" data-target-annotation="2">2</dt>
+<dd>
+<span data-code-cell="annotated-cell-2" data-code-lines="2" data-code-annotation="2">Raises the logging threshold to “error” so only actual errors get printed — this hides the routine warning/info messages you’d otherwise see while loading models.</span>
+</dd>
+</dl>
+</section>
+<section id="step-1-load-the-data" class="level3">
+<h3 class="anchored" data-anchor-id="step-1-load-the-data">Step 1: Load the data</h3>
+<p>We’ll use a curated sample of survey responses from RW3D. Participants of this study wrote about how the COVID-19 situation made them feel, and also self-reported a number of emotions regarding their current situation. They also reported which emotion best fit their current situation. To keep this workshop focused, we’ll only look at three of those emotions: anger, fear, and sadness.</p>
+<p>First, let’s load the data and take a look at the dataset.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="annotated-cell-3"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><button class="code-annotation-anchor" data-target-cell="annotated-cell-3" data-target-annotation="1">1</button><span id="annotated-cell-3-1" class="code-annotation-target"><a href="#annotated-cell-3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="annotated-cell-3-2"><a href="#annotated-cell-3-2" aria-hidden="true" tabindex="-1"></a></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-3" data-target-annotation="2">2</button><span id="annotated-cell-3-3" class="code-annotation-target"><a href="#annotated-cell-3-3" aria-hidden="true" tabindex="-1"></a>DATA_URL <span class="op">=</span> <span class="st">"https://raw.githubusercontent.com/felixdidi/llm-content-analysis/main/sections/workshop/data/rw3d_workshop_sample.csv"</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-3" data-target-annotation="3">3</button><span id="annotated-cell-3-4" class="code-annotation-target"><a href="#annotated-cell-3-4" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(DATA_URL)</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-3" data-target-annotation="4">4</button><span id="annotated-cell-3-5" class="code-annotation-target"><a href="#annotated-cell-3-5" aria-hidden="true" tabindex="-1"></a>df.head()</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-3" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-3" data-code-lines="1" data-code-annotation="1">Imports <code>pandas</code>, the standard Python library for working with tables, under the short name <code>pd</code> — so we can write <code>pd.something</code> instead of <code>pandas.something</code>.</span>
+</dd>
+<dt data-target-cell="annotated-cell-3" data-target-annotation="2">2</dt>
+<dd>
+<span data-code-cell="annotated-cell-3" data-code-lines="3" data-code-annotation="2">The web address of our prepared dataset. Storing it in a variable keeps the line below short, and means you’d only have to change the address in one place.</span>
+</dd>
+<dt data-target-cell="annotated-cell-3" data-target-annotation="3">3</dt>
+<dd>
+<span data-code-cell="annotated-cell-3" data-code-lines="4" data-code-annotation="3"><code>read_csv()</code> downloads that CSV file and turns it into a <code>DataFrame</code> — pandas’ table format, here with one row per survey response. <code>df</code> is the conventional name for it.</span>
+</dd>
+<dt data-target-cell="annotated-cell-3" data-target-annotation="4">4</dt>
+<dd>
+<span data-code-cell="annotated-cell-3" data-code-lines="5" data-code-annotation="4"><code>head()</code> shows only the first five rows, so you get a quick look at the data without printing all 150.</span>
+</dd>
+</dl>
+<div class="quarto-embed-nb-cell">
+<div id="cell-load-data" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-14T13:40:17.647359Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-14T13:40:17.647253Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-14T13:40:17.873092Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-14T13:40:17.872887Z&quot;}}" data-execution_count="4">
+<div id="load-data" class="cell-output cell-output-display" data-execution_count="4">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">id</th>
+<th data-quarto-table-cell-role="th">text</th>
+<th data-quarto-table-cell-role="th">main_emotion</th>
+<th data-quarto-table-cell-role="th">anger</th>
+<th data-quarto-table-cell-role="th">fear</th>
+<th data-quarto-table-cell-role="th">sadness</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>1</td>
+<td>Stressed and uninformed. Don't feel enough is ...</td>
+<td>anger</td>
+<td>9</td>
+<td>1</td>
+<td>6</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>2</td>
+<td>I feel worried about the virus, burnout about ...</td>
+<td>fear</td>
+<td>8</td>
+<td>9</td>
+<td>7</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>3</td>
+<td>Disgusted how unprotected NHS staff are and ho...</td>
+<td>sadness</td>
+<td>2</td>
+<td>6</td>
+<td>7</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>4</td>
+<td>I am not too worried about the situation as I ...</td>
+<td>sadness</td>
+<td>1</td>
+<td>3</td>
+<td>6</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">4</th>
+<td>5</td>
+<td>I'm finding the Corona situation quite dauntin...</td>
+<td>sadness</td>
+<td>5</td>
+<td>2</td>
+<td>7</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<a class="quarto-notebook-link" id="nblink-1" href="encoder-classification-preview.html#cell-load-data">Source: Classification with encoder models</a></div>
+<section id="your-turn" class="level4">
+<h4 class="anchored" data-anchor-id="your-turn">Your turn</h4>
+<p>Before we classify anything, get a feel for the data yourself. Use the code below to output a random text. Then guess how the writer would score their anger, fear, and sadness in that situation (on a scale from 1-9). Run the next cell to reveal their self-reported scores. Change <code>random_state</code> (any whole number) and re-run both cells to look at a different sample.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="annotated-cell-4"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><button class="code-annotation-anchor" data-target-cell="annotated-cell-4" data-target-annotation="1">1</button><span id="annotated-cell-4-1" class="code-annotation-target"><a href="#annotated-cell-4-1" aria-hidden="true" tabindex="-1"></a>random_state <span class="op">=</span> <span class="dv">42</span>  <span class="co"># </span><span class="al">TODO</span><span class="co">: try a different number</span></span>
+<span id="annotated-cell-4-2"><a href="#annotated-cell-4-2" aria-hidden="true" tabindex="-1"></a></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-4" data-target-annotation="2">2</button><span id="annotated-cell-4-3" class="code-annotation-target"><a href="#annotated-cell-4-3" aria-hidden="true" tabindex="-1"></a>sample <span class="op">=</span> df.sample(<span class="dv">1</span>, random_state<span class="op">=</span>random_state)</span>
+<span id="annotated-cell-4-4"><a href="#annotated-cell-4-4" aria-hidden="true" tabindex="-1"></a></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-4" data-target-annotation="3">3</button><span id="annotated-cell-4-5" class="code-annotation-target"><a href="#annotated-cell-4-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, (_, row) <span class="kw">in</span> <span class="bu">enumerate</span>(sample.iterrows()):</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-4" data-target-annotation="4">4</button><span id="annotated-cell-4-6" class="code-annotation-target"><a href="#annotated-cell-4-6" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>row[<span class="st">'text'</span>]<span class="sc">}</span><span class="ch">\n</span><span class="ss">"</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-4" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-4" data-code-lines="1" data-code-annotation="1"><code>random_state</code> fixes which “random” row gets picked — the same number always gives you the same text, so you can compare it to the self-reported scores below.</span>
+</dd>
+<dt data-target-cell="annotated-cell-4" data-target-annotation="2">2</dt>
+<dd>
+<span data-code-cell="annotated-cell-4" data-code-lines="3" data-code-annotation="2"><code>df.sample(1, ...)</code> picks exactly one random row out of the whole DataFrame.</span>
+</dd>
+<dt data-target-cell="annotated-cell-4" data-target-annotation="3">3</dt>
+<dd>
+<span data-code-cell="annotated-cell-4" data-code-lines="5" data-code-annotation="3"><code>iterrows()</code> lets you loop over a DataFrame’s rows one at a time; since there’s only one row here, the loop body runs just once.</span>
+</dd>
+<dt data-target-cell="annotated-cell-4" data-target-annotation="4">4</dt>
+<dd>
+<span data-code-cell="annotated-cell-4" data-code-lines="6" data-code-annotation="4">Prints the text of that row. The <code>f"..."</code> is an f-string: whatever stands inside the curly braces gets replaced by its value, and the <code>\n</code> adds a blank line underneath.</span>
+</dd>
+</dl>
+<p>Now reveal the self-reported scores for the same texts. Do any surprise you?</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="annotated-cell-5"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><button class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="1">1</button><span id="annotated-cell-5-1" class="code-annotation-target"><a href="#annotated-cell-5-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, (_, row) <span class="kw">in</span> <span class="bu">enumerate</span>(sample.iterrows()):</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="2">2</button><span id="annotated-cell-5-2" class="code-annotation-target"><a href="#annotated-cell-5-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"anger=</span><span class="sc">{</span>row[<span class="st">'anger'</span>]<span class="sc">}</span><span class="ss"> fear=</span><span class="sc">{</span>row[<span class="st">'fear'</span>]<span class="sc">}</span><span class="ss"> sadness=</span><span class="sc">{</span>row[<span class="st">'sadness'</span>]<span class="sc">}</span><span class="ss">"</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-5" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-5" data-code-lines="1" data-code-annotation="1">Loops over that same single sampled row again.</span>
+</dd>
+<dt data-target-cell="annotated-cell-5" data-target-annotation="2">2</dt>
+<dd>
+<span data-code-cell="annotated-cell-5" data-code-lines="2" data-code-annotation="2">Prints that person’s own self-reported anger, fear, and sadness scores (on the original 1–9 scale), so you can compare them to your own guess.</span>
+</dd>
+</dl>
+</section>
+</section>
+<section id="step-2-a-category-specific-encoder-model" class="level3">
+<h3 class="anchored" data-anchor-id="step-2-a-category-specific-encoder-model">Step 2: A category-specific encoder model</h3>
+<p>We’ll use <a href="https://huggingface.co/SamLowe/roberta-base-go_emotions"><code>SamLowe/roberta-base-go_emotions</code></a>, a RoBERTa model fine-tuned on the <a href="https://huggingface.co/datasets/google-research-datasets/go_emotions">GoEmotions dataset</a> (58k Reddit comments, 27 emotions + neutral) — the most-used GoEmotions classifier on Hugging Face. This is a <strong>category-specific</strong> model: it was trained once, on one fixed set of labels, and can’t be repurposed for a different category set.</p>
+<p>Loading and running the model on all 150 texts may take some time.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="annotated-cell-6"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="1">1</button><span id="annotated-cell-6-1" class="code-annotation-target"><a href="#annotated-cell-6-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> transformers <span class="im">import</span> pipeline</span>
+<span id="annotated-cell-6-2"><a href="#annotated-cell-6-2" aria-hidden="true" tabindex="-1"></a></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="2">2</button><span id="annotated-cell-6-3" class="code-annotation-target"><a href="#annotated-cell-6-3" aria-hidden="true" tabindex="-1"></a>emotion_classifier <span class="op">=</span> pipeline(<span class="st">"text-classification"</span>,</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="3">3</button><span id="annotated-cell-6-4" class="code-annotation-target"><a href="#annotated-cell-6-4" aria-hidden="true" tabindex="-1"></a>                               model<span class="op">=</span><span class="st">"SamLowe/roberta-base-go_emotions"</span>,</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="4">4</button><span id="annotated-cell-6-5" class="code-annotation-target"><a href="#annotated-cell-6-5" aria-hidden="true" tabindex="-1"></a>                               top_k<span class="op">=</span><span class="va">None</span>,</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="5">5</button><span id="annotated-cell-6-6" class="code-annotation-target"><a href="#annotated-cell-6-6" aria-hidden="true" tabindex="-1"></a>                               truncation<span class="op">=</span><span class="va">True</span>)</span>
+<span id="annotated-cell-6-7"><a href="#annotated-cell-6-7" aria-hidden="true" tabindex="-1"></a></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="6">6</button><span id="annotated-cell-6-8" class="code-annotation-target"><a href="#annotated-cell-6-8" aria-hidden="true" tabindex="-1"></a>roberta_result <span class="op">=</span> emotion_classifier(df[<span class="st">'text'</span>].tolist())</span>
+<span id="annotated-cell-6-9"><a href="#annotated-cell-6-9" aria-hidden="true" tabindex="-1"></a></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="7">7</button><span id="annotated-cell-6-10" class="code-annotation-target"><a href="#annotated-cell-6-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(roberta_result)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-6" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-6" data-code-lines="1" data-code-annotation="1"><code>pipeline</code> is Hugging Face’s high-level shortcut: give it a task and a model name, get back something you can call directly on text.</span>
+</dd>
+<dt data-target-cell="annotated-cell-6" data-target-annotation="2">2</dt>
+<dd>
+<span data-code-cell="annotated-cell-6" data-code-lines="3" data-code-annotation="2"><code>"text-classification"</code> is the task name for category-specific classifiers — models that return a score for each of their fixed labels.</span>
+</dd>
+<dt data-target-cell="annotated-cell-6" data-target-annotation="3">3</dt>
+<dd>
+<span data-code-cell="annotated-cell-6" data-code-lines="4" data-code-annotation="3">The model we want, written as its Hugging Face ID (<code>user/model-name</code>). It gets downloaded automatically the first time you run this, which is why the cell takes a while.</span>
+</dd>
+<dt data-target-cell="annotated-cell-6" data-target-annotation="4">4</dt>
+<dd>
+<span data-code-cell="annotated-cell-6" data-code-lines="5" data-code-annotation="4"><code>top_k=None</code> means “give me all 28 GoEmotions scores per text”, not just the single most likely label.</span>
+</dd>
+<dt data-target-cell="annotated-cell-6" data-target-annotation="5">5</dt>
+<dd>
+<span data-code-cell="annotated-cell-6" data-code-lines="6" data-code-annotation="5"><code>truncation=True</code> cuts off texts that are too long for the model instead of erroring.</span>
+</dd>
+<dt data-target-cell="annotated-cell-6" data-target-annotation="6">6</dt>
+<dd>
+<span data-code-cell="annotated-cell-6" data-code-lines="8" data-code-annotation="6">Runs the classifier over all texts at once. <code>df['text']</code> is the text column, and <code>.tolist()</code> turns it into a plain Python list, which is what the pipeline expects as input.</span>
+</dd>
+<dt data-target-cell="annotated-cell-6" data-target-annotation="7">7</dt>
+<dd>
+<span data-code-cell="annotated-cell-6" data-code-lines="10" data-code-annotation="7">Prints the raw result, so you can see how it is structured: one entry per text, each holding a <code>label</code>/<code>score</code> pair for all 28 categories.</span>
+</dd>
+</dl>
+<p><strong>Basically, that was it.</strong> We now have classifications for all texts in the dataset. We could save this directly — <code>roberta_result</code> is just a list of dictionaries (one per text, each holding <code>label</code>/<code>score</code> pairs for all 28 categories), and that’s exactly the structure of a JSON file. So instead of any Python-specific format, you could save it with Python’s built-in <code>json</code> module:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="annotated-cell-7"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><button class="code-annotation-anchor" data-target-cell="annotated-cell-7" data-target-annotation="1">1</button><span id="annotated-cell-7-1" class="code-annotation-target"><a href="#annotated-cell-7-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">"roberta_result.json"</span>, <span class="st">"w"</span>) <span class="im">as</span> f:</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-7" data-target-annotation="2">2</button><span id="annotated-cell-7-2" class="code-annotation-target"><a href="#annotated-cell-7-2" aria-hidden="true" tabindex="-1"></a>    json.dump(roberta_result, f)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-7" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-7" data-code-lines="1" data-code-annotation="1">Opens (creates) a file called <code>roberta_result.json</code> in write mode; the <code>with</code> block closes the file again automatically once it’s done.</span>
+</dd>
+<dt data-target-cell="annotated-cell-7" data-target-annotation="2">2</dt>
+<dd>
+<span data-code-cell="annotated-cell-7" data-code-lines="2" data-code-annotation="2">Writes <code>roberta_result</code> into that open file, converted to JSON text.</span>
+</dd>
+</dl>
+<p>and continue working in whatever language or tool you like from there — R, for example, can read the same file back in with the <code>jsonlite</code> package.</p>
+<p>For this workshop, we’ll stay in Python and do some basic data wrangling below to turn these scores into a table we can work with.</p>
+<section id="your-turn-1" class="level4">
+<h4 class="anchored" data-anchor-id="your-turn-1">Your turn</h4>
+<p><strong>1. Extracting the scores</strong></p>
+<p>In the cell below, we extract the fear scores from the model output and create a new DataFrame with the original text and the corresponding fear score. Run the cell to see the results. Can you figure out how to add the anger and sadness scores as well?</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="annotated-cell-8"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><button class="code-annotation-anchor" data-target-cell="annotated-cell-8" data-target-annotation="1">1</button><span id="annotated-cell-8-1" class="code-annotation-target"><a href="#annotated-cell-8-1" aria-hidden="true" tabindex="-1"></a>fear_scores <span class="op">=</span> [<span class="bu">next</span>(item[<span class="st">"score"</span>] <span class="cf">for</span> item <span class="kw">in</span> scores <span class="cf">if</span> item[<span class="st">"label"</span>] <span class="op">==</span> <span class="st">"fear"</span>)</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-8" data-target-annotation="2">2</button><span id="annotated-cell-8-2" class="code-annotation-target"><a href="#annotated-cell-8-2" aria-hidden="true" tabindex="-1"></a>               <span class="cf">for</span> scores <span class="kw">in</span> roberta_result]</span>
+<span id="annotated-cell-8-3"><a href="#annotated-cell-8-3" aria-hidden="true" tabindex="-1"></a></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-8" data-target-annotation="3">3</button><span id="annotated-cell-8-4" class="code-annotation-target"><a href="#annotated-cell-8-4" aria-hidden="true" tabindex="-1"></a>roberta_result_df <span class="op">=</span> pd.DataFrame({</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-8" data-target-annotation="4">4</button><span id="annotated-cell-8-5" class="code-annotation-target"><a href="#annotated-cell-8-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"text"</span>: df[<span class="st">"text"</span>],</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-8" data-target-annotation="5">5</button><span id="annotated-cell-8-6" class="code-annotation-target"><a href="#annotated-cell-8-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"fear_score"</span>: fear_scores,</span>
+<span id="annotated-cell-8-7"><a href="#annotated-cell-8-7" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="annotated-cell-8-8"><a href="#annotated-cell-8-8" aria-hidden="true" tabindex="-1"></a></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-8" data-target-annotation="6">6</button><span id="annotated-cell-8-9" class="code-annotation-target"><a href="#annotated-cell-8-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(roberta_result_df)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-8" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-8" data-code-lines="1" data-code-annotation="1">For a single text’s list of 28 label/score dictionaries, this picks out the entry whose <code>label</code> is <code>"fear"</code> and keeps its <code>score</code>. <code>next(...)</code> just means “take the first match and stop searching”.</span>
+</dd>
+<dt data-target-cell="annotated-cell-8" data-target-annotation="2">2</dt>
+<dd>
+<span data-code-cell="annotated-cell-8" data-code-lines="2" data-code-annotation="2">…and this repeats that for every text in <code>roberta_result</code>. Lines 1 and 2 together form a <em>list comprehension</em>: a compact way to write a loop that builds a list — here, one fear score per text.</span>
+</dd>
+<dt data-target-cell="annotated-cell-8" data-target-annotation="3">3</dt>
+<dd>
+<span data-code-cell="annotated-cell-8" data-code-lines="4" data-code-annotation="3"><code>pd.DataFrame({...})</code> builds a new table from a dictionary, where every entry becomes one column.</span>
+</dd>
+<dt data-target-cell="annotated-cell-8" data-target-annotation="4">4</dt>
+<dd>
+<span data-code-cell="annotated-cell-8" data-code-lines="5" data-code-annotation="4">The first column: the original texts, taken straight from the data we loaded at the start.</span>
+</dd>
+<dt data-target-cell="annotated-cell-8" data-target-annotation="5">5</dt>
+<dd>
+<span data-code-cell="annotated-cell-8" data-code-lines="6" data-code-annotation="5">The second column: the fear scores we just extracted. This is where you’d add <code>anger</code> and <code>sadness</code> in the same way to solve the exercise.</span>
+</dd>
+<dt data-target-cell="annotated-cell-8" data-target-annotation="6">6</dt>
+<dd>
+<span data-code-cell="annotated-cell-8" data-code-lines="9" data-code-annotation="6">Prints the finished table.</span>
+</dd>
+</dl>
+<p><strong>2. Comparing model output to self-report</strong></p>
+<p>Now, to get a first impression of how well the model performs, we can compare the model to the self-report: this code will pick out the row for the same text you looked at in Step 1 (same <code>random_state</code>) and print only its classified scores.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="annotated-cell-9"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><button class="code-annotation-anchor" data-target-cell="annotated-cell-9" data-target-annotation="1">1</button><span id="annotated-cell-9-1" class="code-annotation-target"><a href="#annotated-cell-9-1" aria-hidden="true" tabindex="-1"></a>random_state <span class="op">=</span> <span class="dv">42</span>  <span class="co"># </span><span class="al">TODO</span><span class="co">: you can try the same numbers as before if you remember them</span></span>
+<span id="annotated-cell-9-2"><a href="#annotated-cell-9-2" aria-hidden="true" tabindex="-1"></a></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-9" data-target-annotation="2">2</button><span id="annotated-cell-9-3" class="code-annotation-target"><a href="#annotated-cell-9-3" aria-hidden="true" tabindex="-1"></a>sample <span class="op">=</span> df.sample(<span class="dv">1</span>, random_state<span class="op">=</span>random_state)</span>
+<span id="annotated-cell-9-4"><a href="#annotated-cell-9-4" aria-hidden="true" tabindex="-1"></a></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-9" data-target-annotation="3">3</button><span id="annotated-cell-9-5" class="code-annotation-target"><a href="#annotated-cell-9-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(roberta_result_df.loc[sample.index])</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-9" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-9" data-code-lines="1" data-code-annotation="1">Same idea as in Step 1: pick a number to select which text to look at again.</span>
+</dd>
+<dt data-target-cell="annotated-cell-9" data-target-annotation="2">2</dt>
+<dd>
+<span data-code-cell="annotated-cell-9" data-code-lines="3" data-code-annotation="2">Re-selects the same random row from the original data.</span>
+</dd>
+<dt data-target-cell="annotated-cell-9" data-target-annotation="3">3</dt>
+<dd>
+<span data-code-cell="annotated-cell-9" data-code-lines="5" data-code-annotation="3"><code>.loc[sample.index]</code> looks up that row’s index in <code>roberta_result_df</code> (the table of extracted scores) and prints the model’s fear/anger/sadness scores for it.</span>
+</dd>
+</dl>
+<p><strong>3. Saving the dataframe</strong></p>
+<p>Finally, we can also save the model output to a CSV file for later use. Run the cell below to do that.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="annotated-cell-10"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><button class="code-annotation-anchor" data-target-cell="annotated-cell-10" data-target-annotation="1">1</button><span id="annotated-cell-10-1" class="code-annotation-target"><a href="#annotated-cell-10-1" aria-hidden="true" tabindex="-1"></a>roberta_result_df.to_csv(<span class="st">"my_results.csv"</span>, index<span class="op">=</span><span class="va">False</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-10" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-10" data-code-lines="1" data-code-annotation="1">Saves the DataFrame to a CSV file; <code>index=False</code> leaves out the row numbers pandas would otherwise add as an extra column.</span>
+</dd>
+</dl>
+</section>
+</section>
+<section id="step-3-a-task-specific-nli-encoder-model" class="level3">
+<h3 class="anchored" data-anchor-id="step-3-a-task-specific-nli-encoder-model">Step 3: A task-specific (NLI) encoder model</h3>
+<p>Now we’ll use a model trained on <strong>Natural Language Inference</strong> (does a text entail a given hypothesis?) instead of on any fixed emotion label set. That single skill lets us classify text against <em>any</em> labels we like — including our three target emotions, directly, with no mapping step required.</p>
+<p>This is slower than the category-specific model (it has to check every text against every candidate label).</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="annotated-cell-11"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><button class="code-annotation-anchor" data-target-cell="annotated-cell-11" data-target-annotation="1">1</button><span id="annotated-cell-11-1" class="code-annotation-target"><a href="#annotated-cell-11-1" aria-hidden="true" tabindex="-1"></a>nli_classifier <span class="op">=</span> pipeline(</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-11" data-target-annotation="2">2</button><span id="annotated-cell-11-2" class="code-annotation-target"><a href="#annotated-cell-11-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"zero-shot-classification"</span>,</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-11" data-target-annotation="3">3</button><span id="annotated-cell-11-3" class="code-annotation-target"><a href="#annotated-cell-11-3" aria-hidden="true" tabindex="-1"></a>    model<span class="op">=</span><span class="st">"MoritzLaurer/deberta-v3-base-zeroshot-v2.0"</span>,</span>
+<span id="annotated-cell-11-4"><a href="#annotated-cell-11-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="annotated-cell-11-5"><a href="#annotated-cell-11-5" aria-hidden="true" tabindex="-1"></a></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-11" data-target-annotation="4">4</button><span id="annotated-cell-11-6" class="code-annotation-target"><a href="#annotated-cell-11-6" aria-hidden="true" tabindex="-1"></a>template <span class="op">=</span> <span class="st">"This text expresses </span><span class="sc">{}</span><span class="st">."</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-11" data-target-annotation="5">5</button><span id="annotated-cell-11-7" class="code-annotation-target"><a href="#annotated-cell-11-7" aria-hidden="true" tabindex="-1"></a>candidate_labels <span class="op">=</span> [<span class="st">'anger'</span>, <span class="st">'fear'</span>, <span class="st">'sadness'</span>]</span>
+<span id="annotated-cell-11-8"><a href="#annotated-cell-11-8" aria-hidden="true" tabindex="-1"></a></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-11" data-target-annotation="6">6</button><span id="annotated-cell-11-9" class="code-annotation-target"><a href="#annotated-cell-11-9" aria-hidden="true" tabindex="-1"></a>nli_results <span class="op">=</span> nli_classifier(df[<span class="st">'text'</span>].tolist(),</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-11" data-target-annotation="7">7</button><span id="annotated-cell-11-10" class="code-annotation-target"><a href="#annotated-cell-11-10" aria-hidden="true" tabindex="-1"></a>                             candidate_labels<span class="op">=</span>candidate_labels,</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-11" data-target-annotation="8">8</button><span id="annotated-cell-11-11" class="code-annotation-target"><a href="#annotated-cell-11-11" aria-hidden="true" tabindex="-1"></a>                             hypothesis_template<span class="op">=</span>template,</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-11" data-target-annotation="9">9</button><span id="annotated-cell-11-12" class="code-annotation-target"><a href="#annotated-cell-11-12" aria-hidden="true" tabindex="-1"></a>                             multi_label<span class="op">=</span><span class="va">True</span>)</span>
+<span id="annotated-cell-11-13"><a href="#annotated-cell-11-13" aria-hidden="true" tabindex="-1"></a></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-11" data-target-annotation="10">10</button><span id="annotated-cell-11-14" class="code-annotation-target"><a href="#annotated-cell-11-14" aria-hidden="true" tabindex="-1"></a>nli_results</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-11" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-11" data-code-lines="1" data-code-annotation="1">Sets up a second pipeline — the same <code>pipeline()</code> function as in Step 2, just with a different task and model.</span>
+</dd>
+<dt data-target-cell="annotated-cell-11" data-target-annotation="2">2</dt>
+<dd>
+<span data-code-cell="annotated-cell-11" data-code-lines="2" data-code-annotation="2"><code>zero-shot-classification</code> is the task name for NLI-based classifiers — “zero-shot” because the model was never trained on our specific 3 labels.</span>
+</dd>
+<dt data-target-cell="annotated-cell-11" data-target-annotation="3">3</dt>
+<dd>
+<span data-code-cell="annotated-cell-11" data-code-lines="3" data-code-annotation="3">An NLI model fine-tuned for zero-shot classification: it judges how well a text supports a given hypothesis sentence.</span>
+</dd>
+<dt data-target-cell="annotated-cell-11" data-target-annotation="4">4</dt>
+<dd>
+<span data-code-cell="annotated-cell-11" data-code-lines="6" data-code-annotation="4">The template that turns each candidate label into a full hypothesis sentence — the <code>{}</code> is the slot where each label gets inserted, giving e.g.&nbsp;<code>"This text expresses fear."</code></span>
+</dd>
+<dt data-target-cell="annotated-cell-11" data-target-annotation="5">5</dt>
+<dd>
+<span data-code-cell="annotated-cell-11" data-code-lines="7" data-code-annotation="5">The labels we want scores for. Unlike with the category-specific model, we’re free to choose these ourselves.</span>
+</dd>
+<dt data-target-cell="annotated-cell-11" data-target-annotation="6">6</dt>
+<dd>
+<span data-code-cell="annotated-cell-11" data-code-lines="9" data-code-annotation="6">Runs the classifier over all texts, converted to a plain list with <code>.tolist()</code> just like before.</span>
+</dd>
+<dt data-target-cell="annotated-cell-11" data-target-annotation="7">7</dt>
+<dd>
+<span data-code-cell="annotated-cell-11" data-code-lines="10" data-code-annotation="7">Hands over our three labels, so each text gets checked against each of them.</span>
+</dd>
+<dt data-target-cell="annotated-cell-11" data-target-annotation="8">8</dt>
+<dd>
+<span data-code-cell="annotated-cell-11" data-code-lines="11" data-code-annotation="8">Hands over the sentence template from above, which is used to build one hypothesis per label.</span>
+</dd>
+<dt data-target-cell="annotated-cell-11" data-target-annotation="9">9</dt>
+<dd>
+<span data-code-cell="annotated-cell-11" data-code-lines="12" data-code-annotation="9"><code>multi_label=True</code> scores each label independently (a text can score high on more than one emotion at once) instead of forcing the three scores to sum to 1.</span>
+</dd>
+<dt data-target-cell="annotated-cell-11" data-target-annotation="10">10</dt>
+<dd>
+<span data-code-cell="annotated-cell-11" data-code-lines="14" data-code-annotation="10">Writing a variable name on its own at the end of a notebook cell displays its value — a shortcut for <code>print()</code> that formats the output a bit more nicely.</span>
+</dd>
+</dl>
+<p>Same story here. <strong>That was it!</strong> <code>nli_results</code> is a list of dictionaries too — one per text, each with a <code>sequence</code>, <code>labels</code>, and <code>scores</code> entry — so it’s JSON-compatible in exactly the same way <code>roberta_result</code> was in Step 2:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="annotated-cell-12"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><button class="code-annotation-anchor" data-target-cell="annotated-cell-12" data-target-annotation="1">1</button><span id="annotated-cell-12-1" class="code-annotation-target"><a href="#annotated-cell-12-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">"nli_results.json"</span>, <span class="st">"w"</span>) <span class="im">as</span> f:</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-12" data-target-annotation="2">2</button><span id="annotated-cell-12-2" class="code-annotation-target"><a href="#annotated-cell-12-2" aria-hidden="true" tabindex="-1"></a>    json.dump(nli_results, f)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-12" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-12" data-code-lines="1" data-code-annotation="1">Opens (creates) a file called <code>nli_results.json</code> in write mode, same as before.</span>
+</dd>
+<dt data-target-cell="annotated-cell-12" data-target-annotation="2">2</dt>
+<dd>
+<span data-code-cell="annotated-cell-12" data-code-lines="2" data-code-annotation="2">Writes <code>nli_results</code> into that file as JSON.</span>
+</dd>
+</dl>
+<p>That file could be picked up in R or any other tool from here. We’ll keep working in Python below.</p>
+<p>The order of <code>labels</code>/<code>scores</code> in each result is sorted by probability, highest first — it’s not the same as <code>candidate_labels</code> and differs from text to text. So instead of indexing by position, we pair each result’s labels with its scores and look up each emotion by name.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="annotated-cell-13"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><button class="code-annotation-anchor" data-target-cell="annotated-cell-13" data-target-annotation="1">1</button><span id="annotated-cell-13-1" class="code-annotation-target"><a href="#annotated-cell-13-1" aria-hidden="true" tabindex="-1"></a>anger_scores <span class="op">=</span> []</span>
+<span id="annotated-cell-13-2"><a href="#annotated-cell-13-2" aria-hidden="true" tabindex="-1"></a>fear_scores <span class="op">=</span> []</span>
+<span id="annotated-cell-13-3"><a href="#annotated-cell-13-3" aria-hidden="true" tabindex="-1"></a>sadness_scores <span class="op">=</span> []</span>
+<span id="annotated-cell-13-4"><a href="#annotated-cell-13-4" aria-hidden="true" tabindex="-1"></a></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-13" data-target-annotation="2">2</button><span id="annotated-cell-13-5" class="code-annotation-target"><a href="#annotated-cell-13-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> result <span class="kw">in</span> nli_results:</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-13" data-target-annotation="3">3</button><span id="annotated-cell-13-6" class="code-annotation-target"><a href="#annotated-cell-13-6" aria-hidden="true" tabindex="-1"></a>    scores_by_label <span class="op">=</span> <span class="bu">dict</span>(<span class="bu">zip</span>(result[<span class="st">"labels"</span>], result[<span class="st">"scores"</span>]))</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-13" data-target-annotation="4">4</button><span id="annotated-cell-13-7" class="code-annotation-target"><a href="#annotated-cell-13-7" aria-hidden="true" tabindex="-1"></a>    anger_scores.append(scores_by_label[<span class="st">"anger"</span>])</span>
+<span id="annotated-cell-13-8"><a href="#annotated-cell-13-8" aria-hidden="true" tabindex="-1"></a>    fear_scores.append(scores_by_label[<span class="st">"fear"</span>])</span>
+<span id="annotated-cell-13-9"><a href="#annotated-cell-13-9" aria-hidden="true" tabindex="-1"></a>    sadness_scores.append(scores_by_label[<span class="st">"sadness"</span>])</span>
+<span id="annotated-cell-13-10"><a href="#annotated-cell-13-10" aria-hidden="true" tabindex="-1"></a></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-13" data-target-annotation="5">5</button><span id="annotated-cell-13-11" class="code-annotation-target"><a href="#annotated-cell-13-11" aria-hidden="true" tabindex="-1"></a>nli_result_df <span class="op">=</span> pd.DataFrame({</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-13" data-target-annotation="6">6</button><span id="annotated-cell-13-12" class="code-annotation-target"><a href="#annotated-cell-13-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">"text"</span>: df[<span class="st">"text"</span>],</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-13" data-target-annotation="7">7</button><span id="annotated-cell-13-13" class="code-annotation-target"><a href="#annotated-cell-13-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">"anger_score"</span>: anger_scores,</span>
+<span id="annotated-cell-13-14"><a href="#annotated-cell-13-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">"fear_score"</span>: fear_scores,</span>
+<span id="annotated-cell-13-15"><a href="#annotated-cell-13-15" aria-hidden="true" tabindex="-1"></a>    <span class="st">"sadness_score"</span>: sadness_scores,</span>
+<span id="annotated-cell-13-16"><a href="#annotated-cell-13-16" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="annotated-cell-13-17"><a href="#annotated-cell-13-17" aria-hidden="true" tabindex="-1"></a></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-13" data-target-annotation="8">8</button><span id="annotated-cell-13-18" class="code-annotation-target"><a href="#annotated-cell-13-18" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(nli_result_df)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-13" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-13" data-code-lines="1" data-code-annotation="1">Three empty lists, one per emotion, which we fill up as we walk through the texts.</span>
+</dd>
+<dt data-target-cell="annotated-cell-13" data-target-annotation="2">2</dt>
+<dd>
+<span data-code-cell="annotated-cell-13" data-code-lines="5" data-code-annotation="2">Loops over the model’s output — one <code>result</code> per text.</span>
+</dd>
+<dt data-target-cell="annotated-cell-13" data-target-annotation="3">3</dt>
+<dd>
+<span data-code-cell="annotated-cell-13" data-code-lines="6" data-code-annotation="3"><code>zip()</code> pairs each label with the score in the same position, and <code>dict()</code> turns those pairs into a lookup table like <code>{"fear": 0.87, "anger": 0.12, …}</code>. This is what lets us fetch scores <em>by name</em> instead of relying on their order.</span>
+</dd>
+<dt data-target-cell="annotated-cell-13" data-target-annotation="4">4</dt>
+<dd>
+<span data-code-cell="annotated-cell-13" data-code-lines="7" data-code-annotation="4">Looks up this text’s anger score by name and appends it to the anger list; the two lines below do exactly the same for fear and sadness.</span>
+</dd>
+<dt data-target-cell="annotated-cell-13" data-target-annotation="5">5</dt>
+<dd>
+<span data-code-cell="annotated-cell-13" data-code-lines="11" data-code-annotation="5">Builds the results table, just like we did for the previous model.</span>
+</dd>
+<dt data-target-cell="annotated-cell-13" data-target-annotation="6">6</dt>
+<dd>
+<span data-code-cell="annotated-cell-13" data-code-lines="12" data-code-annotation="6">The first column: the original texts.</span>
+</dd>
+<dt data-target-cell="annotated-cell-13" data-target-annotation="7">7</dt>
+<dd>
+<span data-code-cell="annotated-cell-13" data-code-lines="13" data-code-annotation="7">One column per emotion, each filled with the list of scores we collected in the loop.</span>
+</dd>
+<dt data-target-cell="annotated-cell-13" data-target-annotation="8">8</dt>
+<dd>
+<span data-code-cell="annotated-cell-13" data-code-lines="18" data-code-annotation="8">Prints the finished table.</span>
+</dd>
+</dl>
+<section id="your-turn-2" class="level4">
+<h4 class="anchored" data-anchor-id="your-turn-2">Your turn</h4>
+<p>The probability scores generated by an NLI model may change depending on the exact wording of the candidate labels or hypotheses. Try changing the label text in the cell above (e.g., “fear” → “being afraid”) and re-run the cell. Do the scores change? If so, how much? You can also try a totally different category (maybe not even an emotion) and see what happens.</p>
+</section>
+</section>
+<section id="exercise-compare-to-a-different-model" class="level3">
+<h3 class="anchored" data-anchor-id="exercise-compare-to-a-different-model">Exercise: Compare to a different model</h3>
+<p>You’ve now got two encoder-based classifiers running. For the rest of this block, we’ll try running a third model.</p>
+<p>For this exercise, we’ll use the model <a href="https://huggingface.co/j-hartmann/emotion-english-distilroberta-base"><code>j-hartmann/emotion-english-distilroberta-base</code></a>, a category-specific model trained on a <em>different</em> mix of datasets. Check out its model card on Hugging Face and figure out how it differs from the previous models.</p>
+<p><strong>Warning</strong>: In the model card, the parameter <code>return_all_scores=True</code> is used to return all scores (not only the most confident). This parameter, however, is deprecated and needs to be adapted to <code>top_k = None</code> like we did above (which does the same thing).</p>
+<p>Once you have a sense of the model, run it on the same texts and compare its output to the previous two models. How do the scores differ? Do you notice any patterns in the differences?</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">TODO</span><span class="co">: implement the classification with the third model and compare the results to the previous two models.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="next" class="level3">
+<h3 class="anchored" data-anchor-id="next">Next</h3>
+<p>Head to <a href="../../../../sections/workshop/content/03-decoder/index.html">block 3</a> for classification with a generative decoder model.</p>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  var navbar = document.getElementById("quarto-header");
+  var embedHeader = document.getElementById("quarto-embed-header");
+  if (!navbar || !embedHeader) return;
+
+  var navbarHeight = navbar.offsetHeight;
+  embedHeader.style.top = navbarHeight + "px";
+
+  var titleBannerEl = document.querySelector("body > #title-block-header");
+  if (titleBannerEl) {
+    titleBannerEl.style.paddingTop =
+      (parseInt(titleBannerEl.style.paddingTop) || 0) + navbarHeight + "px";
+  }
+
+  var contentEl = document.getElementById("quarto-content");
+  if (contentEl) {
+    for (var i = 0; i < contentEl.children.length; i++) {
+      var child = contentEl.children[i];
+      child.style.paddingTop =
+        (parseInt(child.style.paddingTop) || 0) + navbarHeight + "px";
+    }
+  }
+});
+</script>
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/llm-content-analysis\.com");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        const annoteTargets = window.document.querySelectorAll('.code-annotation-anchor');
+        for (let i=0; i<annoteTargets.length; i++) {
+          const annoteTarget = annoteTargets[i];
+          const targetCell = annoteTarget.getAttribute("data-target-cell");
+          const targetAnnotation = annoteTarget.getAttribute("data-target-annotation");
+          const contentFn = () => {
+            const content = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+            if (content) {
+              const tipContent = content.cloneNode(true);
+              tipContent.classList.add("code-annotation-tip-content");
+              return tipContent.outerHTML;
+            }
+          }
+          const config = {
+            allowHTML: true,
+            content: contentFn,
+            onShow: (instance) => {
+              selectCodeLines(instance.reference);
+              instance.reference.classList.add('code-annotation-active');
+              window.tippy.hideAll();
+            },
+            onHide: (instance) => {
+              unselectCodeLines();
+              instance.reference.classList.remove('code-annotation-active');
+            },
+            maxWidth: 300,
+            delay: [50, 0],
+            duration: [200, 0],
+            offset: [5, 10],
+            arrow: true,
+            appendTo: function(el) {
+              return el.parentElement.parentElement.parentElement;
+            },
+            interactive: true,
+            interactiveBorder: 10,
+            theme: 'quarto',
+            placement: 'right',
+            popperOptions: {
+              modifiers: [
+              {
+                name: 'flip',
+                options: {
+                  flipVariations: false, // true by default
+                  allowedAutoPlacements: ['right'],
+                  fallbackPlacements: ['right', 'top', 'top-start', 'top-end', 'bottom', 'bottom-start', 'bottom-end', 'left'],
+                },
+              },
+              {
+                name: 'preventOverflow',
+                options: {
+                  mainAxis: false,
+                  altAxis: false
+                }
+              }
+              ]        
+            }      
+          };
+          window.tippy(annoteTarget, config); 
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../../../../sections/workshop/content/01-intro/index.html" class="pagination-link" aria-label="1. LLMs &amp; Hugging Face">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">1. LLMs &amp; Hugging Face</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../../../../sections/workshop/content/03-decoder/index.html" class="pagination-link" aria-label="3. Generative decoders">
+        <span class="nav-page-text">3. Generative decoders</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>© Dietrich, Possler, &amp; Scheper | <a href="https://felix-dietrich.de/imprint.html">Imprint &amp; Privacy Policy</a></p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+<script src="../../../../site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>

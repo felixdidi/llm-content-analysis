@@ -1,0 +1,1703 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.18">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>4. Evaluation &amp; gold standards – Open Source LLMs for Content Analysis</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../../">
+<link href="../../../../sections/workshop/content/05-outlook/index.html" rel="next">
+<link href="../../../../sections/workshop/content/03-decoder/index.html" rel="prev">
+<script src="../../../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../../site_libs/quarto-html/quarto-syntax-highlighting-0bdc59fcf4c41de9ca6aa5cdff7392a7.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../../site_libs/bootstrap/bootstrap-11c7400715367f59b59db47c60a69c8d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+<style>
+
+      .quarto-title-block .quarto-title-banner h1,
+      .quarto-title-block .quarto-title-banner h2,
+      .quarto-title-block .quarto-title-banner h3,
+      .quarto-title-block .quarto-title-banner h4,
+      .quarto-title-block .quarto-title-banner h5,
+      .quarto-title-block .quarto-title-banner h6
+      {
+        color: #282828;
+      }
+
+      .quarto-title-block .quarto-title-banner {
+        color: #282828;
+background: #8ec07c99;
+      }
+</style>
+<style>
+  :root { --hl: var(--hl-workshop); --hl-rgb: var(--hl-workshop-rgb); }
+</style>
+
+
+</head>
+
+<body class="nav-sidebar floating nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../../../index.html">
+    <span class="navbar-title">Open Source LLMs for Content Analysis</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../../sections/tutorials/index.html"> 
+<span class="menu-text">Tutorials</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../../sections/paper/index.html"> 
+<span class="menu-text">Paper</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link active" href="../../../../sections/workshop/index.html" aria-current="page"> 
+<span class="menu-text">Workshop</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../../../sections/workshop/content/01-intro/index.html">Exercises &amp; Slides</a></li><li class="breadcrumb-item"><a href="../../../../sections/workshop/content/04-evaluation/index.html">4. Evaluation &amp; gold standard</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../../../sections/workshop/content/01-intro/index.html">Exercises &amp; Slides</a></li><li class="breadcrumb-item"><a href="../../../../sections/workshop/content/04-evaluation/index.html">4. Evaluation &amp; gold standard</a></li></ol></nav>
+      <h1 class="title">4. Evaluation &amp; gold standards</h1>
+                      </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-center sidebar-header">
+      <a href="../../../../sections/workshop/index.html" class="sidebar-logo-link">
+      <img src="../../../../img/transformer_laptop.png" alt="" class="sidebar-logo light-content py-0 d-lg-inline d-none">
+      <img src="../../../../img/transformer_laptop.png" alt="" class="sidebar-logo dark-content py-0 d-lg-inline d-none">
+      </a>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="px-0"><hr class="sidebar-divider hi "></li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../../sections/workshop/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Overview</span></a>
+  </div>
+</li>
+        <li class="px-0"><hr class="sidebar-divider hi "></li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Workshop</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../../sections/workshop/schedule.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Schedule</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../../sections/workshop/content/00-welcome/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="px-0"><hr class="sidebar-divider hi "></li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Exercises &amp; Slides</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../../sections/workshop/content/01-intro/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1. LLMs &amp; Hugging Face</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../../sections/workshop/content/02-encoder/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2. Encoder models</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../../sections/workshop/content/03-decoder/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3. Generative decoders</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../../sections/workshop/content/04-evaluation/index.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">4. Evaluation &amp; gold standard</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../../sections/workshop/content/05-outlook/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5. Discussion &amp; outlook</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#exercise" id="toc-exercise" class="nav-link active" data-scroll-target="#exercise">Exercise</a>
+  <ul class="collapse">
+  <li><a href="#setup" id="toc-setup" class="nav-link" data-scroll-target="#setup">Setup</a></li>
+  <li><a href="#step-1-get-your-results" id="toc-step-1-get-your-results" class="nav-link" data-scroll-target="#step-1-get-your-results">Step 1: Get your results</a></li>
+  <li><a href="#step-2-do-the-probability-scores-track-intensity" id="toc-step-2-do-the-probability-scores-track-intensity" class="nav-link" data-scroll-target="#step-2-do-the-probability-scores-track-intensity">Step 2: Do the probability scores track intensity?</a></li>
+  <li><a href="#step-3-comparison-with-a-manual-gold-standard" id="toc-step-3-comparison-with-a-manual-gold-standard" class="nav-link" data-scroll-target="#step-3-comparison-with-a-manual-gold-standard">Step 3: Comparison with a manual gold standard</a></li>
+  <li><a href="#step-3a-accuracy" id="toc-step-3a-accuracy" class="nav-link" data-scroll-target="#step-3a-accuracy">Step 3a: Accuracy</a></li>
+  <li><a href="#step-3b-precision-recall-and-per-class-performance" id="toc-step-3b-precision-recall-and-per-class-performance" class="nav-link" data-scroll-target="#step-3b-precision-recall-and-per-class-performance">Step 3b: Precision, recall, and per-class performance</a></li>
+  <li><a href="#next" id="toc-next" class="nav-link" data-scroll-target="#next">Next</a></li>
+  </ul></li>
+  </ul>
+<div class="quarto-alternate-notebooks"><h2>Notebooks</h2><ul><li><a href="evaluation-preview.html"><i class="bi bi-journal-code"></i>Evaluation &amp; gold standards</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+<div>
+<iframe class="slide-deck" src="slides.html" width="749" height="450"></iframe>
+</div>
+<p>Open the slides <a href="slides.html" target="_blank">directly</a> if you’d rather see them full screen.</p>
+<section id="exercise" class="level2">
+<h2 class="anchored" data-anchor-id="exercise">Exercise</h2>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Run this yourself
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This page shows the exercise code for reference; code blocks with real output below were actually run to produce it, but the page itself isn’t a live Colab session — open the notebook there to run it yourself.</p>
+<p><a href="https://colab.research.google.com/github/felixdidi/llm-content-analysis/blob/main/sections/workshop/content/04-evaluation/evaluation.ipynb" class="btn btn-primary" role="button">Open in Colab →</a></p>
+</div>
+</div>
+<p>This notebook belongs to the <a href="../../../../sections/workshop/index.html">DGPs 2026 workshop <em>Text Classification with Open Source Models</em></a>. Ideally, you’ve now got predictions from three different classifiers, for three emotions each (anger, fear, sadness). Here we evaluate those predictions two ways: first against RW3D’s self-reported emotion <em>intensity</em> ratings, second against a manual gold standard.</p>
+<p>We run this exercise entirely in R (though you could use Python or another language if you prefer), using the <code>tidyverse</code> and <code>yardstick</code> packages.</p>
+<p><strong>How to use this notebook:</strong> run each cell from top to bottom with <code>Shift+Enter</code> or by clicking the run button. Most cells are given and fully explained; a few are marked <strong>Your turn</strong> — those are where you edit or write something yourself. Every exercise cell has a safe default, so nothing breaks if you leave it as-is, but you’ll get more out of the session if you actually change it.</p>
+<p><strong>Important note for Colab users:</strong> If you are running this notebook in Google Colab, please follow these steps: 1. Make sure you have a Google account and are logged in. 2. To create a copy of this notebook in your own Google Drive (advised), select “Copy to Drive” at the top of the Colab page. 3. <strong>In this notebook, you do not need to change the runtime to GPU because we are not using any GPU-intensive operations.</strong> 4. You can run the notebook cells as instructed.</p>
+<section id="setup" class="level3">
+<h3 class="anchored" data-anchor-id="setup">Setup</h3>
+<p>First, we install the R packages we need, if you don’t already have them.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="annotated-cell-1"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-1-1"><a href="#annotated-cell-1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="annotated-cell-1-2"><a href="#annotated-cell-1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># simply run this cell to install the packages</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-1" data-target-annotation="1">1</button><span id="annotated-cell-1-3" class="code-annotation-target"><a href="#annotated-cell-1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="fu">c</span>(<span class="st">"tidyverse"</span>, <span class="st">"yardstick"</span>))</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-1" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-1" data-code-lines="3" data-code-annotation="1">Installs <code>tidyverse</code> (a collection of R packages for data wrangling and plotting) and <code>yardstick</code> (functions for computing accuracy, precision, recall, etc.) — you only need to do this once per machine.</span>
+</dd>
+</dl>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="annotated-cell-2"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-2-1"><a href="#annotated-cell-2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
+<span id="annotated-cell-2-2"><a href="#annotated-cell-2-2" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="1">1</button><span id="annotated-cell-2-3" class="code-annotation-target"><a href="#annotated-cell-2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="2">2</button><span id="annotated-cell-2-4" class="code-annotation-target"><a href="#annotated-cell-2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(yardstick)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-2" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-2" data-code-lines="3" data-code-annotation="1">Loads <code>tidyverse</code> into this session so its functions (e.g.&nbsp;for reading and reshaping data) become available.</span>
+</dd>
+<dt data-target-cell="annotated-cell-2" data-target-annotation="2">2</dt>
+<dd>
+<span data-code-cell="annotated-cell-2" data-code-lines="4" data-code-annotation="2">Loads <code>yardstick</code>, which we’ll use in Step 3 to calculate evaluation metrics.</span>
+</dd>
+</dl>
+</section>
+<section id="step-1-get-your-results" class="level3">
+<h3 class="anchored" data-anchor-id="step-1-get-your-results">Step 1: Get your results</h3>
+<p>Load a reference results file that we have created (using the same methods that you have used).</p>
+<p>(<strong>If you are a pro 🧐 and bored:</strong> You can save your own results from the previous notebooks to CSV files, read in those files here and combine them into one data frame. This way, you get to see how <em>your</em> choices (e.g., your prompts) actually scored. Make sure to combine the outputs into a data frame with the same structure as the reference results file so that the rest of the notebook works without changes.)</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="annotated-cell-3"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><button class="code-annotation-anchor" data-target-cell="annotated-cell-3" data-target-annotation="1">1</button><span id="annotated-cell-3-1" class="code-annotation-target"><a href="#annotated-cell-3-1" aria-hidden="true" tabindex="-1"></a>RESULTS_URL <span class="ot">&lt;-</span> <span class="st">"https://raw.githubusercontent.com/felixdidi/llm-content-analysis/main/sections/workshop/data/classification_results_reference.csv"</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-3" data-target-annotation="2">2</button><span id="annotated-cell-3-2" class="code-annotation-target"><a href="#annotated-cell-3-2" aria-hidden="true" tabindex="-1"></a>GOLD_URL <span class="ot">&lt;-</span> <span class="st">"https://raw.githubusercontent.com/felixdidi/llm-content-analysis/main/sections/workshop/data/gold_standard.csv"</span></span>
+<span id="annotated-cell-3-3"><a href="#annotated-cell-3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-3-4"><a href="#annotated-cell-3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># read in the reference results</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-3" data-target-annotation="3">3</button><span id="annotated-cell-3-5" class="code-annotation-target"><a href="#annotated-cell-3-5" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(RESULTS_URL, <span class="at">show_col_types =</span> <span class="cn">FALSE</span>)</span>
+<span id="annotated-cell-3-6"><a href="#annotated-cell-3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-3-7"><a href="#annotated-cell-3-7" aria-hidden="true" tabindex="-1"></a><span class="co"># read in the gold standard and rename the columns to avoid name clashes</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-3" data-target-annotation="4">4</button><span id="annotated-cell-3-8" class="code-annotation-target"><a href="#annotated-cell-3-8" aria-hidden="true" tabindex="-1"></a>gold <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(GOLD_URL, <span class="at">show_col_types =</span> <span class="cn">FALSE</span>) <span class="sc">|&gt;</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-3" data-target-annotation="5">5</button><span id="annotated-cell-3-9" class="code-annotation-target"><a href="#annotated-cell-3-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(id, <span class="at">gold_anger =</span> anger, <span class="at">gold_fear =</span> fear, <span class="at">gold_sadness =</span> sadness)</span>
+<span id="annotated-cell-3-10"><a href="#annotated-cell-3-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-3-11"><a href="#annotated-cell-3-11" aria-hidden="true" tabindex="-1"></a><span class="co"># join the two data frames on the "id" column</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-3" data-target-annotation="6">6</button><span id="annotated-cell-3-12" class="code-annotation-target"><a href="#annotated-cell-3-12" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> results <span class="sc">|&gt;</span> <span class="fu">left_join</span>(gold, <span class="at">by =</span> <span class="st">"id"</span>)</span>
+<span id="annotated-cell-3-13"><a href="#annotated-cell-3-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-3-14"><a href="#annotated-cell-3-14" aria-hidden="true" tabindex="-1"></a><span class="co"># look at the first few rows of the results data frame</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-3" data-target-annotation="7">7</button><span id="annotated-cell-3-15" class="code-annotation-target"><a href="#annotated-cell-3-15" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(results)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-3" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-3" data-code-lines="1" data-code-annotation="1">The web address of the reference results, i.e.&nbsp;the classifier predictions we prepared with the same methods you used. <code>&lt;-</code> is R’s assignment operator — it does the same job as <code>=</code> in Python.</span>
+</dd>
+<dt data-target-cell="annotated-cell-3" data-target-annotation="2">2</dt>
+<dd>
+<span data-code-cell="annotated-cell-3" data-code-lines="2" data-code-annotation="2">The web address of the manual gold standard.</span>
+</dd>
+<dt data-target-cell="annotated-cell-3" data-target-annotation="3">3</dt>
+<dd>
+<span data-code-cell="annotated-cell-3" data-code-lines="5" data-code-annotation="3"><code>read_csv()</code> downloads the file and turns it into a tibble (the tidyverse’s version of a table). <code>show_col_types = FALSE</code> only suppresses the message reporting which type each column was given.</span>
+</dd>
+<dt data-target-cell="annotated-cell-3" data-target-annotation="4">4</dt>
+<dd>
+<span data-code-cell="annotated-cell-3" data-code-lines="8" data-code-annotation="4">Reads the gold standard the same way. The <code>|&gt;</code> is R’s pipe: it takes whatever is on its left and passes it into the function on its right, which lets you chain steps top to bottom.</span>
+</dd>
+<dt data-target-cell="annotated-cell-3" data-target-annotation="5">5</dt>
+<dd>
+<span data-code-cell="annotated-cell-3" data-code-lines="9" data-code-annotation="5"><code>select()</code> keeps only the listed columns — and <code>gold_anger = anger</code> renames them while selecting. Without renaming, these would collide with the identically named prediction columns in the next step.</span>
+</dd>
+<dt data-target-cell="annotated-cell-3" data-target-annotation="6">6</dt>
+<dd>
+<span data-code-cell="annotated-cell-3" data-code-lines="12" data-code-annotation="6"><code>left_join()</code> merges the gold standard into the results, matching rows by the <code>id</code> column they share. Every result row keeps its data and gains the three <code>gold_*</code> columns.</span>
+</dd>
+<dt data-target-cell="annotated-cell-3" data-target-annotation="7">7</dt>
+<dd>
+<span data-code-cell="annotated-cell-3" data-code-lines="15" data-code-annotation="7"><code>head()</code> prints the first few rows, so you can check that the join worked.</span>
+</dd>
+</dl>
+<div class="quarto-embed-nb-cell">
+<div id="cell-load-results" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-09-02T12:43:37.278450Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-09-02T12:43:37.269664Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-09-02T12:43:37.370223Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-09-02T12:43:37.369771Z&quot;}}" data-execution_count="2">
+<div id="load-results" class="cell-output cell-output-display" data-execution_count="2">
+<div class="ansi-escaped-output">
+<pre><span style="color:rgb(148,148,148)"># A tibble: 6 × 20</span>
+     id text                     main_emotion self_report_anger self_report_fear
+  <span style="font-style:italic;color:rgb(148,148,148)">&lt;dbl&gt;</span> <span style="font-style:italic;color:rgb(148,148,148)">&lt;chr&gt;</span>                    <span style="font-style:italic;color:rgb(148,148,148)">&lt;chr&gt;</span>                    <span style="font-style:italic;color:rgb(148,148,148)">&lt;dbl&gt;</span>            <span style="font-style:italic;color:rgb(148,148,148)">&lt;dbl&gt;</span>
+<span style="color:rgb(188,188,188)">1</span>     1 Stressed and uninformed… anger                        9                1
+<span style="color:rgb(188,188,188)">2</span>     2 I feel worried about th… fear                         8                9
+<span style="color:rgb(188,188,188)">3</span>     3 Disgusted how unprotect… sadness                      2                6
+<span style="color:rgb(188,188,188)">4</span>     4 I am not too worried ab… sadness                      1                3
+<span style="color:rgb(188,188,188)">5</span>     5 I'm finding the Corona … sadness                      5                2
+<span style="color:rgb(188,188,188)">6</span>     6 At the moment I feel li… sadness                      1                2
+<span style="color:rgb(148,148,148)"># ℹ 15 more variables: self_report_sadness &lt;dbl&gt;, encoder_anger &lt;dbl&gt;,</span>
+<span style="color:rgb(148,148,148)">#   encoder_fear &lt;dbl&gt;, encoder_sadness &lt;dbl&gt;, nli_anger &lt;dbl&gt;, nli_fear &lt;dbl&gt;,</span>
+<span style="color:rgb(148,148,148)">#   nli_sadness &lt;dbl&gt;, decoder_anger &lt;lgl&gt;, decoder_fear &lt;lgl&gt;,</span>
+<span style="color:rgb(148,148,148)">#   decoder_sadness &lt;lgl&gt;, decoder_reasoning &lt;chr&gt;, decoder_raw &lt;chr&gt;,</span>
+<span style="color:rgb(148,148,148)">#   gold_anger &lt;lgl&gt;, gold_fear &lt;lgl&gt;, gold_sadness &lt;lgl&gt;</span></pre>
+</div>
+</div>
+</div>
+<a class="quarto-notebook-link" id="nblink-1" href="evaluation-preview.html#cell-load-results">Source: Evaluation &amp; gold standards</a></div>
+</section>
+<section id="step-2-do-the-probability-scores-track-intensity" class="level3">
+<h3 class="anchored" data-anchor-id="step-2-do-the-probability-scores-track-intensity">Step 2: Do the probability scores track intensity?</h3>
+<p>The category-specific encoder and the NLI encoder each returned a <strong>score</strong> between 0 and 1 per emotion.</p>
+<p>A natural first instinct for interpreting these scores is to read a higher score as “the model thinks this text expresses more of that emotion,” the same way a higher self-report rating means more intensity. But all a classifier’s score technically tells you is how confident the model is in its yes/no call; it seems likely that confidence scales with the underlying emotion’s <em>intensity</em>, but we do not know that for sure.</p>
+<p>Let’s check this: how closely do <code>encoder_anger</code>/<code>encoder_fear</code>/<code>encoder_sadness</code> and <code>nli_anger</code>/<code>nli_fear</code>/<code>nli_sadness</code> correlate with the matching <code>self_report_*</code> rating?</p>
+<p>If you know how to do this in R, you can write your own code.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="annotated-cell-4"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-4-1"><a href="#annotated-cell-4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># write your own code, e.g., for anger</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-4" data-target-annotation="1">1</button><span id="annotated-cell-4-2" class="code-annotation-target"><a href="#annotated-cell-4-2" aria-hidden="true" tabindex="-1"></a>results_corr_anger <span class="ot">&lt;-</span> results <span class="sc">|&gt;</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-4" data-target-annotation="2">2</button><span id="annotated-cell-4-3" class="code-annotation-target"><a href="#annotated-cell-4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(self_report_anger, encoder_anger, nli_anger)</span>
+<span id="annotated-cell-4-4"><a href="#annotated-cell-4-4" aria-hidden="true" tabindex="-1"></a></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-4" data-target-annotation="3">3</button><span id="annotated-cell-4-5" class="code-annotation-target"><a href="#annotated-cell-4-5" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(results_corr_anger)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-4" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-4" data-code-lines="2" data-code-annotation="1">Starts from the joined <code>results</code> table and pipes it into the next step.</span>
+</dd>
+<dt data-target-cell="annotated-cell-4" data-target-annotation="2">2</dt>
+<dd>
+<span data-code-cell="annotated-cell-4" data-code-lines="3" data-code-annotation="2">Keeps only the three anger columns we want to compare: the participant’s own self-report, the category-specific encoder’s score, and the NLI model’s score.</span>
+</dd>
+<dt data-target-cell="annotated-cell-4" data-target-annotation="3">3</dt>
+<dd>
+<span data-code-cell="annotated-cell-4" data-code-lines="5" data-code-annotation="3"><code>cor()</code> computes the correlations between all columns of a table at once, so you get a small correlation matrix of every column against every other one.</span>
+</dd>
+</dl>
+<div class="quarto-embed-nb-cell">
+<div id="cell-correlation-anger-manual" class="cell" data-execution_count="3">
+<div id="correlation-anger-manual" class="cell-output cell-output-display" data-execution_count="3">
+<pre><code>                  self_report_anger encoder_anger nli_anger
+self_report_anger         1.0000000     0.3031520 0.4396954
+encoder_anger             0.3031520     1.0000000 0.4968341
+nli_anger                 0.4396954     0.4968341 1.0000000</code></pre>
+</div>
+</div>
+</div>
+<p>If your brain is alredy fried from the previous exercises, you can simply run the following convenience code to calculate the correlations:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="annotated-cell-5"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><button class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="1">1</button><span id="annotated-cell-5-1" class="code-annotation-target"><a href="#annotated-cell-5-1" aria-hidden="true" tabindex="-1"></a>LABELS <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"anger"</span>, <span class="st">"fear"</span>, <span class="st">"sadness"</span>)</span>
+<span id="annotated-cell-5-2"><a href="#annotated-cell-5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-5-3"><a href="#annotated-cell-5-3" aria-hidden="true" tabindex="-1"></a><span class="co"># A helper function to compute correlations between self-report, encoder, and NLI scores for a given emotion label</span></span>
+<span id="annotated-cell-5-4"><a href="#annotated-cell-5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># you do not need to edit this function, just call it with the label you want to analyze</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="2">2</button><span id="annotated-cell-5-5" class="code-annotation-target"><a href="#annotated-cell-5-5" aria-hidden="true" tabindex="-1"></a>relevant_correlations <span class="ot">&lt;-</span> <span class="cf">function</span>(label) {</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="3">3</button><span id="annotated-cell-5-6" class="code-annotation-target"><a href="#annotated-cell-5-6" aria-hidden="true" tabindex="-1"></a>  cols <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="4">4</button><span id="annotated-cell-5-7" class="code-annotation-target"><a href="#annotated-cell-5-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">self_report =</span> <span class="fu">paste0</span>(<span class="st">"self_report_"</span>, label),</span>
+<span id="annotated-cell-5-8"><a href="#annotated-cell-5-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">encoder     =</span> <span class="fu">paste0</span>(<span class="st">"encoder_"</span>, label),</span>
+<span id="annotated-cell-5-9"><a href="#annotated-cell-5-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">nli         =</span> <span class="fu">paste0</span>(<span class="st">"nli_"</span>, label)</span>
+<span id="annotated-cell-5-10"><a href="#annotated-cell-5-10" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="annotated-cell-5-11"><a href="#annotated-cell-5-11" aria-hidden="true" tabindex="-1"></a></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="5">5</button><span id="annotated-cell-5-12" class="code-annotation-target"><a href="#annotated-cell-5-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">combn</span>(<span class="fu">names</span>(cols), <span class="dv">2</span>, <span class="at">simplify =</span> <span class="cn">FALSE</span>) <span class="sc">|&gt;</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="6">6</button><span id="annotated-cell-5-13" class="code-annotation-target"><a href="#annotated-cell-5-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">map_dfr</span>(<span class="cf">function</span>(pair) {</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="7">7</button><span id="annotated-cell-5-14" class="code-annotation-target"><a href="#annotated-cell-5-14" aria-hidden="true" tabindex="-1"></a>      test <span class="ot">&lt;-</span> <span class="fu">cor.test</span>(results[[cols[[pair[<span class="dv">1</span>]]]]], results[[cols[[pair[<span class="dv">2</span>]]]]])</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="8">8</button><span id="annotated-cell-5-15" class="code-annotation-target"><a href="#annotated-cell-5-15" aria-hidden="true" tabindex="-1"></a>      <span class="fu">tibble</span>(</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="9">9</button><span id="annotated-cell-5-16" class="code-annotation-target"><a href="#annotated-cell-5-16" aria-hidden="true" tabindex="-1"></a>        <span class="at">pair =</span> <span class="fu">paste</span>(pair[<span class="dv">1</span>], <span class="st">"vs"</span>, pair[<span class="dv">2</span>]),</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="10">10</button><span id="annotated-cell-5-17" class="code-annotation-target"><a href="#annotated-cell-5-17" aria-hidden="true" tabindex="-1"></a>        <span class="at">correlation =</span> <span class="fu">round</span>(<span class="fu">unname</span>(test<span class="sc">$</span>estimate), <span class="dv">2</span>),</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="11">11</button><span id="annotated-cell-5-18" class="code-annotation-target"><a href="#annotated-cell-5-18" aria-hidden="true" tabindex="-1"></a>        <span class="at">p_value =</span> <span class="fu">signif</span>(test<span class="sc">$</span>p.value, <span class="dv">3</span>)</span>
+<span id="annotated-cell-5-19"><a href="#annotated-cell-5-19" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="annotated-cell-5-20"><a href="#annotated-cell-5-20" aria-hidden="true" tabindex="-1"></a>    })</span>
+<span id="annotated-cell-5-21"><a href="#annotated-cell-5-21" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="annotated-cell-5-22"><a href="#annotated-cell-5-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-5-23"><a href="#annotated-cell-5-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute correlations for each emotion label and store them in a named list</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="12">12</button><span id="annotated-cell-5-24" class="code-annotation-target"><a href="#annotated-cell-5-24" aria-hidden="true" tabindex="-1"></a>correlations <span class="ot">&lt;-</span> <span class="fu">set_names</span>(<span class="fu">map</span>(LABELS, relevant_correlations), LABELS)</span>
+<span id="annotated-cell-5-25"><a href="#annotated-cell-5-25" aria-hidden="true" tabindex="-1"></a></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-5" data-target-annotation="13">13</button><span id="annotated-cell-5-26" class="code-annotation-target"><a href="#annotated-cell-5-26" aria-hidden="true" tabindex="-1"></a>correlations<span class="sc">$</span>anger</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-5" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-5" data-code-lines="1" data-code-annotation="1"><code>c()</code> combines values into a vector — here the three emotions we’re analysing, so we can loop over them later on.</span>
+</dd>
+<dt data-target-cell="annotated-cell-5" data-target-annotation="2">2</dt>
+<dd>
+<span data-code-cell="annotated-cell-5" data-code-lines="5" data-code-annotation="2">Defines a function that takes one emotion label (e.g.&nbsp;<code>"anger"</code>) and returns a small table of correlations for it.</span>
+</dd>
+<dt data-target-cell="annotated-cell-5" data-target-annotation="3">3</dt>
+<dd>
+<span data-code-cell="annotated-cell-5" data-code-lines="6" data-code-annotation="3">Builds a named vector holding the three column names that belong to this emotion.</span>
+</dd>
+<dt data-target-cell="annotated-cell-5" data-target-annotation="4">4</dt>
+<dd>
+<span data-code-cell="annotated-cell-5" data-code-lines="7" data-code-annotation="4"><code>paste0()</code> glues strings together without a separator, so <code>"self_report_"</code> plus <code>"anger"</code> becomes <code>"self_report_anger"</code>. That’s how we address the right column for whichever label was passed in.</span>
+</dd>
+<dt data-target-cell="annotated-cell-5" data-target-annotation="5">5</dt>
+<dd>
+<span data-code-cell="annotated-cell-5" data-code-lines="12" data-code-annotation="5"><code>combn(..., 2)</code> forms all possible pairs out of the three sources: self-report vs.&nbsp;encoder, self-report vs.&nbsp;NLI, and encoder vs.&nbsp;NLI.</span>
+</dd>
+<dt data-target-cell="annotated-cell-5" data-target-annotation="6">6</dt>
+<dd>
+<span data-code-cell="annotated-cell-5" data-code-lines="13" data-code-annotation="6"><code>map_dfr()</code> runs the function below once for each pair and stacks the resulting one-row tables into a single data frame.</span>
+</dd>
+<dt data-target-cell="annotated-cell-5" data-target-annotation="7">7</dt>
+<dd>
+<span data-code-cell="annotated-cell-5" data-code-lines="14" data-code-annotation="7"><code>cor.test()</code> computes the correlation between this pair’s two columns, including a significance test. <code>results[[...]]</code> fetches one column from the table by its name.</span>
+</dd>
+<dt data-target-cell="annotated-cell-5" data-target-annotation="8">8</dt>
+<dd>
+<span data-code-cell="annotated-cell-5" data-code-lines="15" data-code-annotation="8"><code>tibble()</code> creates a one-row table holding this pair’s results.</span>
+</dd>
+<dt data-target-cell="annotated-cell-5" data-target-annotation="9">9</dt>
+<dd>
+<span data-code-cell="annotated-cell-5" data-code-lines="16" data-code-annotation="9">A readable name for the pair, e.g.&nbsp;<code>"self_report vs encoder"</code>.</span>
+</dd>
+<dt data-target-cell="annotated-cell-5" data-target-annotation="10">10</dt>
+<dd>
+<span data-code-cell="annotated-cell-5" data-code-lines="17" data-code-annotation="10">The correlation coefficient, rounded to two decimals.</span>
+</dd>
+<dt data-target-cell="annotated-cell-5" data-target-annotation="11">11</dt>
+<dd>
+<span data-code-cell="annotated-cell-5" data-code-lines="18" data-code-annotation="11">The p-value, shortened to three significant digits.</span>
+</dd>
+<dt data-target-cell="annotated-cell-5" data-target-annotation="12">12</dt>
+<dd>
+<span data-code-cell="annotated-cell-5" data-code-lines="24" data-code-annotation="12">Runs the helper for all three emotions (<code>map</code>) and labels the three resulting tables with the emotion names (<code>set_names</code>), giving one list you can address by name.</span>
+</dd>
+<dt data-target-cell="annotated-cell-5" data-target-annotation="13">13</dt>
+<dd>
+<span data-code-cell="annotated-cell-5" data-code-lines="26" data-code-annotation="13">Displays the table for anger.</span>
+</dd>
+</dl>
+<div class="quarto-embed-nb-cell">
+<div id="cell-correlation-tables" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-09-02T12:43:37.371850Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-09-02T12:43:37.371494Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-09-02T12:43:37.386641Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-09-02T12:43:37.386178Z&quot;}}" data-execution_count="4">
+<div id="correlation-tables" class="cell-output cell-output-display" data-execution_count="4">
+<div class="ansi-escaped-output">
+<pre><span style="color:rgb(148,148,148)"># A tibble: 3 × 3</span>
+  pair                   correlation      p_value
+  <span style="font-style:italic;color:rgb(148,148,148)">&lt;chr&gt;</span>                        <span style="font-style:italic;color:rgb(148,148,148)">&lt;dbl&gt;</span>        <span style="font-style:italic;color:rgb(148,148,148)">&lt;dbl&gt;</span>
+<span style="color:rgb(188,188,188)">1</span> self_report vs encoder        0.3  0.000<span style="text-decoration:underline">1</span><span style="text-decoration:underline">6</span><span style="text-decoration:underline">3</span>    
+<span style="color:rgb(188,188,188)">2</span> self_report vs nli            0.44 0.000<span style="text-decoration:underline">0</span><span style="text-decoration:underline">0</span><span style="text-decoration:underline">0</span>018<span style="text-decoration:underline">1</span>
+<span style="color:rgb(188,188,188)">3</span> encoder vs nli                0.5  0.000<span style="text-decoration:underline">0</span><span style="text-decoration:underline">0</span><span style="text-decoration:underline">0</span>000<span style="text-decoration:underline">1</span></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="annotated-cell-6"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="1">1</button><span id="annotated-cell-6-1" class="code-annotation-target"><a href="#annotated-cell-6-1" aria-hidden="true" tabindex="-1"></a>correlations<span class="sc">$</span>fear</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-6" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-6" data-code-lines="1" data-code-annotation="1"><code>$</code> fetches one element from the list by name — here the fear table that was computed above.</span>
+</dd>
+</dl>
+<div class="quarto-embed-nb-cell">
+<div id="cell-correlation-fear" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-09-02T12:43:37.388281Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-09-02T12:43:37.387958Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-09-02T12:43:37.394037Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-09-02T12:43:37.393629Z&quot;}}" data-execution_count="5">
+<div id="correlation-fear" class="cell-output cell-output-display" data-execution_count="5">
+<div class="ansi-escaped-output">
+<pre><span style="color:rgb(148,148,148)"># A tibble: 3 × 3</span>
+  pair                   correlation  p_value
+  <span style="font-style:italic;color:rgb(148,148,148)">&lt;chr&gt;</span>                        <span style="font-style:italic;color:rgb(148,148,148)">&lt;dbl&gt;</span>    <span style="font-style:italic;color:rgb(148,148,148)">&lt;dbl&gt;</span>
+<span style="color:rgb(188,188,188)">1</span> self_report vs encoder        0.49 2.38<span style="color:rgb(148,148,148)">e</span><span class="ansi-red-fg">-10</span>
+<span style="color:rgb(188,188,188)">2</span> self_report vs nli            0.38 1.3 <span style="color:rgb(148,148,148)">e</span><span class="ansi-red-fg">- 6</span>
+<span style="color:rgb(188,188,188)">3</span> encoder vs nli                0.42 1.18<span style="color:rgb(148,148,148)">e</span><span class="ansi-red-fg">- 7</span></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="annotated-cell-7"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><button class="code-annotation-anchor" data-target-cell="annotated-cell-7" data-target-annotation="1">1</button><span id="annotated-cell-7-1" class="code-annotation-target"><a href="#annotated-cell-7-1" aria-hidden="true" tabindex="-1"></a>correlations<span class="sc">$</span>sadness</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-7" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-7" data-code-lines="1" data-code-annotation="1">The same once more for sadness.</span>
+</dd>
+</dl>
+<div class="quarto-embed-nb-cell">
+<div id="cell-correlation-sadness" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-09-02T12:43:37.395616Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-09-02T12:43:37.395263Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-09-02T12:43:37.401423Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-09-02T12:43:37.401001Z&quot;}}" data-execution_count="6">
+<div id="correlation-sadness" class="cell-output cell-output-display" data-execution_count="6">
+<div class="ansi-escaped-output">
+<pre><span style="color:rgb(148,148,148)"># A tibble: 3 × 3</span>
+  pair                   correlation  p_value
+  <span style="font-style:italic;color:rgb(148,148,148)">&lt;chr&gt;</span>                        <span style="font-style:italic;color:rgb(148,148,148)">&lt;dbl&gt;</span>    <span style="font-style:italic;color:rgb(148,148,148)">&lt;dbl&gt;</span>
+<span style="color:rgb(188,188,188)">1</span> self_report vs encoder        0.18 2.75<span style="color:rgb(148,148,148)">e</span><span class="ansi-red-fg">- 2</span>
+<span style="color:rgb(188,188,188)">2</span> self_report vs nli            0.04 5.91<span style="color:rgb(148,148,148)">e</span><span class="ansi-red-fg">- 1</span>
+<span style="color:rgb(188,188,188)">3</span> encoder vs nli                0.6  2.43<span style="color:rgb(148,148,148)">e</span><span class="ansi-red-fg">-16</span></pre>
+</div>
+</div>
+</div>
+</div>
+<section id="your-turn" class="level4">
+<h4 class="anchored" data-anchor-id="your-turn">Your turn</h4>
+<p>Would you call these correlations strong enough to treat the probability scores as a helpful indicator for self-reported <em>intensity</em>, e.g., to rank texts by “how much anger” they express?</p>
+<p>What do you think: Are self-reported emotions a good benchmark for model evaluation? Why or why not?</p>
+</section>
+</section>
+<section id="step-3-comparison-with-a-manual-gold-standard" class="level3">
+<h3 class="anchored" data-anchor-id="step-3-comparison-with-a-manual-gold-standard">Step 3: Comparison with a manual gold standard</h3>
+<p>Although the self-report ratings are interesting to compare to, they are not a perfect match for what the classifiers are actually predicting. Whereas they reflect the participant’s judgment of how much of that emotion they felt in their current situation, the classifiers are making a yes/no call about whether each emotion is expressed in the text at all (sometimes returned as a probability score, sometimes as a boolean):</p>
+<ul>
+<li>the category-specific encoder and the NLI encoder each returned a <strong>score</strong> between 0 and 1 per emotion (how confident the model is);</li>
+<li>the decoder returned a <strong>boolean</strong> per emotion directly (its JSON answer already was <code>true</code>/<code>false</code>).</li>
+</ul>
+<p>We should therefore also compare the classifiers’ predictions to a manual gold standard (i.e., manual annotations of whether each emotion is expressed in the text).</p>
+<p>(<em>please consider this gold standard as an example for how to evaluate your own models, not as a definitive truth about the RW3D dataset</em>)</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Where this connects to manual coding
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Everything from here on is the same logic used to validate a manual coding scheme against a second human coder — precision, recall, and agreement metrics don’t care whether the second “coder” is a person or a model. If you’re building a manual codebook of your own, the <a href="../../../../sections/tutorials/index.html">Tutorials</a> section and <a href="../../../../sections/paper/beispielstudie/04_manuelle_Inhaltsanalyse.html">the paper’s example study</a> cover that step in depth.</p>
+</div>
+</div>
+<p>To demonstrate, we compare the gold standard to the decoder’s predictions, which are already in a yes/no format just like the gold standard. The other two classifiers’ scores can be converted to yes/no calls by thresholding (e.g., <code>score &gt; 0.5</code>; if you know how to do data transformations in R and have some extra time, you can do this as a bonus exercise. Please note: Defining thresholds is a mess and we could do a workshop only on this question).</p>
+<p>Take a look at a few rows before diving into metrics:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="annotated-cell-8"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><button class="code-annotation-anchor" data-target-cell="annotated-cell-8" data-target-annotation="1">1</button><span id="annotated-cell-8-1" class="code-annotation-target"><a href="#annotated-cell-8-1" aria-hidden="true" tabindex="-1"></a>results <span class="sc">|&gt;</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-8" data-target-annotation="2">2</button><span id="annotated-cell-8-2" class="code-annotation-target"><a href="#annotated-cell-8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(text, gold_anger, decoder_anger) <span class="sc">|&gt;</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-8" data-target-annotation="3">3</button><span id="annotated-cell-8-3" class="code-annotation-target"><a href="#annotated-cell-8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">3</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-8" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-8" data-code-lines="1" data-code-annotation="1">Takes the joined table from Step 1.</span>
+</dd>
+<dt data-target-cell="annotated-cell-8" data-target-annotation="2">2</dt>
+<dd>
+<span data-code-cell="annotated-cell-8" data-code-lines="2" data-code-annotation="2">Keeps just three columns: the text itself, the manual gold judgment for anger, and the decoder’s prediction for anger.</span>
+</dd>
+<dt data-target-cell="annotated-cell-8" data-target-annotation="3">3</dt>
+<dd>
+<span data-code-cell="annotated-cell-8" data-code-lines="3" data-code-annotation="3">Shows the first three rows — enough to see that both columns are simple <code>TRUE</code>/<code>FALSE</code> values and can be compared directly.</span>
+</dd>
+</dl>
+<div class="quarto-embed-nb-cell">
+<div id="cell-gold-preview" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-09-02T12:43:37.402915Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-09-02T12:43:37.402581Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-09-02T12:43:37.412787Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-09-02T12:43:37.412333Z&quot;}}" data-execution_count="7">
+<div id="gold-preview" class="cell-output cell-output-display" data-execution_count="7">
+<div class="ansi-escaped-output">
+<pre><span style="color:rgb(148,148,148)"># A tibble: 3 × 3</span>
+  text                                                  gold_anger decoder_anger
+  <span style="font-style:italic;color:rgb(148,148,148)">&lt;chr&gt;</span>                                                 <span style="font-style:italic;color:rgb(148,148,148)">&lt;lgl&gt;</span>      <span style="font-style:italic;color:rgb(148,148,148)">&lt;lgl&gt;</span>        
+<span style="color:rgb(188,188,188)">1</span> Stressed and uninformed. Don't feel enough is being … TRUE       FALSE        
+<span style="color:rgb(188,188,188)">2</span> I feel worried about the virus, burnout about me get… FALSE      FALSE        
+<span style="color:rgb(188,188,188)">3</span> Disgusted how unprotected NHS staff are and how late… TRUE       TRUE         </pre>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="step-3a-accuracy" class="level3">
+<h3 class="anchored" data-anchor-id="step-3a-accuracy">Step 3a: Accuracy</h3>
+<p>Accuracy is simply the share of texts the decoder got right, for one emotion at a time. It’s the easiest metric to compute, but it hides a lot: the gold standard isn’t evenly split between <code>TRUE</code> and <code>FALSE</code> for every emotion (see the <code>baseline</code> accuracy printed below, i.e., the share you’d get by always guessing whichever class is more common). A model can reach a high accuracy just by leaning toward the majority class, without actually discriminating anything.</p>
+<p>You can do this with some very simple R code:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="annotated-cell-9"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-9-1"><a href="#annotated-cell-9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Transform the values to factors</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-9" data-target-annotation="1">1</button><span id="annotated-cell-9-2" class="code-annotation-target"><a href="#annotated-cell-9-2" aria-hidden="true" tabindex="-1"></a>results<span class="sc">$</span>gold_anger <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(results<span class="sc">$</span>gold_anger)</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-9" data-target-annotation="2">2</button><span id="annotated-cell-9-3" class="code-annotation-target"><a href="#annotated-cell-9-3" aria-hidden="true" tabindex="-1"></a>results<span class="sc">$</span>decoder_anger <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(results<span class="sc">$</span>decoder_anger)</span>
+<span id="annotated-cell-9-4"><a href="#annotated-cell-9-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-9-5"><a href="#annotated-cell-9-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Accuracy function is as simple as that</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-9" data-target-annotation="3">3</button><span id="annotated-cell-9-6" class="code-annotation-target"><a href="#annotated-cell-9-6" aria-hidden="true" tabindex="-1"></a><span class="fu">accuracy</span>(results, gold_anger, decoder_anger)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-9" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-9" data-code-lines="2" data-code-annotation="1"><code>as.factor()</code> converts the <code>TRUE</code>/<code>FALSE</code> column into a <em>factor</em>, which is R’s type for categorical variables — <code>yardstick</code> expects factors rather than plain logical values. The <code>$</code> addresses a single column of the table.</span>
+</dd>
+<dt data-target-cell="annotated-cell-9" data-target-annotation="2">2</dt>
+<dd>
+<span data-code-cell="annotated-cell-9" data-code-lines="3" data-code-annotation="2">The same conversion for the decoder’s predictions.</span>
+</dd>
+<dt data-target-cell="annotated-cell-9" data-target-annotation="3">3</dt>
+<dd>
+<span data-code-cell="annotated-cell-9" data-code-lines="6" data-code-annotation="3"><code>accuracy()</code> from <code>yardstick</code> compares truth against prediction: you hand it the table, then the gold column, then the prediction column. What comes back is the share of texts the decoder got right.</span>
+</dd>
+</dl>
+<div class="quarto-embed-nb-cell">
+<div id="cell-accuracy-manual" class="cell">
+<div id="accuracy-manual" class="cell-output cell-output-display" data-execution_count="9">
+<div class="ansi-escaped-output">
+<pre><span style="color:rgb(148,148,148)"># A tibble: 1 × 3</span>
+  .metric  .estimator .estimate
+  <span style="font-style:italic;color:rgb(148,148,148)">&lt;chr&gt;</span>    <span style="font-style:italic;color:rgb(148,148,148)">&lt;chr&gt;</span>          <span style="font-style:italic;color:rgb(148,148,148)">&lt;dbl&gt;</span>
+<span style="color:rgb(188,188,188)">1</span> accuracy binary         0.787</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="annotated-cell-10"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-10-1"><a href="#annotated-cell-10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Let's take a look at baseline</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-10" data-target-annotation="1">1</button><span id="annotated-cell-10-2" class="code-annotation-target"><a href="#annotated-cell-10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">prop.table</span>(</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-10" data-target-annotation="2">2</button><span id="annotated-cell-10-3" class="code-annotation-target"><a href="#annotated-cell-10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">table</span>(results<span class="sc">$</span>gold_anger)</span>
+<span id="annotated-cell-10-4"><a href="#annotated-cell-10-4" aria-hidden="true" tabindex="-1"></a>  )</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-10" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-10" data-code-lines="2" data-code-annotation="1"><code>prop.table()</code> converts those counts into proportions, so you can read off directly what share of the texts is <code>TRUE</code> and what share is <code>FALSE</code>.</span>
+</dd>
+<dt data-target-cell="annotated-cell-10" data-target-annotation="2">2</dt>
+<dd>
+<span data-code-cell="annotated-cell-10" data-code-lines="3" data-code-annotation="2"><code>table()</code> counts how often each value occurs in the gold anger column. The larger of the two shares is the baseline: the accuracy you’d already reach by always guessing the more common class.</span>
+</dd>
+</dl>
+<div class="quarto-embed-nb-cell">
+<div id="cell-baseline-proportions" class="cell" data-execution_count="10">
+<div id="baseline-proportions" class="cell-output cell-output-display" data-execution_count="10">
+<pre><code>
+    FALSE      TRUE 
+0.4933333 0.5066667 </code></pre>
+</div>
+</div>
+</div>
+<p>You can also use our convenience function below:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="annotated-cell-11"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-11-1"><a href="#annotated-cell-11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># you can simply run this cell to compute accuracy for each emotion label, or edit it to compute accuracy for your own predictions</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-11" data-target-annotation="1">1</button><span id="annotated-cell-11-2" class="code-annotation-target"><a href="#annotated-cell-11-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (label <span class="cf">in</span> LABELS) {</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-11" data-target-annotation="2">2</button><span id="annotated-cell-11-3" class="code-annotation-target"><a href="#annotated-cell-11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">"=== %s ===</span><span class="sc">\n</span><span class="st">"</span>, label))</span>
+<span id="annotated-cell-11-4"><a href="#annotated-cell-11-4" aria-hidden="true" tabindex="-1"></a></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-11" data-target-annotation="3">3</button><span id="annotated-cell-11-5" class="code-annotation-target"><a href="#annotated-cell-11-5" aria-hidden="true" tabindex="-1"></a>  gold_col <span class="ot">&lt;-</span> results[[<span class="fu">paste0</span>(<span class="st">"gold_"</span>, label)]]</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-11" data-target-annotation="4">4</button><span id="annotated-cell-11-6" class="code-annotation-target"><a href="#annotated-cell-11-6" aria-hidden="true" tabindex="-1"></a>  pred <span class="ot">&lt;-</span> results[[<span class="fu">paste0</span>(<span class="st">"decoder_"</span>, label)]]</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-11" data-target-annotation="5">5</button><span id="annotated-cell-11-7" class="code-annotation-target"><a href="#annotated-cell-11-7" aria-hidden="true" tabindex="-1"></a>  acc <span class="ot">&lt;-</span> <span class="fu">mean</span>(pred <span class="sc">==</span> gold_col, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-11" data-target-annotation="6">6</button><span id="annotated-cell-11-8" class="code-annotation-target"><a href="#annotated-cell-11-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">"  decoder : %.1f%% accuracy</span><span class="sc">\n</span><span class="st">"</span>, acc <span class="sc">*</span> <span class="dv">100</span>))</span>
+<span id="annotated-cell-11-9"><a href="#annotated-cell-11-9" aria-hidden="true" tabindex="-1"></a></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-11" data-target-annotation="7">7</button><span id="annotated-cell-11-10" class="code-annotation-target"><a href="#annotated-cell-11-10" aria-hidden="true" tabindex="-1"></a>  baseline <span class="ot">&lt;-</span> <span class="fu">max</span>(<span class="fu">prop.table</span>(<span class="fu">table</span>(gold_col)))</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-11" data-target-annotation="8">8</button><span id="annotated-cell-11-11" class="code-annotation-target"><a href="#annotated-cell-11-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">"  baseline: %.1f%% accuracy (always predict the majority class)</span><span class="sc">\n\n</span><span class="st">"</span>, baseline <span class="sc">*</span> <span class="dv">100</span>))</span>
+<span id="annotated-cell-11-12"><a href="#annotated-cell-11-12" aria-hidden="true" tabindex="-1"></a>}</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-11" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-11" data-code-lines="2" data-code-annotation="1">Loops over the three emotions in <code>LABELS</code>, running everything inside the braces once per emotion.</span>
+</dd>
+<dt data-target-cell="annotated-cell-11" data-target-annotation="2">2</dt>
+<dd>
+<span data-code-cell="annotated-cell-11" data-code-lines="3" data-code-annotation="2"><code>cat()</code> prints text, and <code>sprintf()</code> assembles it: <code>%s</code> is the placeholder where the label gets inserted, and <code>\n</code> starts a new line.</span>
+</dd>
+<dt data-target-cell="annotated-cell-11" data-target-annotation="3">3</dt>
+<dd>
+<span data-code-cell="annotated-cell-11" data-code-lines="5" data-code-annotation="3">Fetches the gold column for the current emotion, with the column name again assembled by <code>paste0()</code>.</span>
+</dd>
+<dt data-target-cell="annotated-cell-11" data-target-annotation="4">4</dt>
+<dd>
+<span data-code-cell="annotated-cell-11" data-code-lines="6" data-code-annotation="4">The decoder’s predictions for the same emotion.</span>
+</dd>
+<dt data-target-cell="annotated-cell-11" data-target-annotation="5">5</dt>
+<dd>
+<span data-code-cell="annotated-cell-11" data-code-lines="7" data-code-annotation="5"><code>pred == gold_col</code> compares both columns row by row, giving one <code>TRUE</code>/<code>FALSE</code> per text; taking the <code>mean()</code> of that yields the share of matches, i.e.&nbsp;the accuracy. <code>na.rm = TRUE</code> ignores missing values.</span>
+</dd>
+<dt data-target-cell="annotated-cell-11" data-target-annotation="6">6</dt>
+<dd>
+<span data-code-cell="annotated-cell-11" data-code-lines="8" data-code-annotation="6">Prints that accuracy as a percentage with one decimal place (<code>%.1f</code>); the doubled <code>%%</code> prints a literal percent sign.</span>
+</dd>
+<dt data-target-cell="annotated-cell-11" data-target-annotation="7">7</dt>
+<dd>
+<span data-code-cell="annotated-cell-11" data-code-lines="10" data-code-annotation="7">The baseline: the share of the more frequent class (<code>max()</code> of the two proportions).</span>
+</dd>
+<dt data-target-cell="annotated-cell-11" data-target-annotation="8">8</dt>
+<dd>
+<span data-code-cell="annotated-cell-11" data-code-lines="11" data-code-annotation="8">Prints the baseline underneath for comparison. If the decoder isn’t clearly above this number, it isn’t really discriminating anything.</span>
+</dd>
+</dl>
+<div class="quarto-embed-nb-cell">
+<div id="accuracy" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-09-02T12:43:37.414298Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-09-02T12:43:37.413984Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-09-02T12:43:37.421555Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-09-02T12:43:37.421116Z&quot;}}" data-execution_count="7">
+<div class="cell-output cell-output-stdout">
+<pre><code>=== anger ===
+  decoder : 78.7% accuracy
+  baseline: 50.7% accuracy (always predict the majority class)
+
+=== fear ===
+  decoder : 83.3% accuracy
+  baseline: 77.3% accuracy (always predict the majority class)
+
+=== sadness ===
+  decoder : 76.0% accuracy
+  baseline: 52.7% accuracy (always predict the majority class)
+</code></pre>
+</div>
+</div>
+</div>
+</section>
+<section id="step-3b-precision-recall-and-per-class-performance" class="level3">
+<h3 class="anchored" data-anchor-id="step-3b-precision-recall-and-per-class-performance">Step 3b: Precision, recall, and per-class performance</h3>
+<p>To get a more complete picture of how well the decoder is doing, we can compute three additional metrics:</p>
+<ul>
+<li><strong>Precision</strong>: of the texts the decoder called <code>TRUE</code> for an emotion, how many actually were?</li>
+<li><strong>Recall</strong>: of the texts that actually expressed that emotion, how many did the decoder find?</li>
+<li><strong>F1-score</strong>: the harmonic mean of precision and recall.</li>
+</ul>
+<p>In R, you can use the <code>yardstick</code> package to calculate these metrics (similar output can be obtained in other programming languages). To help you extract all relevant metrics in one call, we provide a helper function below. A few things about its output that aren’t obvious on first read:</p>
+<ul>
+<li>It reports a row for <strong>each class</strong> the target can take (here <code>FALSE</code> and <code>TRUE</code>) with its own precision/recall/F1. The <code>TRUE</code> row is usually the one you care about (did the model correctly catch the emotion?), but the <code>FALSE</code> row matters too: a model with great <code>TRUE</code>-recall but terrible <code>FALSE</code>-recall is just saying “yes” to almost everything.</li>
+<li><strong><code>support</code></strong> is the number of texts that belong to that row’s class (the count of gold <code>TRUE</code>s or gold <code>FALSE</code>s), not the number of predictions. It’s what lets you judge whether a score is based on 5 cases or 100.</li>
+<li><strong><code>macro avg</code></strong> takes the unweighted mean of the <code>FALSE</code> and <code>TRUE</code> rows, so a class with only 30 members counts exactly as much as one with 120. <strong><code>weighted avg</code></strong> instead weights each class by its <code>support</code>. Comparing the two is a quick imbalance check: if they’re far apart, the model is doing much better on one class than the other.</li>
+</ul>
+<p>You can also calculate the metrics manually with some very simple R code:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="annotated-cell-12"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-12-1"><a href="#annotated-cell-12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># FALSE</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-12" data-target-annotation="1">1</button><span id="annotated-cell-12-2" class="code-annotation-target"><a href="#annotated-cell-12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">precision</span>(results, gold_anger, decoder_anger)</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-12" data-target-annotation="2">2</button><span id="annotated-cell-12-3" class="code-annotation-target"><a href="#annotated-cell-12-3" aria-hidden="true" tabindex="-1"></a><span class="fu">recall</span>(results, gold_anger, decoder_anger)</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-12" data-target-annotation="3">3</button><span id="annotated-cell-12-4" class="code-annotation-target"><a href="#annotated-cell-12-4" aria-hidden="true" tabindex="-1"></a><span class="fu">f_meas</span>(results, gold_anger, decoder_anger)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-12" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-12" data-code-lines="2" data-code-annotation="1">Precision for the <code>FALSE</code> class: of all the texts the decoder called <code>FALSE</code>, how many really were? By default, <code>yardstick</code> treats the <em>first</em> factor level — here <code>FALSE</code> — as the event of interest.</span>
+</dd>
+<dt data-target-cell="annotated-cell-12" data-target-annotation="2">2</dt>
+<dd>
+<span data-code-cell="annotated-cell-12" data-code-lines="3" data-code-annotation="2">Recall for <code>FALSE</code>: of all the texts that really were <code>FALSE</code>, how many did the decoder actually find?</span>
+</dd>
+<dt data-target-cell="annotated-cell-12" data-target-annotation="3">3</dt>
+<dd>
+<span data-code-cell="annotated-cell-12" data-code-lines="4" data-code-annotation="3"><code>f_meas()</code> is the F1-score, the harmonic mean of the two values above — a single number summarising both.</span>
+</dd>
+</dl>
+<div class="quarto-embed-nb-cell">
+<div id="cell-metrics-false" class="cell" data-execution_count="12">
+<div id="metrics-false" class="cell-output cell-output-display" data-execution_count="12">
+<div class="ansi-escaped-output">
+<pre><span style="color:rgb(148,148,148)"># A tibble: 1 × 3</span>
+  .metric .estimator .estimate
+  <span style="font-style:italic;color:rgb(148,148,148)">&lt;chr&gt;</span>   <span style="font-style:italic;color:rgb(148,148,148)">&lt;chr&gt;</span>          <span style="font-style:italic;color:rgb(148,148,148)">&lt;dbl&gt;</span>
+<span style="color:rgb(188,188,188)">1</span> f_meas  binary         0.822</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="annotated-cell-13"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-13-1"><a href="#annotated-cell-13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># TRUE</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-13" data-target-annotation="1">1</button><span id="annotated-cell-13-2" class="code-annotation-target"><a href="#annotated-cell-13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">precision</span>(results, gold_anger, decoder_anger, <span class="at">event_level =</span> <span class="st">"second"</span>)</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-13" data-target-annotation="2">2</button><span id="annotated-cell-13-3" class="code-annotation-target"><a href="#annotated-cell-13-3" aria-hidden="true" tabindex="-1"></a><span class="fu">recall</span>(results, gold_anger, decoder_anger, <span class="at">event_level =</span> <span class="st">"second"</span>)</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-13" data-target-annotation="3">3</button><span id="annotated-cell-13-4" class="code-annotation-target"><a href="#annotated-cell-13-4" aria-hidden="true" tabindex="-1"></a><span class="fu">f_meas</span>(results, gold_anger, decoder_anger, <span class="at">event_level =</span> <span class="st">"second"</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-13" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-13" data-code-lines="2" data-code-annotation="1">The same metric, but <code>event_level = "second"</code> moves the event of interest to the second factor level, <code>TRUE</code>. So this is the precision for “the emotion is expressed” — usually the direction you actually care about.</span>
+</dd>
+<dt data-target-cell="annotated-cell-13" data-target-annotation="2">2</dt>
+<dd>
+<span data-code-cell="annotated-cell-13" data-code-lines="3" data-code-annotation="2">Recall for <code>TRUE</code>: what share of the genuinely emotional texts the decoder caught.</span>
+</dd>
+<dt data-target-cell="annotated-cell-13" data-target-annotation="3">3</dt>
+<dd>
+<span data-code-cell="annotated-cell-13" data-code-lines="4" data-code-annotation="3">The F1-score for the <code>TRUE</code> class.</span>
+</dd>
+</dl>
+<div class="quarto-embed-nb-cell">
+<div id="cell-metrics-true" class="cell" data-execution_count="13">
+<div id="metrics-true" class="cell-output cell-output-display" data-execution_count="13">
+<div class="ansi-escaped-output">
+<pre><span style="color:rgb(148,148,148)"># A tibble: 1 × 3</span>
+  .metric .estimator .estimate
+  <span style="font-style:italic;color:rgb(148,148,148)">&lt;chr&gt;</span>   <span style="font-style:italic;color:rgb(148,148,148)">&lt;chr&gt;</span>          <span style="font-style:italic;color:rgb(148,148,148)">&lt;dbl&gt;</span>
+<span style="color:rgb(188,188,188)">1</span> f_meas  binary         0.733</pre>
+</div>
+</div>
+</div>
+</div>
+<p>A convenience function to get everything at once:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="annotated-cell-14"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-14-1"><a href="#annotated-cell-14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># this is the helper function, you do not need to edit it</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-14" data-target-annotation="1">1</button><span id="annotated-cell-14-2" class="code-annotation-target"><a href="#annotated-cell-14-2" aria-hidden="true" tabindex="-1"></a>classification_report <span class="ot">&lt;-</span> <span class="cf">function</span>(data, truth_col, pred_col) {</span>
+<span id="annotated-cell-14-3"><a href="#annotated-cell-14-3" aria-hidden="true" tabindex="-1"></a>  d <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-14" data-target-annotation="2">2</button><span id="annotated-cell-14-4" class="code-annotation-target"><a href="#annotated-cell-14-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">transmute</span>(</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-14" data-target-annotation="3">3</button><span id="annotated-cell-14-5" class="code-annotation-target"><a href="#annotated-cell-14-5" aria-hidden="true" tabindex="-1"></a>      <span class="at">truth =</span> <span class="fu">factor</span>(.data[[truth_col]], <span class="at">levels =</span> <span class="fu">c</span>(<span class="cn">FALSE</span>, <span class="cn">TRUE</span>)),</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-14" data-target-annotation="4">4</button><span id="annotated-cell-14-6" class="code-annotation-target"><a href="#annotated-cell-14-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">estimate =</span> <span class="fu">factor</span>(.data[[pred_col]], <span class="at">levels =</span> <span class="fu">c</span>(<span class="cn">FALSE</span>, <span class="cn">TRUE</span>))</span>
+<span id="annotated-cell-14-7"><a href="#annotated-cell-14-7" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">|&gt;</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-14" data-target-annotation="5">5</button><span id="annotated-cell-14-8" class="code-annotation-target"><a href="#annotated-cell-14-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">drop_na</span>()</span>
+<span id="annotated-cell-14-9"><a href="#annotated-cell-14-9" aria-hidden="true" tabindex="-1"></a></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-14" data-target-annotation="6">6</button><span id="annotated-cell-14-10" class="code-annotation-target"><a href="#annotated-cell-14-10" aria-hidden="true" tabindex="-1"></a>  cm <span class="ot">&lt;-</span> <span class="fu">conf_mat</span>(d, truth, estimate)</span>
+<span id="annotated-cell-14-11"><a href="#annotated-cell-14-11" aria-hidden="true" tabindex="-1"></a></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-14" data-target-annotation="7">7</button><span id="annotated-cell-14-12" class="code-annotation-target"><a href="#annotated-cell-14-12" aria-hidden="true" tabindex="-1"></a>  per_class <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-14" data-target-annotation="8">8</button><span id="annotated-cell-14-13" class="code-annotation-target"><a href="#annotated-cell-14-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summary</span>(cm, <span class="at">event_level =</span> <span class="st">"first"</span>)  <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">class =</span> <span class="st">"FALSE"</span>),</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-14" data-target-annotation="9">9</button><span id="annotated-cell-14-14" class="code-annotation-target"><a href="#annotated-cell-14-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summary</span>(cm, <span class="at">event_level =</span> <span class="st">"second"</span>) <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">class =</span> <span class="st">"TRUE"</span>)</span>
+<span id="annotated-cell-14-15"><a href="#annotated-cell-14-15" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-14" data-target-annotation="10">10</button><span id="annotated-cell-14-16" class="code-annotation-target"><a href="#annotated-cell-14-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(.metric <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"precision"</span>, <span class="st">"recall"</span>, <span class="st">"f_meas"</span>)) <span class="sc">|&gt;</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-14" data-target-annotation="11">11</button><span id="annotated-cell-14-17" class="code-annotation-target"><a href="#annotated-cell-14-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(class, .metric, .estimate) <span class="sc">|&gt;</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-14" data-target-annotation="12">12</button><span id="annotated-cell-14-18" class="code-annotation-target"><a href="#annotated-cell-14-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> .metric, <span class="at">values_from =</span> .estimate) <span class="sc">|&gt;</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-14" data-target-annotation="13">13</button><span id="annotated-cell-14-19" class="code-annotation-target"><a href="#annotated-cell-14-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">left_join</span>(</span>
+<span id="annotated-cell-14-20"><a href="#annotated-cell-14-20" aria-hidden="true" tabindex="-1"></a>      <span class="fu">count</span>(d, truth, <span class="at">name =</span> <span class="st">"n"</span>) <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">class =</span> <span class="fu">as.character</span>(truth)) <span class="sc">|&gt;</span> <span class="fu">select</span>(class, n),</span>
+<span id="annotated-cell-14-21"><a href="#annotated-cell-14-21" aria-hidden="true" tabindex="-1"></a>      <span class="at">by =</span> <span class="st">"class"</span></span>
+<span id="annotated-cell-14-22"><a href="#annotated-cell-14-22" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="annotated-cell-14-23"><a href="#annotated-cell-14-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-14-24"><a href="#annotated-cell-14-24" aria-hidden="true" tabindex="-1"></a>  macro <span class="ot">&lt;-</span> per_class <span class="sc">|&gt;</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-14" data-target-annotation="14">14</button><span id="annotated-cell-14-25" class="code-annotation-target"><a href="#annotated-cell-14-25" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">class =</span> <span class="st">"macro avg"</span>, <span class="at">precision =</span> <span class="fu">mean</span>(precision), <span class="at">recall =</span> <span class="fu">mean</span>(recall),</span>
+<span id="annotated-cell-14-26"><a href="#annotated-cell-14-26" aria-hidden="true" tabindex="-1"></a>              <span class="at">f_meas =</span> <span class="fu">mean</span>(f_meas), <span class="at">n =</span> <span class="fu">sum</span>(n))</span>
+<span id="annotated-cell-14-27"><a href="#annotated-cell-14-27" aria-hidden="true" tabindex="-1"></a>  weighted <span class="ot">&lt;-</span> per_class <span class="sc">|&gt;</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-14" data-target-annotation="15">15</button><span id="annotated-cell-14-28" class="code-annotation-target"><a href="#annotated-cell-14-28" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">class =</span> <span class="st">"weighted avg"</span>,</span>
+<span id="annotated-cell-14-29"><a href="#annotated-cell-14-29" aria-hidden="true" tabindex="-1"></a>              <span class="at">precision =</span> <span class="fu">weighted.mean</span>(precision, n), <span class="at">recall =</span> <span class="fu">weighted.mean</span>(recall, n),</span>
+<span id="annotated-cell-14-30"><a href="#annotated-cell-14-30" aria-hidden="true" tabindex="-1"></a>              <span class="at">f_meas =</span> <span class="fu">weighted.mean</span>(f_meas, n), <span class="at">n =</span> <span class="fu">sum</span>(n))</span>
+<span id="annotated-cell-14-31"><a href="#annotated-cell-14-31" aria-hidden="true" tabindex="-1"></a></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-14" data-target-annotation="16">16</button><span id="annotated-cell-14-32" class="code-annotation-target"><a href="#annotated-cell-14-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_rows</span>(per_class, macro, weighted) <span class="sc">|&gt;</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-14" data-target-annotation="17">17</button><span id="annotated-cell-14-33" class="code-annotation-target"><a href="#annotated-cell-14-33" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rename</span>(<span class="at">f1 =</span> f_meas, <span class="at">support =</span> n) <span class="sc">|&gt;</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-14" data-target-annotation="18">18</button><span id="annotated-cell-14-34" class="code-annotation-target"><a href="#annotated-cell-14-34" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">c</span>(precision, recall, f1), \(x) <span class="fu">round</span>(x, <span class="dv">2</span>)))</span>
+<span id="annotated-cell-14-35"><a href="#annotated-cell-14-35" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="annotated-cell-14-36"><a href="#annotated-cell-14-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-14-37"><a href="#annotated-cell-14-37" aria-hidden="true" tabindex="-1"></a><span class="co"># here, we compute the classification report for each emotion label and print it</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-14" data-target-annotation="19">19</button><span id="annotated-cell-14-38" class="code-annotation-target"><a href="#annotated-cell-14-38" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (label <span class="cf">in</span> LABELS) {</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-14" data-target-annotation="20">20</button><span id="annotated-cell-14-39" class="code-annotation-target"><a href="#annotated-cell-14-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">"=== %s ===</span><span class="sc">\n</span><span class="st">"</span>, label))</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-14" data-target-annotation="21">21</button><span id="annotated-cell-14-40" class="code-annotation-target"><a href="#annotated-cell-14-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">classification_report</span>(results, <span class="fu">paste0</span>(<span class="st">"gold_"</span>, label), <span class="fu">paste0</span>(<span class="st">"decoder_"</span>, label)))</span>
+<span id="annotated-cell-14-41"><a href="#annotated-cell-14-41" aria-hidden="true" tabindex="-1"></a>}</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-14" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-14" data-code-lines="2" data-code-annotation="1">Defines the helper. It receives a table plus the <em>names</em> of the gold and the prediction column, which is what makes it reusable for any emotion.</span>
+</dd>
+<dt data-target-cell="annotated-cell-14" data-target-annotation="2">2</dt>
+<dd>
+<span data-code-cell="annotated-cell-14" data-code-lines="4" data-code-annotation="2"><code>transmute()</code> builds a new table containing only the columns created right here.</span>
+</dd>
+<dt data-target-cell="annotated-cell-14" data-target-annotation="3">3</dt>
+<dd>
+<span data-code-cell="annotated-cell-14" data-code-lines="5" data-code-annotation="3">Takes the gold column and turns it into a factor with a fixed level order (<code>FALSE</code> first, <code>TRUE</code> second). That fixed order is what makes <code>event_level</code> below behave predictably.</span>
+</dd>
+<dt data-target-cell="annotated-cell-14" data-target-annotation="4">4</dt>
+<dd>
+<span data-code-cell="annotated-cell-14" data-code-lines="6" data-code-annotation="4">The same for the predictions.</span>
+</dd>
+<dt data-target-cell="annotated-cell-14" data-target-annotation="5">5</dt>
+<dd>
+<span data-code-cell="annotated-cell-14" data-code-lines="8" data-code-annotation="5"><code>drop_na()</code> removes rows with missing values, e.g.&nbsp;responses that couldn’t be parsed earlier.</span>
+</dd>
+<dt data-target-cell="annotated-cell-14" data-target-annotation="6">6</dt>
+<dd>
+<span data-code-cell="annotated-cell-14" data-code-lines="10" data-code-annotation="6"><code>conf_mat()</code> builds the confusion matrix: how often each combination of truth and prediction occurs.</span>
+</dd>
+<dt data-target-cell="annotated-cell-14" data-target-annotation="7">7</dt>
+<dd>
+<span data-code-cell="annotated-cell-14" data-code-lines="12" data-code-annotation="7"><code>bind_rows()</code> stacks two tables on top of one another.</span>
+</dd>
+<dt data-target-cell="annotated-cell-14" data-target-annotation="8">8</dt>
+<dd>
+<span data-code-cell="annotated-cell-14" data-code-lines="13" data-code-annotation="8">All metrics computed with <code>FALSE</code> as the event of interest, tagged with a <code>class</code> column saying so.</span>
+</dd>
+<dt data-target-cell="annotated-cell-14" data-target-annotation="9">9</dt>
+<dd>
+<span data-code-cell="annotated-cell-14" data-code-lines="14" data-code-annotation="9">The same again, but with <code>TRUE</code> as the event of interest.</span>
+</dd>
+<dt data-target-cell="annotated-cell-14" data-target-annotation="10">10</dt>
+<dd>
+<span data-code-cell="annotated-cell-14" data-code-lines="16" data-code-annotation="10">Keeps only the three metrics we care about, out of the many that <code>yardstick</code> returns.</span>
+</dd>
+<dt data-target-cell="annotated-cell-14" data-target-annotation="11">11</dt>
+<dd>
+<span data-code-cell="annotated-cell-14" data-code-lines="17" data-code-annotation="11">Reduces the table to the three columns we still need.</span>
+</dd>
+<dt data-target-cell="annotated-cell-14" data-target-annotation="12">12</dt>
+<dd>
+<span data-code-cell="annotated-cell-14" data-code-lines="18" data-code-annotation="12"><code>pivot_wider()</code> reshapes from long to wide: the metric names become their own columns, so each class ends up as one row with precision, recall, and F1 next to each other.</span>
+</dd>
+<dt data-target-cell="annotated-cell-14" data-target-annotation="13">13</dt>
+<dd>
+<span data-code-cell="annotated-cell-14" data-code-lines="19" data-code-annotation="13">Adds the <code>support</code> column: <code>count()</code> counts how many texts belong to each class, and the join attaches those counts to the matching rows.</span>
+</dd>
+<dt data-target-cell="annotated-cell-14" data-target-annotation="14">14</dt>
+<dd>
+<span data-code-cell="annotated-cell-14" data-code-lines="25" data-code-annotation="14"><code>summarise()</code> collapses the two class rows into a single one — here the unweighted mean of both classes, the “macro avg”.</span>
+</dd>
+<dt data-target-cell="annotated-cell-14" data-target-annotation="15">15</dt>
+<dd>
+<span data-code-cell="annotated-cell-14" data-code-lines="28" data-code-annotation="15">The same, but weighted by each class’s <code>support</code> (“weighted avg”), so the larger class carries more weight.</span>
+</dd>
+<dt data-target-cell="annotated-cell-14" data-target-annotation="16">16</dt>
+<dd>
+<span data-code-cell="annotated-cell-14" data-code-lines="32" data-code-annotation="16">Stacks the per-class rows and the two average rows into the final table.</span>
+</dd>
+<dt data-target-cell="annotated-cell-14" data-target-annotation="17">17</dt>
+<dd>
+<span data-code-cell="annotated-cell-14" data-code-lines="33" data-code-annotation="17">Renames the columns to the more familiar <code>f1</code> and <code>support</code>.</span>
+</dd>
+<dt data-target-cell="annotated-cell-14" data-target-annotation="18">18</dt>
+<dd>
+<span data-code-cell="annotated-cell-14" data-code-lines="34" data-code-annotation="18">Rounds the three metric columns to two decimals; <code>across()</code> applies the same operation to several columns at once.</span>
+</dd>
+<dt data-target-cell="annotated-cell-14" data-target-annotation="19">19</dt>
+<dd>
+<span data-code-cell="annotated-cell-14" data-code-lines="38" data-code-annotation="19">Runs the report for each of the three emotions.</span>
+</dd>
+<dt data-target-cell="annotated-cell-14" data-target-annotation="20">20</dt>
+<dd>
+<span data-code-cell="annotated-cell-14" data-code-lines="39" data-code-annotation="20">Prints a heading with the emotion’s name.</span>
+</dd>
+<dt data-target-cell="annotated-cell-14" data-target-annotation="21">21</dt>
+<dd>
+<span data-code-cell="annotated-cell-14" data-code-lines="40" data-code-annotation="21">Calls the helper with the matching gold and prediction column names, and <code>print()</code> writes the returned table to the output.</span>
+</dd>
+</dl>
+<div class="quarto-embed-nb-cell">
+<div id="classification-report" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-09-02T12:43:37.423098Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-09-02T12:43:37.422780Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-09-02T12:43:37.509663Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-09-02T12:43:37.509172Z&quot;}}" data-execution_count="14">
+<div class="cell-output cell-output-stdout">
+<div class="ansi-escaped-output">
+<pre>=== anger ===
+
+<span style="color:rgb(148,148,148)"># A tibble: 4 × 5</span>
+
+  class        precision recall    f1 support
+
+  <span style="font-style:italic;color:rgb(148,148,148)">&lt;chr&gt;</span>            <span style="font-style:italic;color:rgb(148,148,148)">&lt;dbl&gt;</span>  <span style="font-style:italic;color:rgb(148,148,148)">&lt;dbl&gt;</span> <span style="font-style:italic;color:rgb(148,148,148)">&lt;dbl&gt;</span>   <span style="font-style:italic;color:rgb(148,148,148)">&lt;int&gt;</span>
+
+<span style="color:rgb(188,188,188)">1</span> FALSE             0.7    1     0.82      74
+
+<span style="color:rgb(188,188,188)">2</span> TRUE              1      0.58  0.73      76
+
+<span style="color:rgb(188,188,188)">3</span> macro avg         0.85   0.79  0.78     150
+
+<span style="color:rgb(188,188,188)">4</span> weighted avg      0.85   0.79  0.78     150
+
+=== fear ===
+
+<span style="color:rgb(148,148,148)"># A tibble: 4 × 5</span>
+
+  class        precision recall    f1 support
+
+  <span style="font-style:italic;color:rgb(148,148,148)">&lt;chr&gt;</span>            <span style="font-style:italic;color:rgb(148,148,148)">&lt;dbl&gt;</span>  <span style="font-style:italic;color:rgb(148,148,148)">&lt;dbl&gt;</span> <span style="font-style:italic;color:rgb(148,148,148)">&lt;dbl&gt;</span>   <span style="font-style:italic;color:rgb(148,148,148)">&lt;int&gt;</span>
+
+<span style="color:rgb(188,188,188)">1</span> FALSE             0.68   0.5   0.58      34
+
+<span style="color:rgb(188,188,188)">2</span> TRUE              0.86   0.93  0.9      116
+
+<span style="color:rgb(188,188,188)">3</span> macro avg         0.77   0.72  0.74     150
+
+<span style="color:rgb(188,188,188)">4</span> weighted avg      0.82   0.83  0.82     150
+
+=== sadness ===
+
+<span style="color:rgb(148,148,148)"># A tibble: 4 × 5</span>
+
+  class        precision recall    f1 support
+
+  <span style="font-style:italic;color:rgb(148,148,148)">&lt;chr&gt;</span>            <span style="font-style:italic;color:rgb(148,148,148)">&lt;dbl&gt;</span>  <span style="font-style:italic;color:rgb(148,148,148)">&lt;dbl&gt;</span> <span style="font-style:italic;color:rgb(148,148,148)">&lt;dbl&gt;</span>   <span style="font-style:italic;color:rgb(148,148,148)">&lt;int&gt;</span>
+
+<span style="color:rgb(188,188,188)">1</span> FALSE             0.81   0.65  0.72      71
+
+<span style="color:rgb(188,188,188)">2</span> TRUE              0.73   0.86  0.79      79
+
+<span style="color:rgb(188,188,188)">3</span> macro avg         0.77   0.75  0.75     150
+
+<span style="color:rgb(188,188,188)">4</span> weighted avg      0.77   0.76  0.76     150
+</pre>
+</div>
+</div>
+</div>
+</div>
+<section id="your-turn-1" class="level4">
+<h4 class="anchored" data-anchor-id="your-turn-1">Your turn</h4>
+<p>Where does the decoder actually get it wrong?</p>
+<p>A confusion matrix (as a simple table) shows how the decoder’s <code>TRUE</code>/<code>FALSE</code> calls line up against the gold standard. Rows are the true (gold) label, columns are the decoder’s prediction.</p>
+<p>For which of the three emotions does the decoder have the most <strong>false positives</strong> (calling an emotion <code>TRUE</code> that the gold standard says is <code>FALSE</code>)? Set <code>chosen_label</code> below to check yourself.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="annotated-cell-15"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><button class="code-annotation-anchor" data-target-cell="annotated-cell-15" data-target-annotation="1">1</button><span id="annotated-cell-15-1" class="code-annotation-target"><a href="#annotated-cell-15-1" aria-hidden="true" tabindex="-1"></a>chosen_label <span class="ot">&lt;-</span> <span class="st">"fear"</span>    <span class="co"># </span><span class="al">TODO</span><span class="co">: try "anger", "fear", "sadness"</span></span>
+<span id="annotated-cell-15-2"><a href="#annotated-cell-15-2" aria-hidden="true" tabindex="-1"></a></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-15" data-target-annotation="2">2</button><span id="annotated-cell-15-3" class="code-annotation-target"><a href="#annotated-cell-15-3" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-15" data-target-annotation="3">3</button><span id="annotated-cell-15-4" class="code-annotation-target"><a href="#annotated-cell-15-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">gold =</span> results[[<span class="fu">paste0</span>(<span class="st">"gold_"</span>, chosen_label)]],</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-15" data-target-annotation="4">4</button><span id="annotated-cell-15-5" class="code-annotation-target"><a href="#annotated-cell-15-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">predicted =</span> results[[<span class="fu">paste0</span>(<span class="st">"decoder_"</span>, chosen_label)]]</span>
+<span id="annotated-cell-15-6"><a href="#annotated-cell-15-6" aria-hidden="true" tabindex="-1"></a>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-15" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-15" data-code-lines="1" data-code-annotation="1">Pick the emotion you want to inspect — this is the only line you need to change.</span>
+</dd>
+<dt data-target-cell="annotated-cell-15" data-target-annotation="2">2</dt>
+<dd>
+<span data-code-cell="annotated-cell-15" data-code-lines="3" data-code-annotation="2">Given two inputs, <code>table()</code> produces a cross-tabulation: it counts how often each combination of the two occurs.</span>
+</dd>
+<dt data-target-cell="annotated-cell-15" data-target-annotation="3">3</dt>
+<dd>
+<span data-code-cell="annotated-cell-15" data-code-lines="4" data-code-annotation="3">The rows of the resulting table: the gold standard’s judgment for the chosen emotion.</span>
+</dd>
+<dt data-target-cell="annotated-cell-15" data-target-annotation="4">4</dt>
+<dd>
+<span data-code-cell="annotated-cell-15" data-code-lines="5" data-code-annotation="4">The columns: the decoder’s prediction. The two cells off the diagonal are the errors — false positives in one corner, false negatives in the other.</span>
+</dd>
+</dl>
+<div class="quarto-embed-nb-cell">
+<div id="cell-crosstab" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-09-02T12:43:37.511272Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-09-02T12:43:37.510922Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-09-02T12:43:37.515548Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-09-02T12:43:37.515146Z&quot;}}" data-execution_count="15">
+<div id="crosstab" class="cell-output cell-output-display" data-execution_count="15">
+<pre><code>       predicted
+gold    FALSE TRUE
+  FALSE    17   17
+  TRUE      8  108</code></pre>
+</div>
+</div>
+</div>
+</section>
+<section id="your-turn-2" class="level4">
+<h4 class="anchored" data-anchor-id="your-turn-2">Your turn</h4>
+<p>Aggregate metrics only get you so far — sometimes you want to read the actual texts behind a specific kind of mistake. Say you want to see texts where the decoder called <code>fear</code> <code>TRUE</code>, but the gold standard says it wasn’t: set <code>chosen_label &lt;- "fear"</code> and <code>direction &lt;- "false_positive"</code> below.</p>
+<p>You can change <code>chosen_label</code> and <code>direction</code> to look at other combinations, e.g.&nbsp;<code>sadness</code> false negatives (texts the decoder called <code>FALSE</code> on, even though the gold standard says sadness <em>was</em> present).</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="annotated-cell-16"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><button class="code-annotation-anchor" data-target-cell="annotated-cell-16" data-target-annotation="1">1</button><span id="annotated-cell-16-1" class="code-annotation-target"><a href="#annotated-cell-16-1" aria-hidden="true" tabindex="-1"></a>chosen_label <span class="ot">&lt;-</span> <span class="st">"fear"</span>          <span class="co"># </span><span class="al">TODO</span><span class="co">: "anger", "fear", "sadness"</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-16" data-target-annotation="2">2</button><span id="annotated-cell-16-2" class="code-annotation-target"><a href="#annotated-cell-16-2" aria-hidden="true" tabindex="-1"></a>direction <span class="ot">&lt;-</span> <span class="st">"false_positive"</span>   <span class="co"># </span><span class="al">TODO</span><span class="co">: "false_positive" (decoder said TRUE, gold says FALSE)</span></span>
+<span id="annotated-cell-16-3"><a href="#annotated-cell-16-3" aria-hidden="true" tabindex="-1"></a>                                 <span class="co">#    or "false_negative" (decoder said FALSE, gold says TRUE)</span></span>
+<span id="annotated-cell-16-4"><a href="#annotated-cell-16-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-16-5"><a href="#annotated-cell-16-5" aria-hidden="true" tabindex="-1"></a><span class="co"># you do not need to edit the code below, just change the two variables above</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-16" data-target-annotation="3">3</button><span id="annotated-cell-16-6" class="code-annotation-target"><a href="#annotated-cell-16-6" aria-hidden="true" tabindex="-1"></a>pred <span class="ot">&lt;-</span> results[[<span class="fu">paste0</span>(<span class="st">"decoder_"</span>, chosen_label)]]</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-16" data-target-annotation="4">4</button><span id="annotated-cell-16-7" class="code-annotation-target"><a href="#annotated-cell-16-7" aria-hidden="true" tabindex="-1"></a>gold_col <span class="ot">&lt;-</span> results[[<span class="fu">paste0</span>(<span class="st">"gold_"</span>, chosen_label)]]</span>
+<span id="annotated-cell-16-8"><a href="#annotated-cell-16-8" aria-hidden="true" tabindex="-1"></a></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-16" data-target-annotation="5">5</button><span id="annotated-cell-16-9" class="code-annotation-target"><a href="#annotated-cell-16-9" aria-hidden="true" tabindex="-1"></a>mask <span class="ot">&lt;-</span> <span class="cf">if</span> (direction <span class="sc">==</span> <span class="st">"false_positive"</span>) {</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-16" data-target-annotation="6">6</button><span id="annotated-cell-16-10" class="code-annotation-target"><a href="#annotated-cell-16-10" aria-hidden="true" tabindex="-1"></a>  pred <span class="sc">&amp;</span> <span class="sc">!</span>gold_col</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-16" data-target-annotation="7">7</button><span id="annotated-cell-16-11" class="code-annotation-target"><a href="#annotated-cell-16-11" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> <span class="cf">if</span> (direction <span class="sc">==</span> <span class="st">"false_negative"</span>) {</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-16" data-target-annotation="8">8</button><span id="annotated-cell-16-12" class="code-annotation-target"><a href="#annotated-cell-16-12" aria-hidden="true" tabindex="-1"></a>  <span class="sc">!</span>pred <span class="sc">&amp;</span> gold_col</span>
+<span id="annotated-cell-16-13"><a href="#annotated-cell-16-13" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-16" data-target-annotation="9">9</button><span id="annotated-cell-16-14" class="code-annotation-target"><a href="#annotated-cell-16-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stop</span>(<span class="st">'direction must be "false_positive" or "false_negative"'</span>)</span>
+<span id="annotated-cell-16-15"><a href="#annotated-cell-16-15" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="annotated-cell-16-16"><a href="#annotated-cell-16-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-16-17"><a href="#annotated-cell-16-17" aria-hidden="true" tabindex="-1"></a>results <span class="sc">|&gt;</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-16" data-target-annotation="10">10</button><span id="annotated-cell-16-18" class="code-annotation-target"><a href="#annotated-cell-16-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(mask) <span class="sc">|&gt;</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-16" data-target-annotation="11">11</button><span id="annotated-cell-16-19" class="code-annotation-target"><a href="#annotated-cell-16-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(text, gold_anger, gold_fear, gold_sadness) <span class="sc">|&gt;</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-16" data-target-annotation="12">12</button><span id="annotated-cell-16-20" class="code-annotation-target"><a href="#annotated-cell-16-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">3</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-16" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-16" data-code-lines="1" data-code-annotation="1">Which emotion you’d like to look at.</span>
+</dd>
+<dt data-target-cell="annotated-cell-16" data-target-annotation="2">2</dt>
+<dd>
+<span data-code-cell="annotated-cell-16" data-code-lines="2" data-code-annotation="2">Which kind of mistake: texts the decoder wrongly called <code>TRUE</code>, or ones it wrongly called <code>FALSE</code>.</span>
+</dd>
+<dt data-target-cell="annotated-cell-16" data-target-annotation="3">3</dt>
+<dd>
+<span data-code-cell="annotated-cell-16" data-code-lines="6" data-code-annotation="3">The decoder’s predictions for the chosen emotion.</span>
+</dd>
+<dt data-target-cell="annotated-cell-16" data-target-annotation="4">4</dt>
+<dd>
+<span data-code-cell="annotated-cell-16" data-code-lines="7" data-code-annotation="4">The gold standard’s judgments for the same emotion.</span>
+</dd>
+<dt data-target-cell="annotated-cell-16" data-target-annotation="5">5</dt>
+<dd>
+<span data-code-cell="annotated-cell-16" data-code-lines="9" data-code-annotation="5">Depending on the direction you chose above, a different filter gets built below.</span>
+</dd>
+<dt data-target-cell="annotated-cell-16" data-target-annotation="6">6</dt>
+<dd>
+<span data-code-cell="annotated-cell-16" data-code-lines="10" data-code-annotation="6">False positives: the decoder says <code>TRUE</code> (<code>pred</code>) <strong>and</strong> the gold standard does not (<code>!gold_col</code>). The <code>&amp;</code> requires both conditions per row, and <code>!</code> negates a value.</span>
+</dd>
+<dt data-target-cell="annotated-cell-16" data-target-annotation="7">7</dt>
+<dd>
+<span data-code-cell="annotated-cell-16" data-code-lines="11" data-code-annotation="7">Otherwise, check whether you asked for the second option.</span>
+</dd>
+<dt data-target-cell="annotated-cell-16" data-target-annotation="8">8</dt>
+<dd>
+<span data-code-cell="annotated-cell-16" data-code-lines="12" data-code-annotation="8">False negatives: the decoder said <code>FALSE</code> even though the gold standard says <code>TRUE</code>.</span>
+</dd>
+<dt data-target-cell="annotated-cell-16" data-target-annotation="9">9</dt>
+<dd>
+<span data-code-cell="annotated-cell-16" data-code-lines="14" data-code-annotation="9"><code>stop()</code> aborts with an error message if you typed something else — a small safeguard against typos.</span>
+</dd>
+<dt data-target-cell="annotated-cell-16" data-target-annotation="10">10</dt>
+<dd>
+<span data-code-cell="annotated-cell-16" data-code-lines="18" data-code-annotation="10"><code>filter()</code> keeps only the rows where the mask is <code>TRUE</code>, i.e.&nbsp;exactly the mistakes of the kind you chose.</span>
+</dd>
+<dt data-target-cell="annotated-cell-16" data-target-annotation="11">11</dt>
+<dd>
+<span data-code-cell="annotated-cell-16" data-code-lines="19" data-code-annotation="11">Shows the text together with all three gold judgments, so you can read the mistake in context.</span>
+</dd>
+<dt data-target-cell="annotated-cell-16" data-target-annotation="12">12</dt>
+<dd>
+<span data-code-cell="annotated-cell-16" data-code-lines="20" data-code-annotation="12">Limits the output to three examples; increase this number if you’d like to read more.</span>
+</dd>
+</dl>
+<div class="quarto-embed-nb-cell">
+<div id="cell-mismatch-lookup" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-09-02T12:43:37.517080Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-09-02T12:43:37.516731Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-09-02T12:43:37.534035Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-09-02T12:43:37.533570Z&quot;}}" data-execution_count="16">
+<div id="mismatch-lookup" class="cell-output cell-output-display" data-execution_count="16">
+<div class="ansi-escaped-output">
+<pre><span style="color:rgb(148,148,148)"># A tibble: 3 × 4</span>
+  text                                         gold_anger gold_fear gold_sadness
+  <span style="font-style:italic;color:rgb(148,148,148)">&lt;chr&gt;</span>                                        <span style="font-style:italic;color:rgb(148,148,148)">&lt;fct&gt;</span>      <span style="font-style:italic;color:rgb(148,148,148)">&lt;lgl&gt;</span>     <span style="font-style:italic;color:rgb(148,148,148)">&lt;lgl&gt;</span>       
+<span style="color:rgb(188,188,188)">1</span> <span style="color:rgb(148,148,148)">"</span>I feel trapped in my own life. I am stuck … FALSE      FALSE     TRUE        
+<span style="color:rgb(188,188,188)">2</span> <span style="color:rgb(148,148,148)">"</span>Fed up of the situation, which could have … TRUE       FALSE     TRUE        
+<span style="color:rgb(188,188,188)">3</span> <span style="color:rgb(148,148,148)">"</span>I'm sad for everything I see on the tv - a… FALSE      FALSE     TRUE        </pre>
+</div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="next" class="level3">
+<h3 class="anchored" data-anchor-id="next">Next</h3>
+<p>Head to the <a href="../../../../sections/workshop/content/05-outlook/index.html">discussion &amp; outlook</a> page.</p>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  var navbar = document.getElementById("quarto-header");
+  var embedHeader = document.getElementById("quarto-embed-header");
+  if (!navbar || !embedHeader) return;
+
+  var navbarHeight = navbar.offsetHeight;
+  embedHeader.style.top = navbarHeight + "px";
+
+  var titleBannerEl = document.querySelector("body > #title-block-header");
+  if (titleBannerEl) {
+    titleBannerEl.style.paddingTop =
+      (parseInt(titleBannerEl.style.paddingTop) || 0) + navbarHeight + "px";
+  }
+
+  var contentEl = document.getElementById("quarto-content");
+  if (contentEl) {
+    for (var i = 0; i < contentEl.children.length; i++) {
+      var child = contentEl.children[i];
+      child.style.paddingTop =
+        (parseInt(child.style.paddingTop) || 0) + navbarHeight + "px";
+    }
+  }
+});
+</script>
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/llm-content-analysis\.com");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        const annoteTargets = window.document.querySelectorAll('.code-annotation-anchor');
+        for (let i=0; i<annoteTargets.length; i++) {
+          const annoteTarget = annoteTargets[i];
+          const targetCell = annoteTarget.getAttribute("data-target-cell");
+          const targetAnnotation = annoteTarget.getAttribute("data-target-annotation");
+          const contentFn = () => {
+            const content = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+            if (content) {
+              const tipContent = content.cloneNode(true);
+              tipContent.classList.add("code-annotation-tip-content");
+              return tipContent.outerHTML;
+            }
+          }
+          const config = {
+            allowHTML: true,
+            content: contentFn,
+            onShow: (instance) => {
+              selectCodeLines(instance.reference);
+              instance.reference.classList.add('code-annotation-active');
+              window.tippy.hideAll();
+            },
+            onHide: (instance) => {
+              unselectCodeLines();
+              instance.reference.classList.remove('code-annotation-active');
+            },
+            maxWidth: 300,
+            delay: [50, 0],
+            duration: [200, 0],
+            offset: [5, 10],
+            arrow: true,
+            appendTo: function(el) {
+              return el.parentElement.parentElement.parentElement;
+            },
+            interactive: true,
+            interactiveBorder: 10,
+            theme: 'quarto',
+            placement: 'right',
+            popperOptions: {
+              modifiers: [
+              {
+                name: 'flip',
+                options: {
+                  flipVariations: false, // true by default
+                  allowedAutoPlacements: ['right'],
+                  fallbackPlacements: ['right', 'top', 'top-start', 'top-end', 'bottom', 'bottom-start', 'bottom-end', 'left'],
+                },
+              },
+              {
+                name: 'preventOverflow',
+                options: {
+                  mainAxis: false,
+                  altAxis: false
+                }
+              }
+              ]        
+            }      
+          };
+          window.tippy(annoteTarget, config); 
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../../../../sections/workshop/content/03-decoder/index.html" class="pagination-link" aria-label="3. Generative decoders">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">3. Generative decoders</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../../../../sections/workshop/content/05-outlook/index.html" class="pagination-link" aria-label="5. Discussion &amp; outlook">
+        <span class="nav-page-text">5. Discussion &amp; outlook</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>© Dietrich, Possler, &amp; Scheper | <a href="https://felix-dietrich.de/imprint.html">Imprint &amp; Privacy Policy</a></p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+<script src="../../../../site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>
