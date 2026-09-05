@@ -1,0 +1,8 @@
+title-block-banner: "#8ec07c99"
+title-block-banner-color: "#282828"
+
+include-in-header:
+  text: |
+    <style>
+      :root { --hl: var(--hl-workshop); --hl-rgb: var(--hl-workshop-rgb); }
+    </style>

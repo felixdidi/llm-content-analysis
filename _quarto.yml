@@ -1,56 +1,29 @@
 project:
   type: website
   lib-dir: site_libs
-  
-lang: de
+
+metadata-files:
+  - sections/tutorials/_sidebar.yml
+  - sections/paper/_sidebar.yml
+  - sections/workshop/_sidebar.yml
+
+lang: en
 
 bibliography: "bib/refs.bib"
 csl: "bib/apa.csl"
 
 website:
+  title: "Open Source LLMs for Content Analysis"
   site-url: https://llm-content-analysis.com
-  sidebar:
-    style: "floating"
-    align: "center"
-    logo: "img/transformer.png"
-    search: true
-    collapse-level: 1
-    contents:
-      - section: "Anleitungen"
-        href: "index.qmd"
-        contents:
-          - href: "01_installation.qmd"
-            text: "Installation"
-          - href: "02_setup.qmd"
-            text: "Vorbereitung"
-          - section: "Textklassifikation"
-            contents:
-              - href: "03_kategoriespezifisches_Encoder-Modell.qmd"
-                text: "Kategoriespezifisches Encoder-Modell"
-              - href: "04_aufgabenspezifisches_Encoder-Modell.qmd"
-                text: "Aufgabenspezifisches Encoder-Modell"
-              - href: "05_universelles_Decoder-Modell.qmd"
-                text: "Universelles Decoder-Modell"
-      - text: "---"
-      - section: "Beispielstudie"
-        href: "beispielstudie/00_beispielstudie.qmd"
-        contents:
-          - href: "beispielstudie/00_goldstandard.qmd"
-            text: "Goldstandard"
-          - href: "beispielstudie/01_kategoriespezifisches_Encoder-Modell.qmd"
-            text: "Kategoriespezifisches Encoder-Modell"
-          - href: "beispielstudie/02_aufgabenspezifisches_Encoder-Modell.qmd"
-            text: "Aufgabenspezifisches Encoder-Modell"
-          - href: "beispielstudie/03_universelles_Decoder-Modell.qmd"
-            text: "Universelles Decoder-Modell"
-          # - href: "beispielstudie/04_manuelle_Inhaltsanalyse.qmd"
-          #   text: "Manuelle Inhaltsanalyse"
-          - href: "beispielstudie/05_dictionary.qmd"
-            text: "Off-the-shelf Diktionär"
-          - href: "beispielstudie/06_machine_learning.qmd"
-            text: "Überwachtes maschinelles Lernen"
-          - href: "beispielstudie/07_validierung.qmd"
-            text: "Validierung"
+  navbar:
+    right:
+      - text: "Tutorials"
+        href: sections/tutorials/index.qmd
+      - text: "Paper"
+        href: sections/paper/index.qmd
+      - text: "Workshop"
+        href: sections/workshop/index.qmd
+  page-footer: "© Dietrich, Possler, & Scheper | [Imprint & Privacy Policy](https://felix-dietrich.de/imprint.html)"
 
 format:
   html:
@@ -63,11 +36,12 @@ format:
     code-tools: false
     code-line-numbers: false
     highlight-style: gruvbox
-    lang: de-DE
+    lang: en
     link-external-newwindow: true
     code-annotations: hover
-theme:
-  light: [cosmo, theme.scss]
-  
+    include-after-body: styles/notebook-embed-offset.html
+    theme:
+      light: [cosmo, styles/theme.scss]
+
 execute:
   freeze: auto

@@ -1,0 +1,16 @@
+---
+title: "Tutorials"
+subtitle: "A growing collection of tutorials for content analysis with ready-to-use, open-source models"
+page-layout: article
+anchor-sections: false
+sidebar: tutorials
+listing:
+  id: tutorial-links
+  template: ../../ejs/links.ejs
+  contents: tutorials.yml
+---
+
+On this page, we collect tutorials for content analysis with ready-to-use, open-source models. <br><br>
+
+::: {#tutorial-links}
+:::

@@ -1,0 +1,19 @@
+---
+title: "Schedule"
+---
+
+In this workshop, each block splits into a **Code-Along** (we build the given examples together) and an **Exercise** (you work independently on applying your knowledge).
+
+| Time | Block |
+|---|---|
+| 8:00 – 8:15 | **Welcome & introductions** |
+| 8:15 – 9:00 | **Input I**: text as data, LLMs, model types & Hugging Face |
+| 9:00 – 9:30 | **Code-Along**: classification with encoder models |
+| 9:30 – 10:00 | **Exercise**: classification with an encoder model |
+| 10:00 – 10:15 | **Break** |
+| 10:15 – 10:30 | **Code-Along**: classification with a generative decoder |
+| 10:30 – 11:00 | **Exercise**: classification with a generative decoder |
+| 11:00 – 11:15 | **Input II**: evaluation logic, manual coding & gold standards |
+| 11:15 – 11:30 | **Code-Along**: evaluating classifications |
+| 11:30 – 12:00 | **Discussion**, outlook & wrap-up |
+: {tbl-colwidths="[20,80]"}

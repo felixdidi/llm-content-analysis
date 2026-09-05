@@ -1,0 +1,10 @@
+lang: de-DE
+
+title-block-banner: "#b1628699"
+title-block-banner-color: "#282828"
+
+include-in-header:
+  text: |
+    <style>
+      :root { --hl: var(--hl-paper); --hl-rgb: var(--hl-paper-rgb); }
+    </style>

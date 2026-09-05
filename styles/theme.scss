@@ -1,0 +1,444 @@
+/*-- scss:defaults --*/
+@import url(https://fonts.bunny.net/css?family=aleo:400,400i,700,700i,900,900i);
+$primary: #282828 !default;
+$body-color: #282828 !default;
+$body-bg: #ffffff !default;
+$link-color: #282828 !default;
+$navbar-hl: #fabd2f !default;
+$navbar-bg: #ffffff !default;
+$navbar-fg: #504945 !default;
+$footer-fg: #928374 !default;
+$toc-active-border: #282828 !default;
+$toc-inactive-border: #928374 !default;
+$blue:    #458588 !default;
+$purple:  #b16286 !default;
+$red:     #cc241d !default;
+$orange:  #fe8019 !default;
+$yellow:  #fabd2f !default;
+$green:   #98971a !default;
+$teal:    #689d6a !default;
+$grey:    #928374 !default;
+$font-family-sans-serif: "Aleo", sans-serif !default;
+$callout-color-note: $yellow;
+$callout-color-warning: #fe8019;
+$callout-color-tip: #8ec07c;
+$callout-color-important: #fb4934;
+$callout-color-caution: #fe8019;
+
+/*section highlight color, overridden per-section via include-in-header in each section's _metadata.yml*/
+:root {
+  --hl: #{$yellow};
+  --hl-rgb: 250, 189, 47;
+
+  /*fixed per-section colors, for spots (like the startpage) that show all three sections at once*/
+  --hl-tutorials: #{$yellow};
+  --hl-tutorials-faint: #fabd2f99;
+  --hl-tutorials-rgb: 250, 189, 47;
+  --hl-paper: #b16286;
+  --hl-paper-faint: #b1628699;
+  --hl-paper-rgb: 177, 98, 134;
+  --hl-workshop: #8ec07c;
+  --hl-workshop-faint: #8ec07c99;
+  --hl-workshop-rgb: 142, 192, 124;
+}
+
+/* temporarily fix annotation overlap, see: https://github.com/quarto-dev/quarto-cli/issues/13444 */
+
+.code-copy-outer-scaffold:has(.code-annotated)>.code-copy-button {
+  right: 1.5em;
+  margin-top: 1px;
+  margin-right: 0;
+}
+
+/*add hyphenation*/
+p, .abstract {
+  -moz-hyphens: auto;
+  -o-hyphens: auto;
+  -webkit-hyphens: auto;
+  -ms-hyphens: auto;
+  hyphens: auto;
+}
+
+/*style banner*/
+/*.quarto-title-banner {
+  background: var(--bs-body-bg) !important; 
+}*/
+
+/*style hyperlinks*/
+.content a {
+  color: var(--bs-body-color) !important;
+  text-decoration: underline !important;
+  text-decoration-color: var(--hl) !important;
+  text-decoration-thickness: 2px;
+  transition: 0.3s !important;
+}
+
+.content a:hover {
+  color: var(--bs-body-color) !important;
+  text-decoration-style: wavy !important;
+}
+
+#title-block-header a {
+  color: var(--bs-body-color) !important;
+}
+
+/*style navbar*/
+.navbar-brand {
+  font-weight: 600;
+  font-size: var(--bs-nav-link-font-size) !important;
+  text-decoration: underline !important;
+  text-decoration-color: var(--hl) !important;
+  text-decoration-thickness: 2px;
+}
+
+.navbar-nav, .navbar-nav a {
+  font-weight: 600;
+}
+
+.navbar-nav a {
+  color: var(--bs-body-bg) !important;
+}
+
+.navbar-nav .nav-link.active {
+  color: var(--bs-body-bg);
+  text-decoration: underline !important;
+  text-decoration-color: var(--hl) !important;
+  text-decoration-thickness: 2px;
+}
+
+.navbar-nav a:hover {
+  color: var(--bs-body-bg) !important;
+  text-decoration: underline !important;
+  text-decoration-color: var(--hl) !important;
+  text-decoration-thickness: 2px;
+  text-decoration-style: wavy !important;
+}
+
+/*style sidebar*/
+.sidebar nav[role=doc-toc] ul>li>a.active, .sidebar nav[role=doc-toc] ul>li>ul>li>a.active {
+  color: var(--bs-body-color) !important;
+  border-left: 1px solid var(--bs-body-color) !important;
+}
+.sidebar nav[role=doc-toc] ul>li>a:hover, .sidebar nav[role=doc-toc] ul>li>ul>li>a:hover {
+  color: var(--bs-body-color) !important;
+  border-left: 1px solid var(--bs-body-color) !important;
+}
+
+div.sidebar-item-container .active, div.sidebar-item-container .show>.nav-link, div.sidebar-item-container .sidebar-link>code {
+  color: var(--bs-body-color) !important;
+  font-weight: 900;
+}
+
+/*style callout-note to track the section highlight color (other callout types stay fixed)*/
+div.callout-note.callout {
+  border-left-color: var(--hl) !important;
+}
+
+div.callout-note.callout-style-default > .callout-header {
+  background-color: rgba(var(--hl-rgb), 0.1) !important;
+}
+
+div.callout-note .callout-icon::before {
+  background-image: none !important;
+  background-color: var(--hl);
+  mask-repeat: no-repeat;
+  mask-size: .9rem .9rem;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-size: .9rem .9rem;
+  mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="black" class="bi bi-info-circle" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/><path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/></svg>');
+  -webkit-mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="black" class="bi bi-info-circle" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/><path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/></svg>');
+}
+
+/*style tables*/
+.gt_table {
+  font-family: inherit !important;
+  font-size: 0.9rem !important;
+}
+
+/*style tabset*/
+.nav-link, .nav-link:hover {
+  color: var(--bs-body-color) !important;
+}
+
+/*style selections*/
+::-moz-selection {
+  /* Code for Firefox */
+  color: var(--primary);
+  background: var(--hl);
+}
+
+::selection {
+  color: var(--primary);
+  background: var(--hl);
+}
+
+/*buttons*/
+a.btn.btn-primary {
+  text-decoration: none !important;
+  border: 1px solid var(--bs-body-color);
+  border-radius: 7px;
+  padding: .6em;
+  margin: 5px;
+  font-weight: 700;
+  width: 100%
+}
+
+a.btn.btn-primary, a.btn.btn-primary:hover {
+  color: var(--bs-body-bg) !important;
+}
+
+.panel-tabset a {
+  text-decoration: none !important;
+}
+
+.breadcrumb a {
+  text-decoration: none !important;
+}
+
+/*style homepage hero*/
+#title-block-header:empty {
+  display: none;
+}
+
+.hero {
+  background: radial-gradient(circle at 12% 15%, rgba(var(--hl-rgb), 0.18), transparent 55%),
+              radial-gradient(circle at 88% 85%, rgba(var(--hl-rgb), 0.18), transparent 55%);
+  padding: 4rem 2rem 3rem;
+  margin-bottom: 3rem;
+}
+
+.hero.column-screen {
+  display: flex;
+  justify-content: center;
+  margin-top: -24px;
+}
+
+.hero.column-screen > .grid {
+  width: 100%;
+  max-width: 946px;
+}
+
+.hero-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  background: var(--hl);
+  color: $primary;
+  padding: 0.3em 0.9em;
+  border-radius: 999px;
+  margin-bottom: 1.25rem;
+}
+
+.hero-text h1 {
+  font-size: 2.5rem;
+  line-height: 1.15;
+  margin-bottom: 1rem;
+  margin-top: 0;
+}
+
+.hero-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  max-width: 32rem;
+  margin-top: 2rem;
+}
+
+.hero-buttons a.btn.btn-primary {
+  width: auto;
+  flex: 1 1 8rem;
+  margin: 0;
+  padding: 0.6em 1.2em;
+  background: var(--hl);
+  color: $primary !important;
+  border: none !important;
+  border-radius: 999px;
+}
+
+/*on the startpage, each hero button reflects its target section's color*/
+.hero-buttons a.btn.btn-primary.hl-tutorials {
+  background: var(--hl-tutorials-faint);
+}
+
+.hero-buttons a.btn.btn-primary.hl-tutorials:hover {
+  background: var(--hl-tutorials);
+}
+
+.hero-buttons a.btn.btn-primary.hl-paper {
+  background: var(--hl-paper-faint);
+}
+
+.hero-buttons a.btn.btn-primary.hl-paper:hover {
+  background: var(--hl-paper);
+}
+
+.hero-buttons a.btn.btn-primary.hl-workshop {
+  background: var(--hl-workshop-faint);
+}
+
+.hero-buttons a.btn.btn-primary.hl-workshop:hover {
+  background: var(--hl-workshop);
+}
+
+.hero-visual {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-image {
+  max-width: 300px !important;
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 20px 30px rgba(40, 40, 40, 0.25));
+}
+
+/*style homepage feature cards*/
+.feature-card {
+  padding: 1.5rem;
+  border: 1px solid rgba(146, 131, 116, 0.35);
+  border-radius: 14px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 24px rgba(40, 40, 40, 0.1);
+}
+
+.feature-card .feature-icon {
+  display: block;
+  font-size: 1.9rem;
+  color: var(--hl);
+  margin-bottom: 0.6rem;
+}
+
+.feature-card h3 {
+  margin-top: 0.2rem;
+}
+
+/*on the startpage, each feature card icon reflects its target section's color*/
+.feature-card.hl-tutorials .feature-icon {
+  color: var(--hl-tutorials);
+}
+
+.feature-card.hl-paper .feature-icon {
+  color: var(--hl-paper);
+}
+
+.feature-card.hl-workshop .feature-icon {
+  color: var(--hl-workshop);
+}
+
+.feature-card h3 a {
+  text-decoration: none !important;
+}
+
+/*style tutorial overview listing (cards), modeled on quarto.org's guide page*/
+.link-cards {
+  display: flex;
+  flex-direction: column;
+}
+
+@media (min-width: 576px) {
+  .link-cards {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .link-cards .card {
+    width: 340px;
+    margin: 0 30px 12px 0;
+  }
+}
+
+.link-cards .card {
+  border: none;
+  padding: 0;
+  margin-bottom: 20px;
+}
+
+.link-cards .card-title h4 {
+  margin-top: 0;
+}
+
+.link-cards .card-title h4 a {
+  font-weight: 700;
+}
+
+.link-cards .card-title a {
+  text-decoration: none !important;
+}
+
+.link-cards .card-subtitle {
+  margin-bottom: 0.7rem;
+}
+
+.link-cards .card-body {
+  padding: 1rem 1.5rem;
+  border: 3px solid var(--hl);
+  border-radius: 10px;
+}
+
+.link-cards .card-body ul {
+  margin-bottom: 0;
+  padding-left: 0;
+  list-style-type: none;
+}
+
+.link-cards .card-body ul a {
+  font-size: .9em;
+  text-decoration: none !important;
+}
+
+.link-cards .card-body ul a::before {
+  content: "\2192";
+  margin-right: 0.4em;
+}
+
+/*header for notebook embeds*/
+#quarto-embed-header h6 {
+  display: none;
+}
+
+#quarto-embed-header .btn {
+  width: auto;
+}
+
+#quarto-embed-header {
+  border: none;
+  justify-content: center;
+}
+
+/* the site's top navbar renders on notebook-embed pages too and sits in the
+same fixed-top spot as the embed header above, painting over it since it
+comes later in the DOM. notebook-embed-offset.html pushes the embed header
+down below the navbar at runtime (navbar height varies by breakpoint); keep
+the navbar pinned here so that offset never runs out from under it. */
+body.quarto-notebook #quarto-header {
+  transform: translateY(0) !important;
+}
+
+/*fix sticky footer: Quarto's stock CSS only keeps the footer pinned to the
+bottom of short pages via a hardcoded `#quarto-content { min-height: calc(100vh - 132px) }`,
+which assumes nothing but the navbar and footer sit above/below the content.
+The colored title-block-banner adds extra height that constant doesn't know
+about, so on short pages the real total height exceeds the viewport and the
+footer/page-navigation get pushed below the fold instead of docking to the
+bottom. Stretch with flexbox instead, which adapts to whatever is actually
+on the page.*/
+@media screen {
+  body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
+  #quarto-content.page-columns {
+    flex: 1 0 auto;
+    min-height: 0 !important;
+  }
+}

@@ -1,0 +1,1592 @@
+/*-- scss:defaults --*/
+@import url(https://fonts.bunny.net/css?family=aleo:400,400i,700,700i,900,900i);
+$font-family-sans-serif: "Aleo", sans-serif !default;
+$presentation-font-size-root: 24px !default;
+$presentation-line-height: 1.2;
+
+// colors
+$body-bg: #ffffff !default;
+$body-color: #3c3836 !default;
+$link-color: #3c3836 !default;
+$selection-bg: #8ec07c !default;
+$red: #cc241d;
+$green: #98971a;
+$yellow: #fabd2f;
+$blue: #458588;
+$purple: #b16286;
+$aqua: #689d6a;
+$gray: #a89984;
+$theme-orange: #fabd2f;
+// workshop highlight colour, matches the site's --hl-workshop
+$accent: #8ec07c;
+
+// headings
+$presentation-heading-color: #3c3836 !default;
+
+/*-- scss:rules --*/
+
+.reveal a {
+  line-height: 1.3em;
+  text-decoration: underline !important;
+  text-decoration-color: $accent !important;
+  text-decoration-thickness: 2px;
+  transition: 0.3s !important;
+}
+
+.reveal a:hover {
+  color: var(--body-color) !important;
+  text-decoration-style: wavy !important;
+}
+
+.reveal .progress {
+  height: 5px !important;
+  color: $accent;
+}
+
+/*********************************************
+ * CALLOUT
+ *********************************************/
+
+.small-url {
+  font-size: .5em !important;
+}
+
+.reveal .footer {
+  z-index: 0 !important;
+}
+
+/*********************************************
+ * TABLES
+ *********************************************/
+
+.reveal table {
+  min-width: 100% !important;
+  border: none;
+  margin: 0;
+}
+
+caption {
+  font-style: italic !important;
+  font-weight: 300 !important;
+  margin-bottom: 10px !important;
+  text-align: left;
+}
+
+td {
+  border: none !important;
+  padding: 10px !important;
+}
+
+th {
+  border: none !important;
+  border-bottom: 2px solid $accent !important;
+  padding: 10px !important;
+}
+
+colgroup {
+  display: none !important
+}
+
+/*********************************************
+ * LAYOUT
+ *********************************************/
+
+h2,
+h3 {
+  margin-bottom: 30px !important;
+}
+
+/*********************************************
+ * MENU
+ *********************************************/
+
+.reveal .slide-menu-button .fa-bars::before {
+  background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="rgb(140, 131, 127)" class="bi bi-list" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/></svg>');
+}
+
+/*********************************************
+ * IMAGES
+ *********************************************/
+
+img {
+  max-width: 100% !important;
+  display: block;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+/*********************************************
+ * FOOTNOTES
+ *********************************************/
+
+.reveal .slide .aside-footnotes {
+  bottom: -20px !important;
+  left: 0;
+  right: 0;
+  display: flex !important;
+  color: #3c3836 !important;
+  padding-right: 20px;
+  padding-top: 10px;
+}
+
+.reveal .slide sup + sup::before {
+    content: ", ";
+    margin-left: -0.35em;
+}
+
+.reveal .slide aside {
+  bottom: -20px !important;
+  color: #3c3836 !important;
+  font-size: 0.5em !important;
+}
+
+.reveal .slide aside ol li {
+  margin: 0 !important;
+}
+
+.reveal .slide aside p {
+  color: #3c3836 !important;
+  padding-right: 20px;
+  margin: 0 !important;
+}
+
+.reveal .slide aside a {
+  text-decoration: none !important;
+  color: #3c3836 !important;
+}
+
+.navigate-up .controls-arrow,
+.navigate-down .controls-arrow,
+.navigate-right .controls-arrow,
+.navigate-left .controls-arrow {
+  font-size: 5px;
+  color: #3c3836;
+}
+
+.navigate-down {
+  bottom: 0 !important;
+}
+
+.big-text {
+  font-size: 100px;
+  font-weight: 600;
+  text-align: center;
+  margin-top: -30px;
+}
+
+blockquote {
+  color: #3c3836 !important;
+  border-left-color: $accent !important;
+}
+
+.reveal .slide ul {
+  margin-left: 40px;
+}
+
+hr {
+  height: 2px;
+  border-width: 0px;
+  background-color: $accent;
+}
+
+.center-text {
+  text-align: center;
+}
+
+/*********************************************
+ * FONT SIZES
+ *********************************************/
+
+.tiny-text {
+  font-size: 0.5em !important;
+}
+
+.small-text {
+  font-size: 0.75em !important;
+}
+
+.large-text {
+  font-size: 1.3em !important;
+}
+
+.huge-text {
+  font-size: 1.6em !important;
+}
+
+/*********************************************
+ * CITATIONS
+ *********************************************/
+
+.citation a {
+  text-decoration: none !important;
+}
+
+.below-heading {
+  font-size: 0.75em;
+  margin-top: -1.5em !important;
+}
+
+/*********************************************
+ * SECTION DIVIDERS
+ *********************************************/
+
+.divider-img {
+  position: absolute;
+  right: 6%;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 400px !important;
+  width: auto !important;
+  max-width: 25%;
+}
+
+.reveal .slides section.level1:has(.divider-img) h1 {
+  max-width: 56%;
+}
+
+.section-emoji {
+  font-size: 7em;
+  padding-right: 1em;
+  padding-top: 1em;
+}
+
+/*********************************************
+ * TITLE SLIDE
+ *********************************************/
+
+.title-slide-heading {
+  font-size: 1.9em;
+  font-weight: 800;
+  line-height: 1.15;
+  margin-bottom: 0.4em !important;
+  margin-top: 1em !important;
+}
+
+.title-slide-subheading {
+  font-size: 1.2em;
+  font-weight: 400;
+  margin-bottom: 0.6em !important;
+}
+
+/*********************************************
+ * BIO PHOTOS
+ *********************************************/
+
+.bio-photo {
+  width: 80%;
+  height: 200px;
+  object-fit: cover;
+}
+
+/*********************************************
+ * DIAGRAM TOKENS
+ * the figures follow the original layouts, recoloured to gruvbox
+ *********************************************/
+
+// Chrome (outlines, arrows, boxes, panels) is black on white or neutral grey.
+// The theme's colours survive only where they encode data.
+$fig-ink: $body-color;      // outlines, arrows, structural borders
+$fig-paper: $body-bg;       // surfaces, and light type on dark blocks
+$fig-grey-100: #f4f4f4;     // soft panels
+$fig-grey-200: #e8e8e8;     // filled boxes
+$fig-grey-300: #d4d4d4;     // hairlines, rings, grid lines
+$fig-grey-500: #9e9e9e;     // mid-tone fills
+$fig-grey-700: #555555;     // dark blocks carrying light type
+
+// data colours: kept, because they carry meaning
+$gb-dark-green: #79740e;    // NLI "true"
+$gb-faded-red: #9d0006;     // NLI "false"
+$gb-dark-yellow: #d79921;   // one of the four PCA categories
+
+$dg-navy: $fig-ink;
+$dg-fill: $fig-grey-200;
+$dg-dark: $fig-grey-700;
+$dg-cream: $fig-grey-100;
+$dg-tan: $fig-grey-200;
+$dg-rule: $fig-grey-300;
+
+// document-stack icon, reused across the pipeline figures
+$doc-stack-svg: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 88'%3E%3Cg fill='%23fff' stroke='%233c3836' stroke-width='2.6' stroke-linejoin='round'%3E%3Cpath d='M28 2h30l16 16v46H28z'/%3E%3Cpath d='M22 8h30l16 16v46H22z'/%3E%3Cpath d='M16 14h30l16 16v46H16z'/%3E%3Cpath d='M10 20h30l16 16v46H10z'/%3E%3C/g%3E%3Cpath d='M40 20v16h16' fill='none' stroke='%233c3836' stroke-width='2.6'/%3E%3C/svg%3E";
+
+/*********************************************
+ * FIGURE CUSTOM PROPERTIES
+ * so the inline SVGs in the slides stay in one palette
+ *********************************************/
+
+// the inline SVGs reference these, so the whole figure set follows the theme
+.reveal {
+  --fig-paper: #{$fig-paper};
+  --fig-hairline: #{$fig-grey-300};
+  --fig-grid: #{$fig-grey-300};
+  --fig-ring: #{$fig-grey-300};
+  --fig-crosshair: #{$fig-grey-500};
+  --fig-shot: #{$fig-grey-700};
+  --gb-red: #{$red};
+  --gb-blue: #{$blue};
+  --gb-aqua: #{$aqua};
+  --gb-yellow: #{$gb-dark-yellow};
+}
+
+
+.bow-sack-svg,
+.bowa-pictogram,
+.pca-plot,
+.target-cell svg {
+  color: $fig-ink;
+}
+
+/*********************************************
+ * BAG OF WORDS (BoW figure)
+ *********************************************/
+
+.bow-figure {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .15em;
+  margin: .2em auto;
+}
+
+.bow-texts {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+}
+
+.bow-text {
+  border: 2px solid $fig-ink;
+  padding: .5em .7em;
+  font-size: .62em;
+  text-align: center;
+  background: $body-bg;
+  line-height: 1.25;
+  min-width: 7.5em;
+  max-width: 9em;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.bow-text+.bow-text {
+  margin-left: -2px;
+}
+
+.bow-text-label {
+  font-weight: 800;
+  margin-bottom: .35em;
+}
+
+.bow-arrow {
+  width: 0;
+  height: 0;
+  border-left: .55em solid rgba(0,0,0,0);
+  border-right: .55em solid rgba(0,0,0,0);
+  border-top: .5em solid $fig-ink;
+  margin: .25em 0;
+}
+
+.bow-sack-svg {
+  display: block;
+  width: 80%;
+  max-width: 15em;
+  height: auto;
+  margin: 0 auto;
+}
+
+/*********************************************
+ * DOCUMENT-TERM MATRIX
+ *********************************************/
+
+.reveal table.dtm {
+  border-collapse: collapse;
+  font-size: .7em;
+}
+
+.reveal table.dtm th,
+.reveal table.dtm td {
+  border: none !important;
+  padding: .2em .45em !important;
+  text-align: center;
+  font-weight: 400;
+}
+
+.reveal table.dtm thead th {
+  border-bottom: 2px solid $accent !important;
+  font-weight: 400;
+}
+
+.reveal table.dtm tbody td:first-child,
+.reveal table.dtm thead th:first-child {
+  text-align: left;
+}
+
+/*********************************************
+ * DICTIONARY / SUPERVISED-ML PIPELINE (BoW_Analysis)
+ *********************************************/
+
+.bowa-figure {
+  display: flex;
+  flex-direction: column;
+  gap: .5em;
+  margin: .2em 0;
+  width: 100%;
+  font-size: 1.1em;
+}
+
+.bowa-row {
+  display: flex;
+  align-items: center;
+  gap: .5em;
+}
+
+.bowa-row .dtm-grid {
+  flex: 1 1 auto;
+  width: 100% !important;
+  margin: 0 !important;
+}
+
+.bowa-label {
+  font-size: .6em;
+  font-weight: 800;
+  line-height: 1.15;
+  width: 6.2em;
+  flex: 0 0 6.2em;
+}
+
+.bowa-arrow {
+  width: 0;
+  height: 0;
+  flex: 0 0 auto;
+  border-top: .55em solid rgba(0,0,0,0);
+  border-bottom: .55em solid rgba(0,0,0,0);
+  border-left: .62em solid $fig-ink;
+}
+
+.bowa-icon {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .15em;
+}
+
+.bowa-icon-title {
+  font-size: .52em;
+  font-weight: 800;
+}
+
+.bowa-pictogram {
+  height: 3.1em;
+  width: auto;
+  display: block;
+}
+
+.bowa-docs {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: .15em;
+}
+
+.bowa-docs .doc-labeled {
+  width: 1.9em;
+  height: 2.1em;
+}
+
+/*********************************************
+ * DICTIONARY TABLE & ANALYSIS MATRIX
+ *********************************************/
+
+.reveal table.dtm,
+.reveal table.dtm-grid,
+.reveal table.dict-table,
+.reveal table.heatmap,
+.reveal table.confusion {
+  min-width: 0 !important;
+  width: auto !important;
+  margin: 0;
+}
+
+.reveal table.dict-table {
+  border-collapse: collapse;
+  font-size: .5em;
+}
+
+.reveal table.dict-table th,
+.reveal table.dict-table td {
+  border: none !important;
+  padding: .28em .7em !important;
+  text-align: left;
+}
+
+.reveal table.dict-table thead th {
+  font-weight: 700;
+  border-bottom: 2px solid $accent !important;
+}
+
+.reveal table.dtm-grid {
+  border-collapse: collapse;
+  font-size: .46em;
+}
+
+.reveal table.dtm-grid th,
+.reveal table.dtm-grid td {
+  border: none !important;
+  padding: .2em .4em !important;
+  text-align: center;
+  font-weight: 400;
+}
+
+.reveal table.dtm-grid thead th {
+  border-bottom: 2px solid $accent !important;
+  font-weight: 400;
+}
+
+.reveal table.dtm-grid thead th:first-child,
+.reveal table.dtm-grid tbody td:first-child {
+  text-align: left;
+}
+
+.reveal table.dtm-grid .cell-hit {
+  background: rgba(152,151,26,.3);
+}
+
+.reveal table.dtm-grid .cell-miss {
+  background: rgba(204,36,29,.25);
+}
+
+.reveal table.dtm-grid .col-sep {
+  border-left: 1px solid $fig-grey-300 !important;
+}
+
+/*********************************************
+ * EMBEDDING HEATMAP + PCA
+ *********************************************/
+
+.embed-figure {
+  display: flex;
+  font-size: 1em;
+  align-items: center;
+  justify-content: center;
+  gap: .9em;
+  margin: .6em 0;
+}
+
+.reveal table.heatmap {
+  border-collapse: collapse;
+  font-size: .55em;
+}
+
+.reveal table.heatmap th,
+.reveal table.heatmap td {
+  border: none !important;
+  padding: 0 !important;
+}
+
+.reveal table.heatmap thead th {
+  border-bottom: none !important;
+  font-weight: 400;
+  padding: 0 .3em .25em !important;
+  text-align: center;
+}
+
+.reveal table.heatmap tbody th {
+  font-weight: 400;
+  white-space: nowrap;
+  padding-right: .4em !important;
+  text-align: right;
+  border-bottom: none !important;
+}
+
+.reveal table.heatmap tbody td {
+  border: 2px solid $body-bg !important;
+  text-align: center;
+  padding: .32em .55em !important;
+  min-width: 3.1em;
+}
+
+.hm-b5 {
+  background: $blue;
+}
+
+.hm-b4 {
+  background: rgb(121.08,167.16,169.32);
+}
+
+.hm-b3 {
+  background: rgb(165.72,196.44,197.88);
+}
+
+.hm-b2 {
+  background: rgb(210.36,225.72,226.44);
+}
+
+.hm-b1 {
+  background: rgb(236.4,242.8,243.1);
+}
+
+.hm-r1 {
+  background: rgb(248.88,228.72,227.88);
+}
+
+.hm-r2 {
+  background: rgb(240.72,193.68,191.72);
+}
+
+.hm-r3 {
+  background: rgb(226.95,134.55,130.7);
+}
+
+.hm-r4 {
+  background: rgb(214.2,79.8,74.2);
+}
+
+.hm-r5 {
+  background: $red;
+}
+
+.hm-b5,
+.hm-b4,
+.hm-r5,
+.hm-r4 {
+  color: $fig-paper;
+}
+
+.embed-figure-pca {
+  font-size: .82em;
+}
+
+.pca-note {
+  font-size: .6em;
+  text-align: center;
+  line-height: 1.2;
+}
+
+.pca-plot {
+  flex: 0 0 auto;
+}
+
+/*********************************************
+ * DICTIONARY ENTRY CARD (Meaning_Context)
+ *********************************************/
+
+.dict-entry {
+  background: $fig-grey-100;
+  line-height: 1.3;
+}
+
+.dict-entry-head {
+  background: $fig-grey-200;
+  padding: .35em .55em;
+  font-size: .72em;
+  font-weight: 700;
+}
+
+.dict-entry-body {
+  padding: .5em .7em .35em;
+}
+
+.dict-entry-body ol {
+  margin: 0 0 0 1.1em !important;
+  padding: 0;
+  font-size: .62em;
+}
+
+.dict-entry-body li {
+  margin-bottom: .3em;
+}
+
+.dict-entry-source {
+  font-size: .5em;
+  text-align: right;
+  padding: 0 .7em .4em;
+}
+
+/*********************************************
+ * NLI PREMISE / HYPOTHESIS PAIRS
+ *********************************************/
+
+.nli-figure {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  column-gap: .7em;
+  row-gap: .45em;
+  margin: .6em auto;
+  max-width: 30em;
+}
+
+.nli-head {
+  font-size: .85em;
+  font-weight: 800;
+  text-align: center;
+  line-height: 4em;
+}
+
+.nli-premise {
+  grid-row: 2/span 3;
+  background: $fig-grey-100;
+  border-radius: 16px;
+  padding: 1em 1.1em;
+  font-size: .72em;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.nli-hypothesis {
+  background: $fig-grey-100;
+  border-radius: 16px;
+  padding: .6em .9em;
+  font-size: .72em;
+  text-align: center;
+}
+
+.nli-rel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: .3em;
+  font-size: .7em;
+  white-space: nowrap;
+}
+
+.nli-rel::before,
+.nli-rel::after {
+  content: "";
+  width: 0;
+  height: 0;
+  border-top: .6em solid rgba(0,0,0,0);
+  border-bottom: .6em solid rgba(0,0,0,0);
+}
+
+.nli-rel::before {
+  border-right: .65em solid $fig-ink;
+}
+
+.nli-rel::after {
+  border-left: .65em solid $fig-ink;
+}
+
+.nli-rel-false {
+  color: $gb-faded-red;
+}
+
+.nli-rel-true {
+  color: $gb-dark-green;
+}
+
+.nli-rel-neutral {
+  color: $fig-grey-700;
+}
+
+/*********************************************
+ * TRANSFORMER → LLM PIPELINE
+ *********************************************/
+
+.pipeline {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: .35em;
+  margin: .5em auto;
+  font-size: .86em;
+}
+
+.pipeline-lg {
+  font-size: 1.12em;
+}
+
+.pipe-arrow {
+  flex: 0 0 auto;
+  width: 1.5em;
+  height: .95em;
+  background: $fig-ink;
+  clip-path: polygon(0 30%, 55% 30%, 55% 0, 100% 50%, 55% 100%, 55% 70%, 0 70%);
+}
+
+.pipe-corpus {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .4em;
+  max-width: 9em;
+}
+
+.pipe-corpus-title {
+  font-size: .52em;
+  font-weight: 800;
+  text-align: center;
+  line-height: 1.15;
+}
+
+.doc-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: .25em;
+  border: 1px solid $fig-grey-300;
+  padding: .3em;
+}
+
+.doc-stack {
+  width: 1.35em;
+  height: 1.5em;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 88'%3E%3Cg fill='%23fff' stroke='%233c3836' stroke-width='2.6' stroke-linejoin='round'%3E%3Cpath d='M28 2h30l16 16v46H28z'/%3E%3Cpath d='M22 8h30l16 16v46H22z'/%3E%3Cpath d='M16 14h30l16 16v46H16z'/%3E%3Cpath d='M10 20h30l16 16v46H10z'/%3E%3C/g%3E%3Cpath d='M40 20v16h16' fill='none' stroke='%233c3836' stroke-width='2.6'/%3E%3C/svg%3E") no-repeat center/contain;
+}
+
+.pipe-card {
+  flex: 0 0 auto;
+  border: 2px solid $fig-ink;
+  border-radius: 14px;
+  padding: .4em .55em .5em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .35em;
+  background: $body-bg;
+}
+
+.pipe-card-title {
+  font-size: .55em;
+  font-weight: 800;
+  text-align: center;
+  line-height: 1.15;
+}
+
+.tf-inner {
+  display: flex;
+  align-items: center;
+  gap: .3em;
+}
+
+.tf-input {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-size: .5em;
+  border-right: 1px solid $fig-ink;
+  padding-right: .3em;
+  white-space: nowrap;
+  margin-bottom: 1.44em;
+}
+
+.tf-arrow {
+  flex: 0 0 auto;
+  width: .9em;
+  height: .5em;
+  background: $fig-ink;
+  clip-path: polygon(0 32%, 58% 32%, 58% 0, 100% 50%, 58% 100%, 58% 68%, 0 68%);
+  margin-bottom: .72em;
+}
+
+.emb-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .2em;
+}
+
+.emb-col {
+  display: flex;
+  flex-direction: column;
+  gap: .35em;
+}
+
+.emb-run {
+  display: flex;
+  flex-direction: column;
+}
+
+.emb-cell {
+  width: .85em;
+  height: .85em;
+  border: 1px solid $fig-grey-300;
+  margin-bottom: -1px;
+}
+
+.emb-light .emb-cell {
+  background: $fig-grey-300;
+  border-color: $fig-grey-500;
+}
+
+.emb-dark .emb-cell {
+  background: $fig-grey-500;
+  border-color: $fig-grey-700;
+}
+
+.emb-label {
+  font-size: .45em;
+  text-align: center;
+  line-height: 1.15;
+}
+
+.layer-stack {
+  position: relative;
+  padding: .6em .6em 0 0;
+}
+
+.layer-card {
+  background: $fig-grey-200;
+  border: 1.5px solid $fig-ink;
+  border-radius: 10px;
+  padding: .5em;
+  display: flex;
+  gap: .45em;
+  position: relative;
+  z-index: 3;
+}
+
+.layer-ghost {
+  position: absolute;
+  top: .6em;
+  right: .6em;
+  bottom: 0;
+  left: 0;
+  background: $fig-grey-200;
+  border: 1.5px solid $fig-ink;
+  border-radius: 10px;
+}
+
+.layer-ghost.g1 {
+  transform: translate(0.28em, -0.28em);
+  z-index: 2;
+}
+
+.layer-ghost.g2 {
+  transform: translate(0.56em, -0.56em);
+  z-index: 1;
+}
+
+.layer-block {
+  background: $fig-grey-700;
+  color: $fig-paper;
+  border-radius: 7px;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-size: .5em;
+  font-weight: 700;
+  padding: .8em .75em;
+  text-align: center;
+  min-height: 8em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.llm-box {
+  background: $fig-grey-200;
+  border: 1.5px solid $fig-ink;
+  border-radius: 10px;
+  font-size: .55em;
+  font-weight: 800;
+  text-align: center;
+  line-height: 1.2;
+  padding: .55em .7em;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.llm-box-encoder {
+  min-height: 11em;
+}
+
+.llm-box-decoder {
+  min-height: 3.3em;
+}
+
+.pipe-out {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  // top-aligned rather than centred, so each branch keeps a fixed offset from
+  // the model boxes no matter how many branches the slide shows
+  align-self: flex-start;
+  justify-content: flex-start;
+  margin-top: 0;
+  gap: 0;
+}
+
+// the two encoder branches leave the same (tall) grey box, so they sit close
+// together; the decoder branch leaves the box below it
+.out-row + .out-row {
+  margin-top: .1em;
+}
+
+// needs to out-specify `.out-row + .out-row` above: drops the decoder branch
+// so its arrow and outcome box centre on the decoder model box
+.out-row + .out-row.out-row-plain {
+  margin-top: .95em;
+}
+
+.out-row {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  grid-template-rows: auto auto;
+  align-items: center;
+  column-gap: .2em;
+}
+
+.out-data {
+  grid-column: 1;
+  grid-row: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: .15em;
+  padding-left: .4em;
+}
+
+.out-data-title {
+  font-size: .46em;
+  font-weight: 800;
+  line-height: 1.15;
+}
+
+.out-data-title em {
+  font-weight: 400;
+  font-style: normal;
+}
+
+.doc-pair {
+  display: flex;
+  gap: .3em;
+}
+
+.doc-labeled {
+  position: relative;
+  width: 1.75em;
+  height: 1.95em;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 88'%3E%3Cg fill='%23fff' stroke='%233c3836' stroke-width='2.6' stroke-linejoin='round'%3E%3Cpath d='M28 2h30l16 16v46H28z'/%3E%3Cpath d='M22 8h30l16 16v46H22z'/%3E%3Cpath d='M16 14h30l16 16v46H16z'/%3E%3Cpath d='M10 20h30l16 16v46H10z'/%3E%3C/g%3E%3Cpath d='M40 20v16h16' fill='none' stroke='%233c3836' stroke-width='2.6'/%3E%3C/svg%3E") no-repeat center/contain;
+}
+
+.doc-labeled span {
+  position: absolute;
+  left: 8%;
+  top: 58%;
+  width: 62%;
+  border: 1px solid $fig-ink;
+  background: $body-bg;
+  font-size: .3em;
+  text-align: center;
+  line-height: 1.2;
+}
+
+.out-arrow-short,
+.out-arrow-long {
+  position: relative;
+  height: .4em;
+  background: $fig-ink;
+  margin-right: .6em;
+}
+
+.out-arrow-short::after,
+.out-arrow-long::after {
+  content: "";
+  position: absolute;
+  right: -0.6em;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-top: .5em solid rgba(0,0,0,0);
+  border-bottom: .5em solid rgba(0,0,0,0);
+  border-left: .62em solid $fig-ink;
+}
+
+.out-arrow-short {
+  grid-column: 2;
+  grid-row: 1;
+  align-self: end;
+  min-width: 1.6em;
+  margin-bottom: .5em;
+}
+
+.out-arrow-long {
+  grid-column: 1/span 2;
+  grid-row: 2;
+  // reaches back over the card so the arrow starts at the grey model box
+  margin-left: -1.15em;
+}
+
+.out-row-plain {
+  grid-template-rows: auto;
+}
+
+.out-row-plain .out-arrow-long,
+.out-row-plain .out-box {
+  grid-row: 1;
+}
+
+.out-row-plain .out-arrow-long {
+  align-self: center;
+}
+
+.out-box {
+  grid-column: 3;
+  grid-row: 1/span 2;
+  align-self: stretch;
+  min-height: 3.2em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid $fig-ink;
+  border-radius: 12px;
+  padding: .6em .7em;
+  font-size: .55em;
+  font-weight: 800;
+  text-align: center;
+  line-height: 1.2;
+  background: $body-bg;
+  white-space: nowrap;
+}
+
+/*********************************************
+ * INPUT / MODEL / OUTPUT COMPARISON
+ *********************************************/
+
+.io-figure {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) auto minmax(0, 1fr) auto minmax(0, 0.95fr);
+  align-items: center;
+  column-gap: .7em;
+  row-gap: .3em;
+  font-size: .8em;
+  margin: .4em 0;
+}
+
+.io-head {
+  font-size: 1.25em;
+  font-weight: 800;
+  text-align: center;
+}
+
+.io-in {
+  display: flex;
+  flex-direction: column;
+  gap: .7em;
+  line-height: 1.3;
+}
+
+.io-in strong {
+  display: block;
+}
+
+// a model taking two inputs gets one arrow per input
+.io-arrows {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1.1em;
+}
+
+.io-arrow {
+  width: 1.5em;
+  height: .95em;
+  background: $fig-ink;
+  clip-path: polygon(0 30%, 55% 30%, 55% 0, 100% 50%, 55% 100%, 55% 70%, 0 70%);
+}
+
+.io-model {
+  border: 2px solid $fig-ink;
+  border-radius: 14px;
+  padding: .7em .8em;
+  min-height: 4.4em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-weight: 800;
+  line-height: 1.25;
+  background: $body-bg;
+}
+
+.io-model span {
+  display: block;
+  margin-top: .35em;
+  font-weight: 400;
+  font-size: .85em;
+}
+
+.io-out {
+  line-height: 1.4;
+}
+
+.io-sep {
+  grid-column: 1 / -1;
+  border-top: 2px dashed $fig-ink;
+  margin: .35em 0;
+}
+
+/*********************************************
+ * VALUE CHIPS
+ *********************************************/
+
+.chip {
+  display: inline-block;
+  padding: .1em .5em;
+  border-radius: 6px;
+  font-weight: 700;
+}
+
+.chip-pos {
+  background: rgba(152,151,26,.25);
+}
+
+.chip-neg {
+  background: rgba(204,36,29,.25);
+}
+
+.chip-neu {
+  background: rgba(0, 0, 0, 0.08);
+}
+
+/*********************************************
+ * TARGET / BULLSEYE DIAGRAMS (validity & reliability)
+ *********************************************/
+
+.target-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: .3em 1.6em;
+  justify-items: center;
+  margin: .3em auto;
+  max-width: 34em;
+}
+
+.target-cell {
+  text-align: center;
+}
+
+.target-cell svg {
+  display: block;
+  margin: 0 auto;
+}
+
+.target-cell-label {
+  font-size: .6em;
+  margin-top: .1em;
+  line-height: 1.2;
+}
+
+/*********************************************
+ * CONFUSION MATRIX
+ *********************************************/
+
+.reveal table.confusion {
+  border-collapse: collapse;
+  font-size: .62em;
+}
+
+.reveal table.confusion th,
+.reveal table.confusion td {
+  border: none !important;
+  padding: .45em .7em !important;
+  text-align: center;
+  line-height: 1.25;
+}
+
+.reveal table.confusion .cm-colhead {
+  padding-bottom: .1em !important;
+}
+
+.reveal table.confusion .cm-colkey {
+  border-bottom: 2px solid $accent !important;
+  padding-top: 0 !important;
+}
+
+.reveal table.confusion .cm-rowhead {
+  text-align: right;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.reveal table.confusion .cm-rowkey {
+  text-align: right;
+  padding-right: .1em !important;
+}
+
+/*********************************************
+ * METRICS COMPARISON
+ *********************************************/
+
+.reveal table.metrics-table {
+  min-width: 0 !important;
+  width: 100% !important;
+  margin: 0 auto;
+}
+
+.reveal table.metrics-table {
+  border-collapse: collapse;
+  font-size: .66em;
+}
+
+.reveal table.metrics-table th,
+.reveal table.metrics-table td {
+  border: none !important;
+  padding: .2em .45em !important;
+}
+
+.reveal table.metrics-table thead th {
+  border-bottom: none !important;
+  font-weight: 400;
+  text-align: center;
+  vertical-align: bottom;
+  line-height: 1.15;
+}
+
+.reveal table.metrics-table thead tr:last-child th {
+  border-bottom: 2px solid $accent !important;
+  font-style: italic;
+}
+
+.reveal table.metrics-table thead th.mt-stub,
+.reveal table.metrics-table tbody td:first-child {
+  text-align: left;
+}
+
+.reveal table.metrics-table tbody td {
+  text-align: center;
+}
+
+.reveal table.metrics-table tbody tr.mt-rule-above td {
+  border-top: 1px solid $fig-grey-300 !important;
+  padding-top: .45em !important;
+}
+
+.reveal table.metrics-table tbody tr.mt-gap td {
+  padding-top: .6em !important;
+}
+
+.reveal table.metrics-table tbody td.mt-metric {
+  text-align: left;
+  padding-left: 52% !important;
+}
+
+.reveal table.metrics-table tbody tr:has(.mt-metric) td {
+  padding-top: .3em !important;
+  padding-bottom: .3em !important;
+}
+
+.metrics-figure {
+  position: relative;
+}
+
+.metrics-figure .formula-box {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 46%;
+  font-size: .62em;
+}
+
+.metrics-figure .formula-box .math.display {
+  margin: .15em 0 !important;
+}
+
+.formula-box {
+  border: 1.5px solid $fig-grey-300;
+  padding: .2em .8em;
+  margin: .3em 0;
+}
+
+// partially solve blur on Safari
+.reveal .fragment {
+  will-change: auto !important;
+}
+
+/*********************************************
+ * FLIP CARDS
+ * three dimensions of LLM access; the front carries the decision,
+ * the back the concrete software
+ *********************************************/
+
+.flip-deck {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: .9em;
+  margin: .7em 0 .5em;
+}
+
+.flip-card {
+  height: 14.5em;
+  perspective: 1400px;
+  cursor: pointer;
+  outline: none;
+}
+
+.flip-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform .55s cubic-bezier(.2, .7, .3, 1);
+}
+
+.flip-card.is-flipped .flip-inner {
+  transform: rotateY(180deg);
+}
+
+.flip-front,
+.flip-back {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  padding: .8em 1em 1.4em;
+  border: 2px solid $fig-ink;
+  border-radius: 14px;
+  background: $body-bg;
+  font-size: .72em;
+  line-height: 1.32;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transition: border-color .3s, box-shadow .3s;
+}
+
+.flip-back {
+  background: $fig-grey-100;
+  transform: rotateY(180deg);
+}
+
+.flip-card:hover .flip-front,
+.flip-card:hover .flip-back,
+.flip-card:focus-visible .flip-front,
+.flip-card:focus-visible .flip-back {
+  border-color: $accent;
+  box-shadow: 0 0 0 3px rgba(142, 192, 124, .35);
+}
+
+// the front's block of copy is centred between the header and the card's foot
+.flip-front p:has(.flip-icon) {
+  margin-top: auto;
+}
+
+.flip-front p:last-child {
+  margin-bottom: auto;
+}
+
+// the turn affordance, so it reads as clickable without a caption
+.flip-front::after,
+.flip-back::after {
+  content: "↻";
+  position: absolute;
+  right: .7em;
+  bottom: .45em;
+  font-size: 1.1em;
+  line-height: 1;
+  color: $fig-grey-500;
+}
+
+.flip-step {
+  display: block;
+  font-weight: 800;
+  font-size: .82em;
+  padding-bottom: .3em;
+  margin-bottom: .55em;
+  border-bottom: 2px solid $accent;
+}
+
+.flip-icon {
+  display: block;
+  font-size: 2.6em;
+  line-height: 1;
+  text-align: center;
+  margin: .1em 0 .25em;
+}
+
+.flip-lead {
+  display: block;
+  font-weight: 800;
+  margin-bottom: .4em;
+}
+
+.flip-front p,
+.flip-back p {
+  margin: 0 0 .4em;
+}
+
+.reveal .flip-back ul {
+  margin: 0 0 0 1.1em !important;
+  padding: 0;
+}
+
+.reveal .flip-back li {
+  margin-bottom: .5em;
+}
+
+.reveal .flip-back li:last-child {
+  margin-bottom: 0;
+}
+
+.flip-hint {
+  font-size: .55em;
+  color: #7c6f64;
+  text-align: right;
+}
+
+.flip-hint p {
+  margin: 0 !important;
+}
+
+.flip-hint p::before {
+  content: "↻ ";
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flip-inner {
+    transition: none;
+  }
+}
+
+// in the PDF export nothing can be clicked, so both faces are printed
+.print-pdf {
+  .flip-card {
+    height: auto;
+    perspective: none;
+  }
+
+  .flip-inner {
+    height: auto;
+    transform: none !important;
+  }
+
+  .flip-front,
+  .flip-back {
+    position: static;
+    transform: none;
+    backface-visibility: visible;
+    padding-bottom: .8em;
+    margin-bottom: .5em;
+  }
+
+  .flip-front::after,
+  .flip-back::after,
+  .flip-icon,
+  .flip-hint {
+    display: none;
+  }
+}
+
+/*********************************************
+ * MODEL-HUB COMPARISON TABLE
+ * fifteen rows, so the lines are set tight to fit the slide
+ *********************************************/
+
+.reveal .hub-table table {
+  // narrow enough that the nowrapped rows stay inside the column
+  font-size: .7em;
+  min-width: 0 !important;
+  width: 100% !important;
+}
+
+// fifteen single-line rows: tight leading, slim padding, and no wrapping
+.reveal .hub-table table th,
+.reveal .hub-table table td {
+  line-height: 1;
+  padding: .28em .5em !important;
+  white-space: nowrap;
+}

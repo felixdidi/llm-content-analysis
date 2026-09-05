@@ -1,0 +1,55 @@
+<script>
+// Flip cards: click (or Enter) turns a card over to reveal the concrete tools.
+// Cards are reset when the slide is left, so the deck always starts front-side up.
+(function () {
+  function init() {
+    var cards = document.querySelectorAll('.flip-card');
+    cards.forEach(function (card) {
+      card.setAttribute('role', 'button');
+      card.setAttribute('tabindex', '0');
+      card.setAttribute('aria-pressed', 'false');
+    });
+
+    document.addEventListener('click', function (event) {
+      // links on the back of a card should follow through, not flip it back
+      if (event.target.closest('a')) return;
+      var card = event.target.closest('.flip-card');
+      if (card) toggle(card);
+    });
+
+    // space is taken by reveal.js for navigation, so only enter flips
+    document.addEventListener('keydown', function (event) {
+      if (event.key !== 'Enter') return;
+      var card = document.activeElement && document.activeElement.closest('.flip-card');
+      if (card) {
+        event.preventDefault();
+        toggle(card);
+      }
+    });
+
+    if (window.Reveal && Reveal.on) {
+      Reveal.on('slidechanged', function (event) {
+        document.querySelectorAll('.flip-card.is-flipped').forEach(function (card) {
+          if (!event.currentSlide || !event.currentSlide.contains(card)) reset(card);
+        });
+      });
+    }
+  }
+
+  function toggle(card) {
+    var flipped = card.classList.toggle('is-flipped');
+    card.setAttribute('aria-pressed', flipped ? 'true' : 'false');
+  }
+
+  function reset(card) {
+    card.classList.remove('is-flipped');
+    card.setAttribute('aria-pressed', 'false');
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>

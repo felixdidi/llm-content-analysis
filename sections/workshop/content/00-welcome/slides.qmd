@@ -1,0 +1,157 @@
+---
+pagetitle: "Text Classification with Open Source Models"
+format: workshop-revealjs
+---
+
+## {.title-slide}
+
+::: {.columns}
+
+::: {.column width="40%"}
+![](../../../../img/transformer_laptop.png)
+:::
+
+::: {.column width="60%"}
+::: {.title-slide-heading}
+Text Classification with Open Source Models
+:::
+
+::: {.title-slide-subheading}
+Harnessing Large Language Models for Psychological Research
+:::
+
+<br>
+
+*Felix Dietrich (JGU Mainz)<br>
+Daniel Possler (HMTM Hannover)*
+
+September 6, 2026
+:::
+
+:::
+
+## Welcome!
+
+- Use the arrow keys to navigate
+- Press `M` to open the slide menu
+- Press `?` to see all navigation shortcuts
+- This deck and all other materials are at the course website
+
+## Hello — great to see you here! 👋 {.smaller}
+
+::: {.columns}
+
+::: {.column width="50%"}
+::: {.fragment .fade-in-then-semi-out fragment-index=1}
+::: {layout-ncol="2"}
+![](../img/felix.jpeg){.bio-photo}
+
+#### Felix Dietrich
+
+- **2016–2021:** BA and MA in Media and Communication Studies at the University of Mannheim
+- **2021–2024:** Academic staff member at the Institute for Media and Communication Studies (University of Mannheim)
+- **Since 10/2021:** Academic staff member at the Institute for Communication Studies (JGU Mainz)
+- **Research focus:** Media psychology, entertainment research, algorithmic curation of media content, open & computational communication science
+:::
+:::
+:::
+
+::: {.column width="50%"}
+::: {.fragment .fade-in-then-semi-out fragment-index=2}
+::: {layout-ncol="2"}
+![](../img/daniel.jpg){.bio-photo}
+
+#### Daniel Possler
+
+- **2008–2014:** BA and MA in Media Management at HMTM Hannover
+- **2021:** Dr. phil. at HMTM Hannover
+- **2022–2024:** Postdoctoral Researcher at JMU Würzburg
+- **Since 05/2024:** Postdoctoral Researcher at HMTM Hannover
+- **Research focus:** Media psychology, entertainment research, environmental communication, meta-science (theory development, computational methods)
+:::
+:::
+:::
+
+:::
+
+<br>
+
+:::{.fragment .center-text .big-text fragment-index=3}
+**...and who are you?** 😊
+:::
+
+## Learning Goals
+
+Participants…
+
+::: {.incremental}
+- …know the **basic function** of LLMs for text classification, can distinguish between **central model types**, and are aware of the **HuggingFace platform** as a central hub for models.
+- …can **employ encoder and decoder models** themselves to encode text in Python.
+- …know the basic logic of **evaluating classifications** and are aware of how it can be implemented.
+:::
+
+<br>
+
+:::fragment
+::: {.callout-tip}
+## Want to know more?
+Possler, D., Dietrich, F., Scheper, J., Lammers, A., & Spatzenegger, A. (2026). Gebrauchsfertige, Open Source Large Language Models auf Hugging Face als Forschungsinfrastruktur für die standardisierte Inhaltsanalyse von Texten [Ready-to-use, open-source Large Language Models on Hugging Face as research infrastructure for standardized content analysis of text]. *Publizistik*. https://doi.org/TBD
+:::
+:::
+
+## Today's Plan
+
+| Time | Block |
+|---|---|
+| 8:00 – 8:15 | **Welcome & introductions** |
+| 8:15 – 9:00 | **Input I**: text as data, LLMs, model types & Hugging Face |
+| 9:00 – 9:30 | **Code-Along**: classification with encoder models |
+| 9:30 – 10:00 | **Exercise**: classification with an encoder model |
+| 10:00 – 10:15 | **Break** |
+| 10:15 – 10:30 | **Code-Along**: classification with a generative decoder |
+| 10:30 – 11:00 | **Exercise**: classification with a generative decoder |
+| 11:00 – 11:15 | **Input II**: evaluation logic, manual coding & gold standards |
+| 11:15 – 11:30 | **Code-Along**: evaluating classifications |
+| 11:30 – 12:00 | **Discussion**, outlook & wrap-up |
+
+## Our Example for Today {auto-animate="true"}
+
+We want to understand how people **emotionally experienced the COVID-19 pandemic**.
+
+::: {.fragment fragment-index=1}
+> "It is very scary, especially because of the vulnerability of my family, but it can be overcome, however it is scary and annoying to see youths still going out with their friends and people underestimating the severity of the disease especially to vulnerable people. Not only this but some people lie and think it is made up or are too engrossed in the politics and don't understand the normal people being affected by it, dying and being extremely subdued. However personally for me it is awful because of the regime and how difficult it is to adapt to living in isolation, not going out or seeing friends and family or loved ones, or being able to exercise properly or educate and the countless hours spent infront of a computer."
+>
+> (RW3D participant, UK, April 2020)
+:::
+
+::: {.fragment fragment-index=2}
+How can we **analyze such texts at scale**?
+:::
+
+## The Data
+
+We'll use the **Real World Worry Waves Dataset (RW3D)** [@vandervegtMultimodalPanelDataset2023].
+
+::: {.incremental}
+- Panel survey on the crowdsourcing platform *Prolific*, with UK-based participants, run in three waves (April 2020, 2021, 2022)
+- Each wave, participants wrote open-ended text describing their feelings about the pandemic *and* rated their own emotions (e.g., anger, fear, sadness) on 9-point scales
+- We'll use **wave 1**, collected during the UK's first lockdown
+- Openly available under CC-BY 4.0: [osf.io/9b85r](https://osf.io/9b85r/)
+:::
+
+***
+
+:::big-text
+Any Questions?
+:::
+
+<br><br>
+
+:::center-text
+You can find all class materials at <br><https://llm-content-analysis.com>
+:::
+
+## References
+
+::: {#refs}
+:::

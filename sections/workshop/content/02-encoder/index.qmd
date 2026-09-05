@@ -1,0 +1,280 @@
+---
+title: "2. Classification with encoder models"
+---
+
+## Exercise
+
+:::{.callout-note}
+## Run this yourself
+This page shows the exercise code for reference; code blocks with real output below were actually run to produce it, but the page itself isn't a live Colab session — open the notebook there to run it yourself.
+
+[Open in Colab →](https://colab.research.google.com/github/felixdidi/llm-content-analysis/blob/main/sections/workshop/content/02-encoder/encoder-classification.ipynb){.btn .btn-primary role="button"}
+:::
+
+:::{.callout-note collapse="true"}
+## Questions about the code?
+No problem! Explanations for the less obvious lines are hidden behind the little numbers on the right of each code block — just hover your mouse over one to see it.
+
+```python
+print("Hello!")  # <1>
+```
+1. This prints "Hello!" to the console. The output would appear directly below the code block.
+:::
+
+This notebook belongs to the [DGPs 2026 workshop *Text Classification with Open Source Models*](../../index.qmd). You'll run two different encoder-based classifiers on real, open-ended survey text from the [Real World Worry Waves Dataset (RW3D)](https://osf.io/9b85r/) — focused on three emotions, anger, fear, and sadness.
+
+**Code-along vs. exercise:** Steps 1–3 below are the code-along, which we build together — there are a couple of small **Your turn** fill-ins along the way that you can work on after each step. The "Exercise: Compare to a different model" section at the end is yours to work through independently.
+
+**How to use this notebook:** run each cell from top to bottom with `Shift+Enter` or by clicking the run button. Most cells are given and fully explained; a few are marked **Your turn** — those are where you edit or write something yourself. Every exercise cell has a safe default, so nothing breaks if you leave it as-is, but you'll get more out of the session if you actually change it.
+
+**Important note for Colab users:** If you are running this notebook in Google Colab, please follow these steps: 1. Make sure you have a Google account and are logged in. 2. To create a copy of this notebook in your own Google Drive (advised), select "Copy to Drive" at the top of the Colab page. 3. Once the notebook copy opens in Colab, click on "Runtime" in the menu bar, then select "Change runtime type" and choose "T4 GPU" as the hardware accelerator. 4. Click "Save" to apply the changes. 5. Now you can run the notebook cells as instructed.
+
+### Setup
+
+First, we install the Python packages we need. This will take some time to complete.
+
+```python
+%pip install -q transformers accelerate pandas  # <1>
+```
+1. `%pip install` runs Python's package manager from inside the notebook; `-q` just keeps its output short. `transformers` and `accelerate` let us load and run the models, and `pandas` gives us a convenient table (`DataFrame`) format for the data.
+
+Next, we can change the logging level of the `transformers` library to avoid cluttering the notebook with warnings and info messages. You do not have to run this cell, but it will make the output easier to read.
+
+```python
+from transformers import logging  # <1>
+logging.set_verbosity_error()     # <2>
+```
+1. Imports `transformers`' logging module, which controls how much it prints to the console.
+2. Raises the logging threshold to "error" so only actual errors get printed — this hides the routine warning/info messages you'd otherwise see while loading models.
+
+### Step 1: Load the data
+
+We'll use a curated sample of survey responses from RW3D. Participants of this study wrote about how the COVID-19 situation made them feel, and also self-reported a number of emotions regarding their current situation. They also reported which emotion best fit their current situation. To keep this workshop focused, we'll only look at three of those emotions: anger, fear, and sadness.
+
+First, let's load the data and take a look at the dataset.
+
+```python
+import pandas as pd  # <1>
+
+DATA_URL = "https://raw.githubusercontent.com/felixdidi/llm-content-analysis/main/sections/workshop/data/rw3d_workshop_sample.csv"  # <2>
+df = pd.read_csv(DATA_URL)  # <3>
+df.head()  # <4>
+```
+1. Imports `pandas`, the standard Python library for working with tables, under the short name `pd` — so we can write `pd.something` instead of `pandas.something`.
+2. The web address of our prepared dataset. Storing it in a variable keeps the line below short, and means you'd only have to change the address in one place.
+3. `read_csv()` downloads that CSV file and turns it into a `DataFrame` — pandas' table format, here with one row per survey response. `df` is the conventional name for it.
+4. `head()` shows only the first five rows, so you get a quick look at the data without printing all 150.
+
+{{< embed encoder-classification.ipynb#load-data >}}
+
+#### Your turn
+
+Before we classify anything, get a feel for the data yourself. Use the code below to output a random text. Then guess how the writer would score their anger, fear, and sadness in that situation (on a scale from 1-9). Run the next cell to reveal their self-reported scores. Change `random_state` (any whole number) and re-run both cells to look at a different sample.
+
+```python
+random_state = 42  # TODO: try a different number  # <1>
+
+sample = df.sample(1, random_state=random_state)  # <2>
+
+for i, (_, row) in enumerate(sample.iterrows()):  # <3>
+    print(f"{row['text']}\n")  # <4>
+```
+1. `random_state` fixes which "random" row gets picked — the same number always gives you the same text, so you can compare it to the self-reported scores below.
+2. `df.sample(1, ...)` picks exactly one random row out of the whole DataFrame.
+3. `iterrows()` lets you loop over a DataFrame's rows one at a time; since there's only one row here, the loop body runs just once.
+4. Prints the text of that row. The `f"..."` is an f-string: whatever stands inside the curly braces gets replaced by its value, and the `\n` adds a blank line underneath.
+
+Now reveal the self-reported scores for the same texts. Do any surprise you?
+
+```python
+for i, (_, row) in enumerate(sample.iterrows()):  # <1>
+    print(f"anger={row['anger']} fear={row['fear']} sadness={row['sadness']}")  # <2>
+```
+1. Loops over that same single sampled row again.
+2. Prints that person's own self-reported anger, fear, and sadness scores (on the original 1–9 scale), so you can compare them to your own guess.
+
+### Step 2: A category-specific encoder model
+
+We'll use [`SamLowe/roberta-base-go_emotions`](https://huggingface.co/SamLowe/roberta-base-go_emotions), a RoBERTa model fine-tuned on the [GoEmotions dataset](https://huggingface.co/datasets/google-research-datasets/go_emotions) (58k Reddit comments, 27 emotions + neutral) — the most-used GoEmotions classifier on Hugging Face. This is a **category-specific** model: it was trained once, on one fixed set of labels, and can't be repurposed for a different category set.
+
+Loading and running the model on all 150 texts may take some time.
+
+```python
+from transformers import pipeline  # <1>
+
+emotion_classifier = pipeline("text-classification",                        # <2>
+                               model="SamLowe/roberta-base-go_emotions",     # <3>
+                               top_k=None,                                   # <4>
+                               truncation=True)                              # <5>
+
+roberta_result = emotion_classifier(df['text'].tolist())  # <6>
+
+print(roberta_result)  # <7>
+```
+
+1. `pipeline` is Hugging Face's high-level shortcut: give it a task and a model name, get back something you can call directly on text.
+2. `"text-classification"` is the task name for category-specific classifiers — models that return a score for each of their fixed labels.
+3. The model we want, written as its Hugging Face ID (`user/model-name`). It gets downloaded automatically the first time you run this, which is why the cell takes a while.
+4. `top_k=None` means "give me all 28 GoEmotions scores per text", not just the single most likely label.
+5. `truncation=True` cuts off texts that are too long for the model instead of erroring.
+6. Runs the classifier over all texts at once. `df['text']` is the text column, and `.tolist()` turns it into a plain Python list, which is what the pipeline expects as input.
+7. Prints the raw result, so you can see how it is structured: one entry per text, each holding a `label`/`score` pair for all 28 categories.
+
+**Basically, that was it.** We now have classifications for all texts in the dataset. We could save this directly — `roberta_result` is just a list of dictionaries (one per text, each holding `label`/`score` pairs for all 28 categories), and that's exactly the structure of a JSON file. So instead of any Python-specific format, you could save it with Python's built-in `json` module:
+
+```python
+with open("roberta_result.json", "w") as f:  # <1>
+    json.dump(roberta_result, f)              # <2>
+```
+1. Opens (creates) a file called `roberta_result.json` in write mode; the `with` block closes the file again automatically once it's done.
+2. Writes `roberta_result` into that open file, converted to JSON text.
+
+and continue working in whatever language or tool you like from there — R, for example, can read the same file back in with the `jsonlite` package.
+
+For this workshop, we'll stay in Python and do some basic data wrangling below to turn these scores into a table we can work with.
+
+#### Your turn
+
+**1. Extracting the scores**
+
+In the cell below, we extract the fear scores from the model output and create a new DataFrame with the original text and the corresponding fear score. Run the cell to see the results. Can you figure out how to add the anger and sadness scores as well?
+
+```python
+fear_scores = [next(item["score"] for item in scores if item["label"] == "fear")  # <1>
+               for scores in roberta_result]  # <2>
+
+roberta_result_df = pd.DataFrame({  # <3>
+    "text": df["text"],  # <4>
+    "fear_score": fear_scores,  # <5>
+})
+
+print(roberta_result_df)  # <6>
+```
+1. For a single text's list of 28 label/score dictionaries, this picks out the entry whose `label` is `"fear"` and keeps its `score`. `next(...)` just means "take the first match and stop searching".
+2. …and this repeats that for every text in `roberta_result`. Lines 1 and 2 together form a *list comprehension*: a compact way to write a loop that builds a list — here, one fear score per text.
+3. `pd.DataFrame({...})` builds a new table from a dictionary, where every entry becomes one column.
+4. The first column: the original texts, taken straight from the data we loaded at the start.
+5. The second column: the fear scores we just extracted. This is where you'd add `anger` and `sadness` in the same way to solve the exercise.
+6. Prints the finished table.
+
+**2. Comparing model output to self-report**
+
+Now, to get a first impression of how well the model performs, we can compare the model to the self-report: this code will pick out the row for the same text you looked at in Step 1 (same `random_state`) and print only its classified scores.
+
+```python
+random_state = 42  # TODO: you can try the same numbers as before if you remember them  # <1>
+
+sample = df.sample(1, random_state=random_state)  # <2>
+
+print(roberta_result_df.loc[sample.index])  # <3>
+```
+1. Same idea as in Step 1: pick a number to select which text to look at again.
+2. Re-selects the same random row from the original data.
+3. `.loc[sample.index]` looks up that row's index in `roberta_result_df` (the table of extracted scores) and prints the model's fear/anger/sadness scores for it.
+
+**3. Saving the dataframe**
+
+Finally, we can also save the model output to a CSV file for later use. Run the cell below to do that.
+
+```python
+roberta_result_df.to_csv("my_results.csv", index=False)  # <1>
+```
+1. Saves the DataFrame to a CSV file; `index=False` leaves out the row numbers pandas would otherwise add as an extra column.
+
+### Step 3: A task-specific (NLI) encoder model
+
+Now we'll use a model trained on **Natural Language Inference** (does a text entail a given hypothesis?) instead of on any fixed emotion label set. That single skill lets us classify text against *any* labels we like — including our three target emotions, directly, with no mapping step required.
+
+This is slower than the category-specific model (it has to check every text against every candidate label).
+
+```python
+nli_classifier = pipeline(                             # <1>
+    "zero-shot-classification",                        # <2>
+    model="MoritzLaurer/deberta-v3-base-zeroshot-v2.0",  # <3>
+)
+
+template = "This text expresses {}."                    # <4>
+candidate_labels = ['anger', 'fear', 'sadness']         # <5>
+
+nli_results = nli_classifier(df['text'].tolist(),       # <6>
+                             candidate_labels=candidate_labels,  # <7>
+                             hypothesis_template=template,       # <8>
+                             multi_label=True)            # <9>
+
+nli_results  # <10>
+```
+
+1. Sets up a second pipeline — the same `pipeline()` function as in Step 2, just with a different task and model.
+2. `zero-shot-classification` is the task name for NLI-based classifiers — "zero-shot" because the model was never trained on our specific 3 labels.
+3. An NLI model fine-tuned for zero-shot classification: it judges how well a text supports a given hypothesis sentence.
+4. The template that turns each candidate label into a full hypothesis sentence — the `{}` is the slot where each label gets inserted, giving e.g. `"This text expresses fear."`
+5. The labels we want scores for. Unlike with the category-specific model, we're free to choose these ourselves.
+6. Runs the classifier over all texts, converted to a plain list with `.tolist()` just like before.
+7. Hands over our three labels, so each text gets checked against each of them.
+8. Hands over the sentence template from above, which is used to build one hypothesis per label.
+9. `multi_label=True` scores each label independently (a text can score high on more than one emotion at once) instead of forcing the three scores to sum to 1.
+10. Writing a variable name on its own at the end of a notebook cell displays its value — a shortcut for `print()` that formats the output a bit more nicely.
+
+Same story here. **That was it!** `nli_results` is a list of dictionaries too — one per text, each with a `sequence`, `labels`, and `scores` entry — so it's JSON-compatible in exactly the same way `roberta_result` was in Step 2:
+
+```python
+with open("nli_results.json", "w") as f:  # <1>
+    json.dump(nli_results, f)              # <2>
+```
+1. Opens (creates) a file called `nli_results.json` in write mode, same as before.
+2. Writes `nli_results` into that file as JSON.
+
+That file could be picked up in R or any other tool from here. We'll keep working in Python below.
+
+The order of `labels`/`scores` in each result is sorted by probability, highest first — it's not the same as `candidate_labels` and differs from text to text. So instead of indexing by position, we pair each result's labels with its scores and look up each emotion by name.
+
+```python
+anger_scores = []      # <1>
+fear_scores = []
+sadness_scores = []
+
+for result in nli_results:  # <2>
+    scores_by_label = dict(zip(result["labels"], result["scores"]))  # <3>
+    anger_scores.append(scores_by_label["anger"])  # <4>
+    fear_scores.append(scores_by_label["fear"])
+    sadness_scores.append(scores_by_label["sadness"])
+
+nli_result_df = pd.DataFrame({  # <5>
+    "text": df["text"],  # <6>
+    "anger_score": anger_scores,  # <7>
+    "fear_score": fear_scores,
+    "sadness_score": sadness_scores,
+})
+
+print(nli_result_df)  # <8>
+```
+1. Three empty lists, one per emotion, which we fill up as we walk through the texts.
+2. Loops over the model's output — one `result` per text.
+3. `zip()` pairs each label with the score in the same position, and `dict()` turns those pairs into a lookup table like `{"fear": 0.87, "anger": 0.12, …}`. This is what lets us fetch scores *by name* instead of relying on their order.
+4. Looks up this text's anger score by name and appends it to the anger list; the two lines below do exactly the same for fear and sadness.
+5. Builds the results table, just like we did for the previous model.
+6. The first column: the original texts.
+7. One column per emotion, each filled with the list of scores we collected in the loop.
+8. Prints the finished table.
+
+#### Your turn
+
+The probability scores generated by an NLI model may change depending on the exact wording of the candidate labels or hypotheses. Try changing the label text in the cell above (e.g., "fear" → "being afraid") and re-run the cell. Do the scores change? If so, how much? You can also try a totally different category (maybe not even an emotion) and see what happens.
+
+### Exercise: Compare to a different model
+
+You've now got two encoder-based classifiers running. For the rest of this block, we'll try running a third model.
+
+For this exercise, we'll use the model [`j-hartmann/emotion-english-distilroberta-base`](https://huggingface.co/j-hartmann/emotion-english-distilroberta-base), a category-specific model trained on a *different* mix of datasets. Check out its model card on Hugging Face and figure out how it differs from the previous models.
+
+**Warning**: In the model card, the parameter `return_all_scores=True` is used to return all scores (not only the most confident). This parameter, however, is deprecated and needs to be adapted to `top_k = None` like we did above (which does the same thing).
+
+Once you have a sense of the model, run it on the same texts and compare its output to the previous two models. How do the scores differ? Do you notice any patterns in the differences?
+
+```python
+# TODO: implement the classification with the third model and compare the results to the previous two models.
+```
+
+### Next
+
+Head to [block 3](../03-decoder/index.qmd) for classification with a generative decoder model.

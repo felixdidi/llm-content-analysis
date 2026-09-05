@@ -1,0 +1,95 @@
+---
+title: "Preparation"
+engine: knitr
+---
+
+Now that we have already taken care of all the prerequisites in the previous section (Python installed, project folder and virtual environment created, required packages installed), we go through how to set up the working environment for the examples in this tutorial. Unlike the installation, the following steps need to be carried out every time we start a new text classification.
+
+## 1 Open the project folder
+
+We can open the project folder we already created using the file manager (Windows) or Finder (Mac). We then navigate to our project folder and open our computer's command line there:
+
+::: {.panel-tabset group="os"}
+
+## Linux/Mac
+
+Right-click on the project folder in Finder and select "New Terminal at Folder".
+
+## Windows
+
+Shift + right-click on the project folder in Explorer and select "Open PowerShell window here".
+
+:::
+
+## 2 Prepare texts
+
+The texts we want to classify need to be available in a CSV file in the project folder. The CSV file must contain at least one column with the texts to be classified. Optionally, it can contain further columns with metadata (e.g. ID, source, date). In the examples in this tutorial, the texts are in the `text` column. If your texts are in a different column, the corresponding column name must be adjusted in the code.
+
+In the following examples, we use a sample file named `example_dataset.csv`, located in the `data` folder. It contains ten short texts drawn from the [Real World Worry Waves Dataset (RW3D)](https://osf.io/9b85r/) [@vandervegtMultimodalPanelDataset2023]. In this study, each respondent wrote freely about how the COVID-19 situation made them feel and reported which emotion best fit their description.
+
+To keep this tutorial focused, we classify only 10 texts for a single emotion: *fear*. We preselected the texts so that five of the ten texts were self-reported as `fear`, and five clearly were not (`happiness` or `relaxation`), so we have a clean mix to check our models' predictions against.
+
+:::{.callout-note}
+## Show code
+Code that is not immediately necessary for understanding the examples is hidden by default. It can be shown at any time via the "Code" button.
+:::
+
+```{r filename="R"}
+#| code-fold: true
+readr::read_csv("data/example_dataset.csv", show_col_types = FALSE) #<1>
+```
+
+1. We read in the sample file `example_dataset.csv`, located in the `data` folder. The file contains ten short texts in the `text` column, plus a `self_reported_emotion` column for reference (not used by the models themselves).
+
+## 3 Activate the virtual Python environment
+
+Even though we already created the virtual Python environment, we need to activate it every time we want to work in it. To do this, we run the following command:
+
+:::callout-important
+## Note
+If the virtual environment is already activated, the following command must not be run again, as this can cause errors. In the command line, the virtual environment is recognizable by a changed prompt containing the name of the virtual environment (e.g. `(env)`). Alternatively, we can run the command `echo $VIRTUAL_ENV` (Linux/Mac) or `echo %VIRTUAL_ENV%` (Windows) in the console. If the path to the virtual environment is displayed, the virtual environment is activated. Otherwise, an empty line is displayed.
+:::
+
+::: {.panel-tabset group="os"}
+
+## Linux/Mac
+
+```{.bash filename="Terminal"}
+source env/bin/activate #<1>
+```
+
+1. We activate the virtual Python environment named `env`. The name of the virtual environment can be chosen freely, but ideally should not contain spaces or special characters. It must also match the name used when the virtual environment was created.
+
+## Windows
+
+```{.bash filename="Terminal"}
+.\env\Scripts\activate #<1>
+```
+
+1. We activate the virtual Python environment named `env`. The name of the virtual environment can be chosen freely, but ideally should not contain spaces or special characters. It must also match the name used when the virtual environment was created.
+
+If PowerShell blocks the execution of scripts, this can be changed with the following command:
+
+```{.bash filename="Terminal"}
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass #<2>
+```
+
+2. We allow the execution of scripts in the current PowerShell session. This is necessary to activate the virtual Python environment. This setting only applies to the current session and is reset when PowerShell is closed.
+
+:::
+
+## 4 Open Jupyter Notebook
+
+Finally, with the following command we can open the Jupyter Notebook environment in which we can try out the examples from this tutorial. In the Jupyter Notebook environment, we can then run the Python scripts described in the following chapters.
+
+```{.bash filename="Terminal"}
+jupyter notebook #<1>
+```
+
+1. We open the Jupyter Notebook environment. This opens a new window in our web browser, in which we can see the Jupyter Notebook environment.
+
+:::callout-tip
+## Good to know
+
+While the Jupyter Notebook environment is running, the command line should not be closed. In the meantime, we see various pieces of information in the command line, e.g. whether the Jupyter Notebook environment started successfully and under which URL we can reach the Jupyter Notebook environment in the browser (usually `http://localhost:8888`). When we want to close the Jupyter Notebook environment, we can do so via the command line with `CTRL + C`. We then need to confirm the input with `y`.
+:::

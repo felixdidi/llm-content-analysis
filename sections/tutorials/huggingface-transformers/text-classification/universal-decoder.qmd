@@ -1,0 +1,109 @@
+---
+title: Universal Decoder Model
+engine: knitr
+---
+
+To run or modify the example code yourself, you can open and download the Jupyter notebook underlying this page via the sidebar.
+
+:::{.callout-note collapse="true"}
+## Questions about the code?
+No problem! Explanations for the individual steps of the code are hidden behind the numbers on the right. Simply hover your mouse over the number to see the explanation. Where the respective code is executed (in Python, R, or the terminal) is shown in the header of the code block.
+
+```{python filename="Python"}
+print("Hello! 👋") # <1>
+```
+
+1. This is a simple Python command that prints the text "Hello" to the console. The output appears below the code block.
+
+:::
+
+## Load data
+
+Regardless of the model used, we first load the already-installed packages as well as our text data, and store it in a list object:
+
+```{python filename="Python"}
+#| eval: false
+
+import pandas as pd                              #<1>
+from transformers import pipeline                #<1>
+import json                                      #<1>
+
+data = pd.read_csv("data/example_dataset.csv")   #<2>
+textlist = list(data["text"])                    #<2>
+
+```
+
+1. Importing the required libraries
+2. Loading the text data from a CSV file and storing it in a list
+
+## Load model
+
+Unlike category-specific models, universal decoder models let us classify any category we like. As an example, we use the Qwen2.5 model [@baiQwen3VLTechnicalReport2025] — a small, instruction-tuned model that runs comfortably on a laptop CPU.
+
+:::{.callout-tip}
+## Good to know
+
+Instead of the model used here, you can also use other universal decoder models (usually labeled for "Text Generation") for different languages and use cases. An overview of available models can be found on [Hugging Face](https://huggingface.co/models). Make sure that the chosen model is suitable for your specific task (e.g. sentiment analysis, topic classification, etc.) and supports the language of your texts.
+:::
+
+```{python filename="Python"}
+#| eval: false
+
+generate = pipeline("text-generation", model="Qwen/Qwen2.5-1.5B-Instruct")  #<3>
+```
+
+3. Loading the universal decoder model for text generation
+
+## Classification
+
+Unlike the previous approaches, with a universal decoder model we need to write a prompt, based on which the model generates text (i.e. the answer to our classification request), ideally in a machine-readable format. The prompt could, for example, read: *"You are a trained assistant for content analysis who determines whether a text expresses fear. Always answer precisely in JSON format with fear (true or false) and reasoning (a short justification in English). Return only the JSON response, starting with '{' and ending with '}', with these two parameters."* We now apply this prompt iteratively to each text in our dataset. The easiest way to do this is with a *for* loop.
+
+Using the `max_new_tokens` parameter, we can limit the length of the generated output; `do_sample` should generally be set to `False` to get deterministic, and therefore reproducible, answers.
+
+```{python filename="Python"}
+#| eval: false
+
+results = []                    #<4>
+for text in textlist:           #<5>
+    instructions = [            #<6>
+        {"role": "system",      #<6>
+         "content": "You are a trained assistant for content analysis who determines whether a text expresses fear. Always answer precisely in JSON format with fear (true or false) and reasoning (a short justification in English). Return only the JSON response, starting with '{' and ending with '}', with these two parameters"}, #<6>
+        {"role": "user", "content": text}]                                #<6>
+    outputs = generate(instructions, max_new_tokens=256, do_sample=False) #<7>
+    results.append({"text": text, "response": outputs[0]["generated_text"][-1]['content']}) #<8>
+```
+
+4. Initializing an empty list for the results
+5. Iterating over each text in the list of texts
+6. Defining the instructions (prompt) for the model
+7. Generating the model's response using the defined instructions
+8. Storing the original text and the generated response in the results list
+
+Once all responses have been generated, we can extract the results from the JSON format. If we want, we can also save the additional reasoning that is output, to look at it.
+
+:::callout-important
+## Note
+It can occasionally happen that the model returns malformed JSON — for instance by "forgetting" quotation marks, wrapping the JSON in a ` ```json ` markdown code fence despite being told to return only the JSON object, or because responses are cut off once `max_new_tokens` is reached, so they don't close with a curly brace. Our parsing function below strips a code fence if present, and otherwise fails gracefully rather than crashing.
+:::
+
+```{python}
+#| eval: false
+
+def parse_response(response):                                                             #<9>
+    response = response.strip().strip("`").removeprefix("json").strip()                  #<9>
+    try:                                                                                  #<10>
+        parsed = json.loads(response)                                                     #<10>
+        return parsed['fear'], parsed['reasoning']                                        #<10>
+    except (json.JSONDecodeError, KeyError):                                              #<10>
+        return None, None                                                                 #<10>
+
+parsed_data = [(entry['text'], *parse_response(entry['response'])) for entry in results] #<11>
+parsed_data = pd.DataFrame(parsed_data, columns=['text', 'fear', 'reasoning'])            #<11>
+print(parsed_data)                                                                       #<11>
+```
+
+9. Defining a function to parse the JSON response; first stripping a ` ```json ` / ` ``` ` markdown code fence if the model added one, since it otherwise returns clean JSON here
+10. Attempting to parse the (fence-stripped) response as JSON; if that fails, or the expected keys are missing, returning `None` for both fields instead of crashing
+11. Applying the parsing function to the results list and storing it in a DataFrame
+
+{{< embed ../notebooks/universal-decoder.ipynb#classify >}}

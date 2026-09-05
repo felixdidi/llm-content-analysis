@@ -1,0 +1,16 @@
+- title: Hugging Face Transformers
+  subtitle: Easy to use Python library
+  href: huggingface-transformers/index.qmd
+  links:
+    - text: Summary
+      href: huggingface-transformers/index.qmd
+    - text: Installation
+      href: huggingface-transformers/installation.qmd
+    - text: Preparation
+      href: huggingface-transformers/preparation.qmd
+    - text: Category-Specific Encoder Model
+      href: huggingface-transformers/text-classification/category-specific-encoder.qmd
+    - text: Task-Specific Encoder Model
+      href: huggingface-transformers/text-classification/task-specific-encoder.qmd
+    - text: Universal Decoder Model
+      href: huggingface-transformers/text-classification/universal-decoder.qmd
