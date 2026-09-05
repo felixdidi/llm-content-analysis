@@ -2,182 +2,182 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://llm-content-analysis.com/sections/paper/04_aufgabenspezifisches_Encoder-Modell.html</loc>
-    <lastmod>2026-09-05T19:27:55.811Z</lastmod>
+    <lastmod>2026-09-05T20:20:54.394Z</lastmod>
   </url>
   <url>
     <loc>https://llm-content-analysis.com/sections/paper/02_setup.html</loc>
-    <lastmod>2026-09-05T19:27:55.811Z</lastmod>
+    <lastmod>2026-09-05T20:20:54.394Z</lastmod>
   </url>
   <url>
     <loc>https://llm-content-analysis.com/sections/paper/notebooks/04_aufgabenspezifisches_Encoder-Modell.html</loc>
-    <lastmod>2026-09-05T19:27:55.901Z</lastmod>
+    <lastmod>2026-09-05T20:20:54.475Z</lastmod>
   </url>
   <url>
     <loc>https://llm-content-analysis.com/sections/paper/05_universelles_Decoder-Modell.html</loc>
-    <lastmod>2026-09-05T19:27:55.811Z</lastmod>
+    <lastmod>2026-09-05T20:20:54.394Z</lastmod>
   </url>
   <url>
     <loc>https://llm-content-analysis.com/sections/paper/beispielstudie/05_dictionary.html</loc>
-    <lastmod>2026-09-05T19:27:55.811Z</lastmod>
+    <lastmod>2026-09-05T20:20:54.394Z</lastmod>
   </url>
   <url>
     <loc>https://llm-content-analysis.com/sections/paper/beispielstudie/00_goldstandard.html</loc>
-    <lastmod>2026-09-05T19:27:55.811Z</lastmod>
+    <lastmod>2026-09-05T20:20:54.394Z</lastmod>
   </url>
   <url>
     <loc>https://llm-content-analysis.com/sections/paper/beispielstudie/01_kategoriespezifisches_Encoder-Modell.html</loc>
-    <lastmod>2026-09-05T19:27:55.811Z</lastmod>
+    <lastmod>2026-09-05T20:20:54.394Z</lastmod>
   </url>
   <url>
     <loc>https://llm-content-analysis.com/sections/paper/beispielstudie/04_manuelle_Inhaltsanalyse.html</loc>
-    <lastmod>2026-09-05T19:27:55.811Z</lastmod>
+    <lastmod>2026-09-05T20:20:54.394Z</lastmod>
   </url>
   <url>
     <loc>https://llm-content-analysis.com/sections/paper/beispielstudie/07_validierung_kategoriespezifisches_Encoder-Modell.html</loc>
-    <lastmod>2026-09-05T19:27:55.811Z</lastmod>
+    <lastmod>2026-09-05T20:20:54.394Z</lastmod>
   </url>
   <url>
     <loc>https://llm-content-analysis.com/sections/paper/index.html</loc>
-    <lastmod>2026-09-05T19:27:55.899Z</lastmod>
+    <lastmod>2026-09-05T20:20:54.474Z</lastmod>
   </url>
   <url>
     <loc>https://llm-content-analysis.com/sections/tutorials/huggingface-transformers/notebooks/task-specific-encoder.html</loc>
-    <lastmod>2026-09-05T19:27:55.901Z</lastmod>
+    <lastmod>2026-09-05T20:20:54.475Z</lastmod>
   </url>
   <url>
     <loc>https://llm-content-analysis.com/sections/tutorials/huggingface-transformers/notebooks/universal-decoder.html</loc>
-    <lastmod>2026-09-05T19:27:55.901Z</lastmod>
+    <lastmod>2026-09-05T20:20:54.475Z</lastmod>
   </url>
   <url>
     <loc>https://llm-content-analysis.com/sections/tutorials/huggingface-transformers/text-classification/category-specific-encoder.html</loc>
-    <lastmod>2026-09-05T19:27:55.901Z</lastmod>
+    <lastmod>2026-09-05T20:20:54.475Z</lastmod>
   </url>
   <url>
     <loc>https://llm-content-analysis.com/sections/tutorials/huggingface-transformers/text-classification/universal-decoder.html</loc>
-    <lastmod>2026-09-05T19:27:55.902Z</lastmod>
+    <lastmod>2026-09-05T20:20:54.475Z</lastmod>
   </url>
   <url>
     <loc>https://llm-content-analysis.com/sections/tutorials/index.html</loc>
-    <lastmod>2026-09-05T19:27:55.902Z</lastmod>
+    <lastmod>2026-09-05T20:20:54.475Z</lastmod>
   </url>
   <url>
     <loc>https://llm-content-analysis.com/sections/workshop/content/00-welcome/slides.html</loc>
-    <lastmod>2026-09-05T19:27:55.902Z</lastmod>
+    <lastmod>2026-09-05T20:20:54.476Z</lastmod>
   </url>
   <url>
     <loc>https://llm-content-analysis.com/sections/workshop/content/04-evaluation/evaluation.html</loc>
-    <lastmod>2026-09-05T19:27:55.904Z</lastmod>
+    <lastmod>2026-09-05T20:20:54.478Z</lastmod>
   </url>
   <url>
     <loc>https://llm-content-analysis.com/sections/workshop/content/03-decoder/decoder-classification.html</loc>
-    <lastmod>2026-09-05T19:27:55.903Z</lastmod>
+    <lastmod>2026-09-05T20:20:54.477Z</lastmod>
   </url>
   <url>
     <loc>https://llm-content-analysis.com/sections/workshop/content/02-encoder/encoder-classification.html</loc>
-    <lastmod>2026-09-05T19:27:55.902Z</lastmod>
+    <lastmod>2026-09-05T20:20:54.476Z</lastmod>
   </url>
   <url>
     <loc>https://llm-content-analysis.com/sections/workshop/content/01-intro/index.html</loc>
-    <lastmod>2026-09-05T19:27:55.902Z</lastmod>
+    <lastmod>2026-09-05T20:20:54.476Z</lastmod>
   </url>
   <url>
     <loc>https://llm-content-analysis.com/sections/workshop/content/05-outlook/index.html</loc>
-    <lastmod>2026-09-05T19:27:55.904Z</lastmod>
+    <lastmod>2026-09-05T20:20:54.478Z</lastmod>
   </url>
   <url>
     <loc>https://llm-content-analysis.com/sections/workshop/schedule.html</loc>
-    <lastmod>2026-09-05T19:27:55.981Z</lastmod>
+    <lastmod>2026-09-05T20:20:54.543Z</lastmod>
   </url>
   <url>
     <loc>https://llm-content-analysis.com/index.html</loc>
-    <lastmod>2026-09-05T19:27:55.807Z</lastmod>
+    <lastmod>2026-09-05T20:20:54.392Z</lastmod>
   </url>
   <url>
     <loc>https://llm-content-analysis.com/sections/workshop/index.html</loc>
-    <lastmod>2026-09-05T19:27:55.981Z</lastmod>
+    <lastmod>2026-09-05T20:20:54.543Z</lastmod>
   </url>
   <url>
     <loc>https://llm-content-analysis.com/sections/workshop/content/05-outlook/slides.html</loc>
-    <lastmod>2026-09-05T19:27:55.906Z</lastmod>
+    <lastmod>2026-09-05T20:20:54.479Z</lastmod>
   </url>
   <url>
     <loc>https://llm-content-analysis.com/sections/workshop/content/01-intro/slides.html</loc>
-    <lastmod>2026-09-05T19:27:55.902Z</lastmod>
+    <lastmod>2026-09-05T20:20:54.476Z</lastmod>
   </url>
   <url>
     <loc>https://llm-content-analysis.com/sections/workshop/content/02-encoder/index.html</loc>
-    <lastmod>2026-09-05T19:27:55.902Z</lastmod>
+    <lastmod>2026-09-05T20:20:54.476Z</lastmod>
   </url>
   <url>
     <loc>https://llm-content-analysis.com/sections/workshop/content/03-decoder/index.html</loc>
-    <lastmod>2026-09-05T19:27:55.903Z</lastmod>
+    <lastmod>2026-09-05T20:20:54.477Z</lastmod>
   </url>
   <url>
     <loc>https://llm-content-analysis.com/sections/workshop/content/04-evaluation/slides.html</loc>
-    <lastmod>2026-09-05T19:27:55.904Z</lastmod>
+    <lastmod>2026-09-05T20:20:54.478Z</lastmod>
   </url>
   <url>
     <loc>https://llm-content-analysis.com/sections/workshop/content/04-evaluation/index.html</loc>
-    <lastmod>2026-09-05T19:27:55.904Z</lastmod>
+    <lastmod>2026-09-05T20:20:54.478Z</lastmod>
   </url>
   <url>
     <loc>https://llm-content-analysis.com/sections/workshop/content/00-welcome/index.html</loc>
-    <lastmod>2026-09-05T19:27:55.902Z</lastmod>
+    <lastmod>2026-09-05T20:20:54.476Z</lastmod>
   </url>
   <url>
     <loc>https://llm-content-analysis.com/sections/tutorials/huggingface-transformers/index.html</loc>
-    <lastmod>2026-09-05T19:27:55.901Z</lastmod>
+    <lastmod>2026-09-05T20:20:54.475Z</lastmod>
   </url>
   <url>
     <loc>https://llm-content-analysis.com/sections/tutorials/huggingface-transformers/text-classification/task-specific-encoder.html</loc>
-    <lastmod>2026-09-05T19:27:55.902Z</lastmod>
+    <lastmod>2026-09-05T20:20:54.475Z</lastmod>
   </url>
   <url>
     <loc>https://llm-content-analysis.com/sections/tutorials/huggingface-transformers/preparation.html</loc>
-    <lastmod>2026-09-05T19:27:55.901Z</lastmod>
+    <lastmod>2026-09-05T20:20:54.475Z</lastmod>
   </url>
   <url>
     <loc>https://llm-content-analysis.com/sections/tutorials/huggingface-transformers/notebooks/category-specific-encoder.html</loc>
-    <lastmod>2026-09-05T19:27:55.901Z</lastmod>
+    <lastmod>2026-09-05T20:20:54.475Z</lastmod>
   </url>
   <url>
     <loc>https://llm-content-analysis.com/sections/tutorials/huggingface-transformers/installation.html</loc>
-    <lastmod>2026-09-05T19:27:55.901Z</lastmod>
+    <lastmod>2026-09-05T20:20:54.475Z</lastmod>
   </url>
   <url>
     <loc>https://llm-content-analysis.com/sections/paper/03_kategoriespezifisches_Encoder-Modell.html</loc>
-    <lastmod>2026-09-05T19:27:55.811Z</lastmod>
+    <lastmod>2026-09-05T20:20:54.394Z</lastmod>
   </url>
   <url>
     <loc>https://llm-content-analysis.com/sections/paper/beispielstudie/00_beispielstudie.html</loc>
-    <lastmod>2026-09-05T19:27:55.811Z</lastmod>
+    <lastmod>2026-09-05T20:20:54.394Z</lastmod>
   </url>
   <url>
     <loc>https://llm-content-analysis.com/sections/paper/beispielstudie/03_universelles_Decoder-Modell.html</loc>
-    <lastmod>2026-09-05T19:27:55.811Z</lastmod>
+    <lastmod>2026-09-05T20:20:54.394Z</lastmod>
   </url>
   <url>
     <loc>https://llm-content-analysis.com/sections/paper/beispielstudie/06_machine_learning.html</loc>
-    <lastmod>2026-09-05T19:27:55.811Z</lastmod>
+    <lastmod>2026-09-05T20:20:54.394Z</lastmod>
   </url>
   <url>
     <loc>https://llm-content-analysis.com/sections/paper/beispielstudie/02_aufgabenspezifisches_Encoder-Modell.html</loc>
-    <lastmod>2026-09-05T19:27:55.811Z</lastmod>
+    <lastmod>2026-09-05T20:20:54.394Z</lastmod>
   </url>
   <url>
     <loc>https://llm-content-analysis.com/sections/paper/beispielstudie/07_validierung.html</loc>
-    <lastmod>2026-09-05T19:27:55.811Z</lastmod>
+    <lastmod>2026-09-05T20:20:54.394Z</lastmod>
   </url>
   <url>
     <loc>https://llm-content-analysis.com/sections/paper/notebooks/05_universelles_Decoder-Modell.html</loc>
-    <lastmod>2026-09-05T19:27:55.901Z</lastmod>
+    <lastmod>2026-09-05T20:20:54.475Z</lastmod>
   </url>
   <url>
     <loc>https://llm-content-analysis.com/sections/paper/notebooks/03_kategoriespezifisches_Encoder-Modell.html</loc>
-    <lastmod>2026-09-05T19:27:55.899Z</lastmod>
+    <lastmod>2026-09-05T20:20:54.474Z</lastmod>
   </url>
   <url>
     <loc>https://llm-content-analysis.com/sections/paper/01_installation.html</loc>
-    <lastmod>2026-09-05T19:27:55.811Z</lastmod>
+    <lastmod>2026-09-05T20:20:54.394Z</lastmod>
   </url>
 </urlset>

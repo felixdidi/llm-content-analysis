@@ -168,7 +168,7 @@
 <link href="../../../../site_libs/quarto-html/quarto-syntax-highlighting-0bdc59fcf4c41de9ca6aa5cdff7392a7.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../../../site_libs/bootstrap/bootstrap-11c7400715367f59b59db47c60a69c8d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../../../site_libs/bootstrap/bootstrap-3b3639e6606ee2adcb7f7604bd6f8904.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
      <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -342,13 +342,13 @@ background: #8ec07c99;
 <p>First, let’s load the data and take a look at the dataset.</p>
 </section>
 </div>
-<div class="cell-container"><div class="cell-decorator"><pre>In [4]:</pre></div><div id="cell-load-data" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-14T13:40:17.647359Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-14T13:40:17.647253Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-14T13:40:17.873092Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-14T13:40:17.872887Z&quot;}}" data-execution_count="4">
+<div class="cell-container"><div class="cell-decorator"><pre>In [2]:</pre></div><div id="cell-load-data" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-14T13:40:17.647359Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-14T13:40:17.647253Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-14T13:40:17.873092Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-14T13:40:17.872887Z&quot;}}" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>DATA_URL <span class="op">=</span> <span class="st">"https://raw.githubusercontent.com/felixdidi/llm-content-analysis/main/sections/workshop/data/rw3d_workshop_sample.csv"</span></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(DATA_URL)</span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>df.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div id="load-data" class="cell-output cell-output-display" data-execution_count="4">
+<div id="load-data" class="cell-output cell-output-display" data-execution_count="2">
 <div>
 
 
@@ -422,7 +422,7 @@ background: #8ec07c99;
 <p>Before we classify anything, get a feel for the data yourself. Use the code below to output a random text. Then guess how the writer would score their anger, fear, and sadness in that situation (on a scale from 1-9). Run the next cell to reveal their self-reported scores. Change <code>random_state</code> (any whole number) and re-run both cells to look at a different sample.</p>
 </section>
 </div>
-<div class="cell-container"><div class="cell-decorator"><pre>In [27]:</pre></div><div id="54cc6243" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-14T13:40:17.874147Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-14T13:40:17.874060Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-14T13:40:17.876113Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-14T13:40:17.875941Z&quot;}}" data-execution_count="27">
+<div class="cell-container"><div class="cell-decorator"><pre>In [3]:</pre></div><div id="sample-text" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-14T13:40:17.874147Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-14T13:40:17.874060Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-14T13:40:17.876113Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-14T13:40:17.875941Z&quot;}}" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>random_state <span class="op">=</span> <span class="dv">42</span>  <span class="co"># </span><span class="al">TODO</span><span class="co">: try a different number</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>sample <span class="op">=</span> df.sample(<span class="dv">1</span>, random_state<span class="op">=</span>random_state)</span>
@@ -437,7 +437,7 @@ background: #8ec07c99;
 <div id="ab3d2958" class="cell markdown">
 <p>Now reveal the self-reported scores for the same texts. Do any surprise you?</p>
 </div>
-<div class="cell-container"><div class="cell-decorator"><pre>In [6]:</pre></div><div id="b7b8a100" class="cell" data-execution_count="6">
+<div class="cell-container"><div class="cell-decorator"><pre>In [4]:</pre></div><div id="sample-self-report" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, (_, row) <span class="kw">in</span> <span class="bu">enumerate</span>(sample.iterrows()):</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"anger=</span><span class="sc">{</span>row[<span class="st">'anger'</span>]<span class="sc">}</span><span class="ss"> fear=</span><span class="sc">{</span>row[<span class="st">'fear'</span>]<span class="sc">}</span><span class="ss"> sadness=</span><span class="sc">{</span>row[<span class="st">'sadness'</span>]<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
@@ -451,7 +451,7 @@ background: #8ec07c99;
 <p>Loading and running the model on all texts may take some time.</p>
 </section>
 </div>
-<div class="cell-container"><div class="cell-decorator"><pre>In [18]:</pre></div><div id="18897da0" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-14T13:40:17.876977Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-14T13:40:17.876921Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-14T13:40:25.527553Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-14T13:40:25.527280Z&quot;}}" data-execution_count="18">
+<div class="cell-container"><div class="cell-decorator"><pre>In [5]:</pre></div><div id="roberta-classify" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-14T13:40:17.876977Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-14T13:40:17.876921Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-14T13:40:25.527553Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-14T13:40:25.527280Z&quot;}}" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> transformers <span class="im">import</span> pipeline</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>emotion_classifier <span class="op">=</span> pipeline(<span class="st">"text-classification"</span>,</span>
@@ -482,7 +482,7 @@ background: #8ec07c99;
 </section>
 </section>
 </div>
-<div class="cell-container"><div class="cell-decorator"><pre>In [12]:</pre></div><div id="fear-scores" class="cell">
+<div class="cell-container"><div class="cell-decorator"><pre>In [6]:</pre></div><div id="fear-scores" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>fear_scores <span class="op">=</span> [<span class="bu">next</span>(item[<span class="st">"score"</span>] <span class="cf">for</span> item <span class="kw">in</span> scores <span class="cf">if</span> item[<span class="st">"label"</span>] <span class="op">==</span> <span class="st">"fear"</span>)</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>               <span class="cf">for</span> scores <span class="kw">in</span> roberta_result]</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -492,19 +492,35 @@ background: #8ec07c99;
 <span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>})</span>
 <span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(roberta_result_df)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                                                  text  fear_score
+0    Stressed and uninformed. Don't feel enough is ...    0.031799
+1    I feel worried about the virus, burnout about ...    0.163574
+2    Disgusted how unprotected NHS staff are and ho...    0.004592
+3    I am not too worried about the situation as I ...    0.014743
+4    I'm finding the Corona situation quite dauntin...    0.032603
+..                                                 ...         ...
+145  Significant Anger and disappointment that we a...    0.010647
+146  I feel saddened at the number of deaths of NHS...    0.010845
+147  My grandad is currently hospitalised with the ...    0.124958
+148  I feel very angry and annoyed with people that...    0.204566
+149  I'm not worried about the effects of Corona on...    0.080702
+
+[150 rows x 2 columns]</code></pre>
+</div>
 </div></div>
 <div id="841bef4d" class="cell markdown">
-<section id="comparing-model-output-to-self-report" class="level4">
-<h4 class="anchored" data-anchor-id="comparing-model-output-to-self-report">2. Comparing model output to self-report</h4>
-<p>Now, to get a first impression of how well the model performs, we can compare the model to the self-report: this code will pick out the row for the same text you looked at in Step 1 (same <code>random_state</code>) and print only its classified scores.</p>
+<section id="inspecting-model-output" class="level4">
+<h4 class="anchored" data-anchor-id="inspecting-model-output">2. Inspecting model output</h4>
+<p>Now, to get a first impression of how well the model performs, this code will pick out the row for the same text you looked at in Step 1 (same <code>random_state</code>) and print its classified scores.</p>
 </section>
 </div>
-<div class="cell-container"><div class="cell-decorator"><pre>In [28]:</pre></div><div id="f320fc41" class="cell" data-execution_count="28">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>random_state <span class="op">=</span> <span class="dv">42</span>  <span class="co"># </span><span class="al">TODO</span><span class="co">: you can try the same numbers as before if you remember them</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>sample <span class="op">=</span> df.sample(<span class="dv">1</span>, random_state<span class="op">=</span>random_state)</span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(roberta_result_df.loc[sample.index])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [9]:</pre></div><div id="inspect-scores" class="cell" data-execution_count="9">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>random_state <span class="op">=</span> <span class="dv">42</span>  <span class="co"># </span><span class="al">TODO</span><span class="co">: you can try the same numbers as before if you remember them</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>sample <span class="op">=</span> df.sample(<span class="dv">1</span>, random_state<span class="op">=</span>random_state)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(roberta_result_df.loc[sample.index])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                                                 text  fear_score
 73  I think lockdown should of been earlier.I also...    0.002481</code></pre>
@@ -517,7 +533,7 @@ background: #8ec07c99;
 </section>
 </div>
 <div class="cell-container"><div class="cell-decorator"><pre>In [51]:</pre></div><div id="752bab7f" class="cell" data-execution_count="51">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>roberta_result_df.to_csv(<span class="st">"my_results.csv"</span>, index<span class="op">=</span><span class="va">False</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>roberta_result_df.to_csv(<span class="st">"my_results.csv"</span>, index<span class="op">=</span><span class="va">False</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div></div>
 <div id="932ca59e" class="cell markdown">
 <section id="step-3-a-task-specific-nli-encoder-model" class="level2">
@@ -526,22 +542,22 @@ background: #8ec07c99;
 <p>This is slower than the category-specific model (it has to check every text against every candidate label).</p>
 </section>
 </div>
-<div class="cell-container"><div class="cell-decorator"><pre>In [29]:</pre></div><div id="b76ad6ee" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-14T13:40:25.537671Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-14T13:40:25.537594Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-14T13:40:39.222122Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-14T13:40:39.221846Z&quot;}}" data-execution_count="29">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>nli_classifier <span class="op">=</span> pipeline(</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"zero-shot-classification"</span>,</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    model<span class="op">=</span><span class="st">"MoritzLaurer/deberta-v3-base-zeroshot-v2.0"</span>,</span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>template <span class="op">=</span> <span class="st">"This text expresses </span><span class="sc">{}</span><span class="st">."</span></span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>candidate_labels <span class="op">=</span> [<span class="st">'anger'</span>, <span class="st">'fear'</span>, <span class="st">'sadness'</span>]</span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>nli_results <span class="op">=</span> nli_classifier(df[<span class="st">'text'</span>].tolist(),</span>
-<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>                             candidate_labels<span class="op">=</span>candidate_labels,</span>
-<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>                             hypothesis_template<span class="op">=</span>template,</span>
-<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>                             multi_label<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>nli_results</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="29">
+<div class="cell-container"><div class="cell-decorator"><pre>In [10]:</pre></div><div id="cell-nli-classify" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-14T13:40:25.537671Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-14T13:40:25.537594Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-14T13:40:39.222122Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-14T13:40:39.221846Z&quot;}}" data-execution_count="10">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>nli_classifier <span class="op">=</span> pipeline(</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"zero-shot-classification"</span>,</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    model<span class="op">=</span><span class="st">"MoritzLaurer/deberta-v3-base-zeroshot-v2.0"</span>,</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>template <span class="op">=</span> <span class="st">"This text expresses </span><span class="sc">{}</span><span class="st">."</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>candidate_labels <span class="op">=</span> [<span class="st">'anger'</span>, <span class="st">'fear'</span>, <span class="st">'sadness'</span>]</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>nli_results <span class="op">=</span> nli_classifier(df[<span class="st">'text'</span>].tolist(),</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>                             candidate_labels<span class="op">=</span>candidate_labels,</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>                             hypothesis_template<span class="op">=</span>template,</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>                             multi_label<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>nli_results</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="nli-classify" class="cell-output cell-output-display" data-execution_count="10">
 <pre><code>[{'sequence': "Stressed and uninformed. Don't feel enough is being done by the government to help with the NHS crisis or the proper enforcement of social distancing.nhs staff should be tested immediately and given the right equipment to fight the Corona virus. There should be a full lockdown straight away to stop the spread.the equipment side of it is the fact that they aren't really getting enough or even any at all.how can you be expected to take urgent care of someone, and also be worried that you might catch it,or maybe even already have it.",
   'labels': ['fear', 'sadness', 'anger'],
   'scores': [0.9993638396263123, 0.14596547186374664, 0.04069295525550842]},
@@ -1046,29 +1062,58 @@ background: #8ec07c99;
 </div></div>
 <div id="de1eb5bb" class="cell markdown">
 <p>Same story here. <strong>That was it!</strong> <code>nli_results</code> is a list of dictionaries too — one per text, each with a <code>sequence</code>, <code>labels</code>, and <code>scores</code> entry — so it’s JSON-compatible in exactly the same way <code>roberta_result</code> was in Step 2:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">"nli_results.json"</span>, <span class="st">"w"</span>) <span class="im">as</span> f:</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    json.dump(nli_results, f)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">"nli_results.json"</span>, <span class="st">"w"</span>) <span class="im">as</span> f:</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>    json.dump(nli_results, f)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>That file could be picked up in R or any other tool from here. We’ll keep working in Python below.</p>
 </div>
-<div class="cell-container"><div class="cell-decorator"><pre>In [17]:</pre></div><div id="nli-scores" class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>anger_scores <span class="op">=</span> []</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>fear_scores <span class="op">=</span> []</span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>sadness_scores <span class="op">=</span> []</span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> result <span class="kw">in</span> nli_results:</span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>    scores_by_label <span class="op">=</span> <span class="bu">dict</span>(<span class="bu">zip</span>(result[<span class="st">"labels"</span>], result[<span class="st">"scores"</span>]))</span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>    anger_scores.append(scores_by_label[<span class="st">"anger"</span>])</span>
-<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>    fear_scores.append(scores_by_label[<span class="st">"fear"</span>])</span>
-<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>    sadness_scores.append(scores_by_label[<span class="st">"sadness"</span>])</span>
-<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>nli_result_df <span class="op">=</span> pd.DataFrame({</span>
-<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">"text"</span>: df[<span class="st">"text"</span>],</span>
-<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">"anger_score"</span>: anger_scores,</span>
-<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">"fear_score"</span>: fear_scores,</span>
-<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>    <span class="st">"sadness_score"</span>: sadness_scores,</span>
-<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>})</span>
-<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(nli_result_df)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [11]:</pre></div><div id="nli-scores" class="cell" data-execution_count="11">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>anger_scores <span class="op">=</span> []</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>fear_scores <span class="op">=</span> []</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>sadness_scores <span class="op">=</span> []</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> result <span class="kw">in</span> nli_results:</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>    scores_by_label <span class="op">=</span> <span class="bu">dict</span>(<span class="bu">zip</span>(result[<span class="st">"labels"</span>], result[<span class="st">"scores"</span>]))</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>    anger_scores.append(scores_by_label[<span class="st">"anger"</span>])</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>    fear_scores.append(scores_by_label[<span class="st">"fear"</span>])</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>    sadness_scores.append(scores_by_label[<span class="st">"sadness"</span>])</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>nli_result_df <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">"text"</span>: df[<span class="st">"text"</span>],</span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">"anger_score"</span>: anger_scores,</span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">"fear_score"</span>: fear_scores,</span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>    <span class="st">"sadness_score"</span>: sadness_scores,</span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(nli_result_df)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                                                  text  anger_score  \
+0    Stressed and uninformed. Don't feel enough is ...     0.040693   
+1    I feel worried about the virus, burnout about ...     0.000040   
+2    Disgusted how unprotected NHS staff are and ho...     0.956227   
+3    I am not too worried about the situation as I ...     0.018869   
+4    I'm finding the Corona situation quite dauntin...     0.000121   
+..                                                 ...          ...   
+145  Significant Anger and disappointment that we a...     0.999794   
+146  I feel saddened at the number of deaths of NHS...     0.973469   
+147  My grandad is currently hospitalised with the ...     0.850469   
+148  I feel very angry and annoyed with people that...     0.999853   
+149  I'm not worried about the effects of Corona on...     0.022781   
+
+     fear_score  sadness_score  
+0      0.999364       0.145965  
+1      0.999873       0.034004  
+2      0.011710       0.507373  
+3      0.103205       0.988050  
+4      0.948107       0.998508  
+..          ...            ...  
+145    0.950549       0.000578  
+146    0.146820       0.999164  
+147    0.999246       0.935287  
+148    0.011266       0.000339  
+149    0.033558       0.004290  
+
+[150 rows x 4 columns]</code></pre>
+</div>
 </div></div>
 <div id="4c70ee9f" class="cell markdown">
 <section id="your-turn-2" class="level3">
@@ -1085,8 +1130,8 @@ background: #8ec07c99;
 <p>Once you have a sense of the model, run it on the same texts and compare its output to the previous two models. How do the scores differ? Do you notice any patterns in the differences?</p>
 </section>
 </div>
-<div class="cell-container"><div class="cell-decorator"><pre>In [20]:</pre></div><div id="2c598768" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-14T13:40:39.529377Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-14T13:40:39.529311Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-14T13:40:41.596848Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-14T13:40:41.596593Z&quot;}}">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">TODO</span><span class="co">: implement the classification with the third model and compare the results to the previous two models.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [18]:</pre></div><div id="2c598768" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-08-14T13:40:39.529377Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-08-14T13:40:39.529311Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-08-14T13:40:41.596848Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-08-14T13:40:41.596593Z&quot;}}">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">TODO</span><span class="co">: implement the classification with the third model and compare the results to the previous two models.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div></div>
 
 

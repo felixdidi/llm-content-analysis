@@ -80,7 +80,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../../../../site_libs/quarto-html/quarto-syntax-highlighting-0bdc59fcf4c41de9ca6aa5cdff7392a7.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../../../site_libs/bootstrap/bootstrap-11c7400715367f59b59db47c60a69c8d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../../../site_libs/bootstrap/bootstrap-3b3639e6606ee2adcb7f7604bd6f8904.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -434,14 +434,14 @@ nli_anger                 0.4396954     0.4968341 1.0000000</code></pre>
 <h2 class="anchored" data-anchor-id="step-3a-accuracy">Step 3a: Accuracy</h2>
 <p>Accuracy is simply the share of texts the decoder got right, for one emotion at a time. It’s the easiest metric to compute, but it hides a lot: the gold standard isn’t evenly split between <code>TRUE</code> and <code>FALSE</code> for every emotion (see the <code>baseline</code> accuracy printed below, i.e., the share you’d get by always guessing whichever class is more common). A model can reach a high accuracy just by leaning toward the majority class, without actually discriminating anything.</p>
 <p>You can do this with some very simple R code:</p>
-<div id="cell-accuracy-manual" class="cell">
+<div id="cell-accuracy-manual" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Transform the values to factors</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>results<span class="sc">$</span>gold_anger <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(results<span class="sc">$</span>gold_anger)</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>results<span class="sc">$</span>decoder_anger <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(results<span class="sc">$</span>decoder_anger)</span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Accuracy function is as simple as that</span></span>
 <span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="fu">accuracy</span>(results, gold_anger, decoder_anger)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div id="accuracy-manual" class="cell-output cell-output-display" data-execution_count="9">
+<div id="accuracy-manual" class="cell-output cell-output-display" data-execution_count="8">
 <div class="ansi-escaped-output">
 <pre><span style="color:rgb(148,148,148)"># A tibble: 1 × 3</span>
   .metric  .estimator .estimate
@@ -450,19 +450,19 @@ nli_anger                 0.4396954     0.4968341 1.0000000</code></pre>
 </div>
 </div>
 </div>
-<div id="cell-baseline-proportions" class="cell" data-execution_count="10">
+<div id="cell-baseline-proportions" class="cell" data-execution_count="9">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Let's take a look at baseline</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">prop.table</span>(</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">table</span>(results<span class="sc">$</span>gold_anger)</span>
 <span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div id="baseline-proportions" class="cell-output cell-output-display" data-execution_count="10">
+<div id="baseline-proportions" class="cell-output cell-output-display" data-execution_count="9">
 <pre><code>
     FALSE      TRUE 
 0.4933333 0.5066667 </code></pre>
 </div>
 </div>
 <p>You can also use our convenience function below:</p>
-<div id="accuracy" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-09-02T12:43:37.414298Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-09-02T12:43:37.413984Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-09-02T12:43:37.421555Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-09-02T12:43:37.421116Z&quot;}}" data-execution_count="7">
+<div id="accuracy" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-09-02T12:43:37.414298Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-09-02T12:43:37.413984Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-09-02T12:43:37.421555Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-09-02T12:43:37.421116Z&quot;}}" data-execution_count="10">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># you can simply run this cell to compute accuracy for each emotion label, or edit it to compute accuracy for your own predictions</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (label <span class="cf">in</span> LABELS) {</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">"=== %s ===</span><span class="sc">\n</span><span class="st">"</span>, label))</span>
@@ -506,12 +506,12 @@ nli_anger                 0.4396954     0.4968341 1.0000000</code></pre>
 <li><strong><code>macro avg</code></strong> takes the unweighted mean of the <code>FALSE</code> and <code>TRUE</code> rows, so a class with only 30 members counts exactly as much as one with 120. <strong><code>weighted avg</code></strong> instead weights each class by its <code>support</code>. Comparing the two is a quick imbalance check: if they’re far apart, the model is doing much better on one class than the other.</li>
 </ul>
 <p>You can also calculate the metrics manually with some very simple R code:</p>
-<div id="cell-metrics-false" class="cell" data-execution_count="12">
+<div id="cell-metrics-false" class="cell" data-execution_count="11">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># FALSE</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">precision</span>(results, gold_anger, decoder_anger)</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="fu">recall</span>(results, gold_anger, decoder_anger)</span>
 <span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="fu">f_meas</span>(results, gold_anger, decoder_anger)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div id="metrics-false" class="cell-output cell-output-display" data-execution_count="12">
+<div id="metrics-false" class="cell-output cell-output-display" data-execution_count="11">
 <div class="ansi-escaped-output">
 <pre><span style="color:rgb(148,148,148)"># A tibble: 1 × 3</span>
   .metric .estimator .estimate
@@ -520,12 +520,12 @@ nli_anger                 0.4396954     0.4968341 1.0000000</code></pre>
 </div>
 </div>
 </div>
-<div id="cell-metrics-true" class="cell" data-execution_count="13">
+<div id="cell-metrics-true" class="cell" data-execution_count="12">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># TRUE</span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">precision</span>(results, gold_anger, decoder_anger, <span class="at">event_level =</span> <span class="st">"second"</span>)</span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="fu">recall</span>(results, gold_anger, decoder_anger, <span class="at">event_level =</span> <span class="st">"second"</span>)</span>
 <span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="fu">f_meas</span>(results, gold_anger, decoder_anger, <span class="at">event_level =</span> <span class="st">"second"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div id="metrics-true" class="cell-output cell-output-display" data-execution_count="13">
+<div id="metrics-true" class="cell-output cell-output-display" data-execution_count="12">
 <div class="ansi-escaped-output">
 <pre><span style="color:rgb(148,148,148)"># A tibble: 1 × 3</span>
   .metric .estimator .estimate
@@ -535,7 +535,7 @@ nli_anger                 0.4396954     0.4968341 1.0000000</code></pre>
 </div>
 </div>
 <p>A convenience function to get everything at once:</p>
-<div id="classification-report" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-09-02T12:43:37.423098Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-09-02T12:43:37.422780Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-09-02T12:43:37.509663Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-09-02T12:43:37.509172Z&quot;}}" data-execution_count="14">
+<div id="classification-report" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-09-02T12:43:37.423098Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-09-02T12:43:37.422780Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-09-02T12:43:37.509663Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-09-02T12:43:37.509172Z&quot;}}" data-execution_count="13">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># this is the helper function, you do not need to edit it</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>classification_report <span class="ot">&lt;-</span> <span class="cf">function</span>(data, truth_col, pred_col) {</span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  d <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span></span>
@@ -635,14 +635,14 @@ nli_anger                 0.4396954     0.4968341 1.0000000</code></pre>
 <p>Where does the decoder actually get it wrong?</p>
 <p>A confusion matrix (as a simple table) shows how the decoder’s <code>TRUE</code>/<code>FALSE</code> calls line up against the gold standard. Rows are the true (gold) label, columns are the decoder’s prediction.</p>
 <p>For which of the three emotions does the decoder have the most <strong>false positives</strong> (calling an emotion <code>TRUE</code> that the gold standard says is <code>FALSE</code>)? Set <code>chosen_label</code> below to check yourself.</p>
-<div id="cell-crosstab" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-09-02T12:43:37.511272Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-09-02T12:43:37.510922Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-09-02T12:43:37.515548Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-09-02T12:43:37.515146Z&quot;}}" data-execution_count="15">
+<div id="cell-crosstab" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-09-02T12:43:37.511272Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-09-02T12:43:37.510922Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-09-02T12:43:37.515548Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-09-02T12:43:37.515146Z&quot;}}" data-execution_count="14">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>chosen_label <span class="ot">&lt;-</span> <span class="st">"fear"</span>    <span class="co"># </span><span class="al">TODO</span><span class="co">: try "anger", "fear", "sadness"</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(</span>
 <span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">gold =</span> results[[<span class="fu">paste0</span>(<span class="st">"gold_"</span>, chosen_label)]],</span>
 <span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">predicted =</span> results[[<span class="fu">paste0</span>(<span class="st">"decoder_"</span>, chosen_label)]]</span>
 <span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div id="crosstab" class="cell-output cell-output-display" data-execution_count="15">
+<div id="crosstab" class="cell-output cell-output-display" data-execution_count="14">
 <pre><code>       predicted
 gold    FALSE TRUE
   FALSE    17   17
@@ -654,7 +654,7 @@ gold    FALSE TRUE
 <h3 class="anchored" data-anchor-id="your-turn-2">Your turn</h3>
 <p>Aggregate metrics only get you so far – sometimes you want to read the actual texts behind a specific kind of mistake. Say you want to see texts where the decoder called <code>fear</code> <code>TRUE</code>, but the gold standard says it wasn’t: set <code>chosen_label &lt;- "fear"</code> and <code>direction &lt;- "false_positive"</code> below.</p>
 <p>You can change <code>chosen_label</code> and <code>direction</code> to look at other combinations, e.g.&nbsp;<code>sadness</code> false negatives (texts the decoder called <code>FALSE</code> on, even though the gold standard says sadness <em>was</em> present).</p>
-<div id="cell-mismatch-lookup" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-09-02T12:43:37.517080Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-09-02T12:43:37.516731Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-09-02T12:43:37.534035Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-09-02T12:43:37.533570Z&quot;}}" data-execution_count="16">
+<div id="cell-mismatch-lookup" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-09-02T12:43:37.517080Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-09-02T12:43:37.516731Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-09-02T12:43:37.534035Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-09-02T12:43:37.533570Z&quot;}}" data-execution_count="15">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>chosen_label <span class="ot">&lt;-</span> <span class="st">"fear"</span>          <span class="co"># </span><span class="al">TODO</span><span class="co">: "anger", "fear", "sadness"</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>direction <span class="ot">&lt;-</span> <span class="st">"false_positive"</span>   <span class="co"># </span><span class="al">TODO</span><span class="co">: "false_positive" (decoder said TRUE, gold says FALSE)</span></span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>                                 <span class="co">#    or "false_negative" (decoder said FALSE, gold says TRUE)</span></span>
@@ -675,7 +675,7 @@ gold    FALSE TRUE
 <span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(mask) <span class="sc">|&gt;</span></span>
 <span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(text, gold_anger, gold_fear, gold_sadness) <span class="sc">|&gt;</span></span>
 <span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div id="mismatch-lookup" class="cell-output cell-output-display" data-execution_count="16">
+<div id="mismatch-lookup" class="cell-output cell-output-display" data-execution_count="15">
 <div class="ansi-escaped-output">
 <pre><span style="color:rgb(148,148,148)"># A tibble: 3 × 4</span>
   text                                         gold_anger gold_fear gold_sadness
