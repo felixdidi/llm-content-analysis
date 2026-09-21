@@ -95,7 +95,7 @@ Participants…
 :::fragment
 ::: {.callout-tip}
 ## Want to know more?
-Possler, D., Dietrich, F., Scheper, J., Lammers, A., & Spatzenegger, A. (2026). Gebrauchsfertige, Open Source Large Language Models auf Hugging Face als Forschungsinfrastruktur für die standardisierte Inhaltsanalyse von Texten [Ready-to-use, open-source Large Language Models on Hugging Face as research infrastructure for standardized content analysis of text]. *Publizistik*. https://doi.org/TBD
+Possler, D., Dietrich, F., Scheper, J., Lammers, A., & Spatzenegger, A. (2026). Gebrauchsfertige, Open Source Large Language Models auf Hugging Face als Forschungsinfrastruktur für die standardisierte Inhaltsanalyse von Texten [Ready-to-use, open-source Large Language Models on Hugging Face as research infrastructure for standardized content analysis of text]. *Publizistik*. https://doi.org/10.1007/s11616-026-00942-w
 :::
 :::
 
